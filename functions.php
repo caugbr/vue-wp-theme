@@ -70,23 +70,3 @@ function get_vue_info() {
 	</script>
 	<?php
 }
-
-
-// Only logged in users
-// include_once "only-loggedin/index.php";
-
-// function videos_header($title = 'Rare connect', $subtitle = 'Plataforma de vídeos', $icon = 'fa-circle-info') {
-	/* ?>
-		<div class="videos-header">
-			<div class="title-area">
-				<h1><?php print $title; ?></h1>
-				<strong><?php print $subtitle; ?></strong>
-			</div>
-			<div class="button-area">
-				<button type="button" class="btn-primary header-button">
-					<i class="fa-solid <?php print $icon; ?>" aria-hidden="true"></i>
-				</button>
-			</div>
-		</div>
-	<?php */
-// }
