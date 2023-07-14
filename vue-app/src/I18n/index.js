@@ -137,14 +137,9 @@ export default I18n;
 
 // Helper functions
 export const i18nMixin = {
-    // data() {
-    //     return {
-    //         language: this.$store.state.lang
-    //     }
-    // },
     computed: {
         language() {
-            return this.$store.state.lang;
+            return this.$store.state.language;
         }
     },
     methods: {
@@ -162,9 +157,9 @@ export const i18nMixin = {
             });
             return languages;
         },
-        setLang(lng) {
-            this.language = lng;
-            this.$i18n.setLang(this.language);
+        setLanguage(lng) {
+            this.$store.dispatch('setLanguage', lng);
+            this.$i18n.setLang(lng);
         }
     }
 };

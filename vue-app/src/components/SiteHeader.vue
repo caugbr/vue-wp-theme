@@ -1,9 +1,7 @@
 <template>
     <div class="site-header">
-        <div class="langs">
-            <langs-menu />
-        </div>
-        <h1>Header</h1>
+        <langs-menu />
+        <h1>{{ t('Header') }}</h1>
     </div>
 </template>
 
@@ -11,8 +9,8 @@
 import LangsMenu from './LangsMenu.vue';
 
 export default {
-    components: { LangsMenu },
-    name: 'SiteHeader'
+    name: 'SiteHeader',
+    components: { LangsMenu }
 }
 </script>
 

@@ -1,6 +1,6 @@
 <template>
     <div class="site-footer">
-        <h3>Footer</h3>
+        <h3>{{ t('Footer') }}</h3>
     </div>
 </template>
 

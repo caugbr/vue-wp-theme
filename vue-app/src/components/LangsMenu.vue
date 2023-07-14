@@ -3,7 +3,14 @@
         <form action="#" @submit.prevent>
             <label for="chose-lang">{{  t('Choose your language') }}</label>
             <select id="chose-lang" @change="select">
-                <option v-for="name, code in langs" :value="code" :key="code">{{ name }}</option>
+                <option 
+                    v-for="name, code in langs" 
+                    :value="code" 
+                    :key="code" 
+                    :selected="language === code"
+                >
+                    {{ name }}
+                </option>
             </select>
         </form>
     </div>
@@ -12,24 +19,14 @@
 <script>
 export default {
     name: 'LangsMenu',
-    // props: {
-    //     langs: {
-    //         type: Object,
-    //         default() {
-    //             return {};
-    //         }
-    //     }
-    // },
     data() {
         return {
-            selectedLang: '',
             langs: this.getLangs()
         };
     },
     methods: {
         select(val) {
-            this.selectedLang = val.target.value;
-            this.$emit('select', this.selectedLang);
+            this.setLanguage(val.target.value);
         }
     }
 }

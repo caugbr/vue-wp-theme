@@ -7,7 +7,7 @@ import NotFound from '../views/NotFound.vue';
 
 Vue.use(VueRouter);
 
-const basePath = window.apiInfo.basePath;
+const basePath = window.vueWpThemeInfo.basePath;
 const routes = [
     {
         path: basePath ? basePath : '/',

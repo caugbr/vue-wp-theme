@@ -1,8 +1,8 @@
 <template>
     <div class="not-found">
-        <h1>Not found</h1>
+        <h1>{{ t('Not found') }}</h1>
         <p>
-            The content '{{ searched }}' was not found.
+            {{ tp("content_not_found", { searched }) }}
         </p>
     </div>
 </template>

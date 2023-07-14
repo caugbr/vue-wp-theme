@@ -1,4 +1,5 @@
 import NotFound from '../views/NotFound';
+
 export default {
     components: {
         NotFound
@@ -10,10 +11,7 @@ export default {
                 title: '',
                 content: '',
                 created: '',
-                updated: '',
-                author: {},
-                categories: [],
-                tags: []
+                updated: ''
             },
             thumbnail: '',
             loaded: false,

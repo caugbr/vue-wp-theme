@@ -1,12 +1,4 @@
 <?php
-// Remove all default WP template redirects/lookups
-remove_action('template_redirect', 'redirect_canonical');
-
-// Redirect all requests to index.php so the Vue app is loaded and 404s aren't thrown
-function remove_redirects() {
-	add_rewrite_rule('^/(.+)/?', 'index.php', 'top');
-}
-add_action('init', 'remove_redirects');
 
 global $scriptsUrlDev;
 global $scriptsUrlProd;
@@ -17,6 +9,13 @@ $loadScripts = [
 	'wp-vue-app-js' => 'js/app.js',
 	'wp-vue-vendors-js' => 'js/chunk-vendors.js'
 ];
+
+// Remove redirects
+function remove_redirects() {
+	add_rewrite_rule('^/(.+)/?', 'index.php', 'top');
+}
+add_action('init', 'remove_redirects');
+remove_action('template_redirect', 'redirect_canonical');
 
 /**
  * Include the necessary files to run Vue, based on constant 
@@ -66,7 +65,7 @@ function get_vue_info() {
 	];
 	?>
 	<script>
-		window.apiInfo = <?php print json_encode($ret); ?>;
+		window.vueWpThemeInfo = <?php print json_encode($ret); ?>;
 	</script>
 	<?php
 }

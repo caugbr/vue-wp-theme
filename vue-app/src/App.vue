@@ -24,6 +24,16 @@ export default {
         loadingLayer() {
             return this.$store.state.loadingLayer;
         }
+    },
+    watch: {
+        '$store.state.language'(lng) {
+            this.setLanguage(lng);
+        }
+    },
+    beforeMount() {
+        if (this.$store.state.language) {
+            this.setLanguage(this.$store.state.language);
+        }
     }
 }
 </script>

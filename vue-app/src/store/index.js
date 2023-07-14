@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        lang: 'pt-br',
+        language: 'pt-br',
         loadingLayer: {
             bgColor: '#000000',
             bgOpacity: '0.6',
@@ -20,8 +20,8 @@ export default new Vuex.Store({
         SET_LOADING_LAYER(state, payload) {
             state.loadingLayer = { ...state.loadingLayer, ...payload };
         },
-        SET_LANG(state, payload) {
-            state.lang = payload;
+        SET_LANGUAGE(state, payload) {
+            state.language = payload;
         }
     },
     actions: {
@@ -31,8 +31,8 @@ export default new Vuex.Store({
             }
             commit('SET_LOADING_LAYER', payload);
         },
-        setLang({ commit }, lang) {
-            commit('SET_LANG', lang);
-        },
+        setLanguage({ commit }, lang) {
+            commit('SET_LANGUAGE', lang);
+        }
     }
 })

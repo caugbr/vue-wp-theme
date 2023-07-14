@@ -1,11 +1,11 @@
 <template>
   <div class="home">
-    <h1>Home</h1>
+    <h1>{{ t('Home') }}</h1>
 
-    <h3>Pages</h3>
+    <h3>{{ t('Pages') }}</h3>
     <list postType="page" :thumbnails="false"></list>
 
-    <h3>Posts</h3>
+    <h3>{{ t('Posts') }}</h3>
     <list postType="post" :thumbnails="false"></list>
   </div>
 </template>

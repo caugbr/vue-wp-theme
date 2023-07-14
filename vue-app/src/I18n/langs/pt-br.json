@@ -1,3 +1,10 @@
 {
-    "language_name": "Português (Brasil)"
+    "language_name": "Português (Brasil)",
+    "Posts": "Posts",
+    "Pages": "Páginas",
+    "Header": "Cabeçalho",
+    "Footer": "Rodapé",
+    "Choose your language": "Escolha o idioma",
+    "Not found": "Não encontrado",
+    "content_not_found": "O conteúdo '{searched}' não foi encontrado."
 }
