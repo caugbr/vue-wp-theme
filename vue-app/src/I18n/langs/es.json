@@ -6,5 +6,6 @@
     "Footer": "Pie",
     "Choose your language": "Elige tu idioma",
     "Not found": "No encontrado",
-    "content_not_found": "No se encontró el contenido '{searched}'."
+    "content_not_found": "No se encontró el contenido '{searched}'.",
+    "Home": "Página principal"
 }

@@ -2,7 +2,10 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Post from '../views/Post.vue';
+import PostArchive from '../views/PostArchive.vue';
 import Page from '../views/Page.vue';
+import PageArchive from '../views/PageArchive.vue';
+import TaxonomyArchive from '../views/TaxonomyArchive.vue';
 import NotFound from '../views/NotFound.vue';
 
 Vue.use(VueRouter);
@@ -15,14 +18,29 @@ const routes = [
         component: Home
     },
     {
+        path: basePath + '/posts',
+        name: 'PostArchive',
+        component: PostArchive
+    },
+    {
         path: basePath + '/posts/:slug',
         name: 'Post',
         component: Post
     },
     {
+        path: basePath + '/pages',
+        name: 'PageArchive',
+        component: PageArchive
+    },
+    {
         path: basePath + '/pages/:slug',
         name: 'Page',
         component: Page
+    },
+    {
+        path: basePath + '/:postType/:taxonomy/:term',
+        name: 'TaxonomyArchive',
+        component: TaxonomyArchive
     },
     {
         path: basePath + '/:pathMatch(.*)*',

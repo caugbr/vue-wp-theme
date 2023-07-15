@@ -1,3 +1,27 @@
+/**
+ * Internationalization for Vue apps
+ * ---------------------------------
+ * 
+ * Depends on Vuex as a global property (this.$store). 
+ * This script expects two things in your store:
+ * - The state value 'language'
+ * - The action 'setLanguage'
+ * 
+ * Like this:
+    export default new Vuex.Store({
+        state: { language: 'pt-br' },
+        mutations: {
+            SET_LANGUAGE(state, payload) {
+                state.language = payload;
+            }
+        },
+        actions: {
+            setLanguage({ commit }, lang) {
+                commit('SET_LANGUAGE', lang);
+            }
+        }
+    });
+ */
 
 class Translate {
 
@@ -132,10 +156,9 @@ const I18n = {
         Vue.prototype.$i18n = new Translate(lang);
     }
 };
-
 export default I18n;
 
-// Helper functions
+// Helper functions as a Vue mixin
 export const i18nMixin = {
     computed: {
         language() {
@@ -158,7 +181,6 @@ export const i18nMixin = {
             return languages;
         },
         setLanguage(lng) {
-            this.$store.dispatch('setLanguage', lng);
             this.$i18n.setLang(lng);
         }
     }

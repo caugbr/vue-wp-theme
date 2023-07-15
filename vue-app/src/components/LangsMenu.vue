@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         select(val) {
-            this.setLanguage(val.target.value);
+            this.$store.dispatch('setLanguage', val.target.value)
         }
     }
 }

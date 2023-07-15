@@ -1,5 +1,5 @@
 <template>
-    <div :class="`list-posts type-${postType}`">
+    <div :class="`list-posts type-${postType} list`">
         <ul>
             <li v-for="post, index in posts" :key="index">
                 <router-link :to="`${info.basePath}/${urlName}/${post.slug}`">
@@ -30,6 +30,14 @@ export default {
             type: String,
             default: 'post'
         },
+        taxonomy: {
+            type: String,
+            default: ''
+        },
+        term: {
+            type: String,
+            default: ''
+        },
         thumbnails: {
             type: Boolean,
             default: true
@@ -42,26 +50,57 @@ export default {
     },
     computed: {
         urlName() {
-            if (this.postType == 'post' || this.postType == 'page') {
+            if (/^(post|page|video)$/.test(this.postType)) {
                 return this.postType + 's';
             }
             return this.postType;
         }
     },
-    beforeMount() {
+    async beforeMount() {
+        this.loading(true);
         const params = { _fields: ['slug', 'title'], per_page: this.perPage };
         if (this.thumbnails) {
             this.api.embed = true;
         }
-        this.api.getList(this.urlName, params).then(posts => {
+        if (this.taxonomy && this.term) {
+            const { postType, taxonomy, term } = this;
+            const posts = await this.apiCall('listByTaxonomy', postType, taxonomy, term, params);
             this.posts = this.normalizeStringsArray(posts.data);
-        });
+            // this.api.listByTaxonomy(postType, taxonomy, term, params).then(posts => {
+            //     this.posts = this.normalizeStringsArray(posts.data);
+            //     this.loading(false);
+            // });
+        } else {
+            const posts = await this.apiCall('listByPostType', this.urlName, params);
+            this.posts = this.normalizeStringsArray(posts.data);
+            // this.api.listByPostType(this.urlName, params).then(posts => {
+            //     this.posts = this.normalizeStringsArray(posts.data);
+            //     this.loading(false);
+            // });
+        }
     }
 }
 </script>
 
 <style lang="scss">
-.List-posts {
+// .list-posts {
+//     display: inline-block;
+//     width: auto;
     
-}
+//     ul {
+//         display: inline-block;
+//         padding: 0;
+//         margin: 0;
+//         list-style-type: none;
+//         list-style: none;
+        
+//         li {
+//             display: inline-block;
+//             padding: 0;
+//             margin: 0;
+//             list-style-type: none;
+//             list-style: none;
+//         }
+//     }
+// }
 </style>

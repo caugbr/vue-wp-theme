@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        redrawKey: 0,
         language: 'pt-br',
         loadingLayer: {
             bgColor: '#000000',
@@ -22,6 +23,9 @@ export default new Vuex.Store({
         },
         SET_LANGUAGE(state, payload) {
             state.language = payload;
+        },
+        SET_REDRAW_KEY(state) {
+            state.redrawKey++;
         }
     },
     actions: {
@@ -33,6 +37,9 @@ export default new Vuex.Store({
         },
         setLanguage({ commit }, lang) {
             commit('SET_LANGUAGE', lang);
+        },
+        setRedraw({ commit }) {
+            commit('SET_REDRAW_KEY');
         }
     }
-})
+});

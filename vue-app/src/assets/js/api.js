@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-class WpAPI {
+class WpApi {
     apiUrl;
     nonce;
     namespace;
@@ -39,15 +39,41 @@ class WpAPI {
     }
 
     /**
+     * Returns the menu items
+     * @param {string} menuName     WP Menu name
+     * @param {object} params       Other request params
+     * @returns array
+     */
+    getMenu(menuName, params = {}) {
+        const urlParams = this.obj2url(params);
+        return this._get(`/menu/${menuName}${urlParams}`);
+    }
+
+    /**
+     * Returns a list of posts of the given taxonomy / term
+     * @param {string} postType     Post type name
+     * @param {string} taxonomy     Taxonomy name
+     * @param {string} term         Term ID
+     * @param {object} params       Other request params
+     * @returns array
+     */
+    listByTaxonomy(postType, taxonomy, term, params = {}) {
+        params[taxonomy] = term;
+        const urlParams = this.obj2url(params);
+        this.embed = false;
+        return this._get(`/${this.ptSlug(postType)}${urlParams}`);
+    }
+
+    /**
      * Returns a list of posts of type postType
      * @param {string} postType     Post type name
      * @param {object} params       Other request params
      * @returns array
      */
-    getList(postType, params = {}) {
+    listByPostType(postType, params = {}) {
         const urlParams = this.obj2url(params);
         this.embed = false;
-        return this._get(`/${postType}${urlParams}`);
+        return this._get(`/${this.ptSlug(postType)}${urlParams}`);
     }
 
     /**
@@ -61,7 +87,7 @@ class WpAPI {
         params.id = id;
         const urlParams = this.obj2url(params);
         this.embed = false;
-        return this._get(`/${postType}${urlParams}`);
+        return this._get(`/${this.ptSlug(postType)}${urlParams}`);
     }
 
     /**
@@ -75,12 +101,13 @@ class WpAPI {
         params.slug = slug;
         const urlParams = this.obj2url(params);
         this.embed = false;
-        return this._get(`/${postType}${urlParams}`);
+        return this._get(`/${this.ptSlug(postType)}${urlParams}`);
     }
 
     /**
      * If val is an array, return a string joined by ','
-     * @param {mixed} val Sent value
+     * @param {mixed}  val          Sent value
+     * @param {string} separator    String separator
      * @returns string
      */
     arr2str(val, separator = ',') {
@@ -107,6 +134,10 @@ class WpAPI {
         }
         return str.length ? '?' + str.join('&') : '';
     }
+
+    ptSlug(slug) {
+        return /^(post|page)$/.test(slug) ? `${slug}s` : slug;
+    }
 }
 
-export default WpAPI;
+export default WpApi;

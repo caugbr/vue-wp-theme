@@ -1,3 +1,4 @@
+@import "variables";
 
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -5,4 +6,52 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+}
+
+
+.list {
+    ul {
+        // display: inline-block;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        list-style: none;
+        
+        li {
+            // display: inline-block;
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+            list-style: none;
+
+            a {
+                // display: inline-block;
+                display: block;
+                padding: 0.25rem 0.75rem;
+                text-decoration: none;
+                color: $link-color;
+
+                &:hover {
+                    color: $link-hover-color;
+                }
+            }
+        }
+    }
+    
+    &.inline-list {
+        display: inline-block;
+        width: auto;
+
+        ul {
+            display: inline-block;
+            
+            li {
+                display: inline-block;
+    
+                a {
+                    display: inline-block;
+                }
+            }
+        }
+    }
 }
