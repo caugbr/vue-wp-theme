@@ -1,5 +1,5 @@
 <template>
-    <div class="wp-menu inline-list list">
+    <div :class="`wp-menu list ${inline ? 'inline-list' : ''}`">
         <ul>
             <li v-for="(itm, index) in items" :key="index">
                 <router-link :to="itemUrl(itm)">
@@ -16,8 +16,11 @@ export default {
     props: {
         menu: {
             type: String,
-            default: '',
             required: true
+        },
+        inline: {
+            type: Boolean,
+            default: true
         }
     },
     data() {

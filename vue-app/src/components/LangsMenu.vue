@@ -34,9 +34,10 @@ export default {
 
 <style>
 .langs-menu {
-    position: absolute;
+    text-align: center;
+    /* position: absolute;
     right: 20px;
-    top: 20px;
+    top: 20px; */
 }
 .langs-menu label {
     display: block;

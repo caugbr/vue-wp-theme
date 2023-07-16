@@ -1,11 +1,12 @@
 {
     "language_name": "Português (Brasil)",
-    "Posts": "Posts",
-    "Pages": "Páginas",
-    "Header": "Cabeçalho",
+    "Choose your language": "Escolha seu idioma",
     "Footer": "Rodapé",
-    "Choose your language": "Escolha o idioma",
+    "Header": "Cabeçalho",
+    "Vue WP Theme": "",
+    "vuewp_intro": "Introdução aqui...",
+    "Pages": "Páginas",
+    "Posts": "Posts",
     "Not found": "Não encontrado",
-    "content_not_found": "O conteúdo '{searched}' não foi encontrado.",
-    "Home": "Início"
+    "Posts tax": ""
 }

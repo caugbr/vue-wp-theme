@@ -58,6 +58,8 @@ function get_vue_info() {
         "themeDirUrl" => $scriptsUrlProd,
         "siteUrl" => site_url(),
         "basePath" => $url_info['path'],
+        "language" => get_locale(),
+        "settings" => get_vuewp_settings(),
         "wpApiSettings" => [
             "root" => esc_url_raw(rest_url()),
             "nonce" => wp_create_nonce('wp_rest')
@@ -70,41 +72,224 @@ function get_vue_info() {
     <?php
 }
 
+function add_admin_js() {
+    global $scriptsUrlProd;
+    wp_enqueue_script("vuewp-admin-js", $scriptsUrlProd . "/admin.js");
+}
 
+function add_admin_css() {
+    global $scriptsUrlProd;
+    wp_enqueue_style("vuewp-admin-css", $scriptsUrlProd . "/admin.css");
+}
 
 function videos_admin_page() {
-    add_options_page(
+    $page_id = add_theme_page(
         __('Vue WP Theme options', 'vuewp'),
         __('Vue WP Theme', 'vuewp'),
         'manage_options',
         'vuewp-options',
         'admin_page'
     );
+    add_action('admin_print_scripts-' . $page_id, 'add_admin_js');
+    add_action('admin_print_styles-' . $page_id, 'add_admin_css' );
 }
 add_action('admin_menu', 'videos_admin_page');
 
 function save_admin_page() {
     $msg = '';
-    if (count($_POST) > 0) {
-        if ($_POST['act'] == 'save-config') {
-            update_option('vbr_providers', $_POST['providers'] ?? []);
-            $msg = __('Configuration successfully saved', 'vuewp');
+    if (isset($_POST['action'])) {
+        if ($_POST['action'] == 'save-lang') {
+            $ok = save_strings($_POST['lang'], $_POST['strings']);
+            if ($ok) {
+                $msg = sprintf(__('The file %s was successfully saved.', 'vuewp'), $_POST['lang'] . '.json');
+            } else {
+                $msg = sprintf(__('The file %s could not be saved, there was an error.', 'vuewp'), $_POST['lang'] . '.json');
+            }
+        }
+        if ($_POST['action'] == 'create-lang') {
+            create_file($_POST['lang']);
+            $ok = save_strings($_POST['lang'], $_POST['strings']);
+            if ($ok) {
+                $msg = sprintf(__('The file %s was successfully create.', 'vuewp'), $_POST['lang'] . '.json');
+            } else {
+                $msg = sprintf(__('The file %s could not be create, there was an error.', 'vuewp'), $_POST['lang'] . '.json');
+            }
+        }
+        if ($_POST['action'] == 'save-settings') {
+            update_option('vuewp_settings', $_POST['settings']);
+            $msg = __('Settings updated successfully.', 'vuewp');
         }
     }
     return $msg;
 }
 
+function create_file($lang) {
+    $path = get_template_directory() . '/vue-app/src/I18n/langs/' . $lang . '.json';
+    if (!file_exists($path)) {
+        $fh = fopen($path, "w");
+        fclose($fh);
+    }
+}
+
+function save_strings($lang, $json) {
+    $path = get_template_directory() . '/vue-app/src/I18n/langs/' . $lang . '.json';
+    $valid = json_decode(stripslashes($json), true);
+    if (!is_array($valid)) {
+        return false;
+    }
+    $str = json_encode($valid, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    return !!file_put_contents($path, $str);
+}
+
+function get_vuewp_settings() {
+    $settings = get_option('vuewp_settings');
+    if (!$settings) {
+        include_once get_stylesheet_directory() . "/theme-settings.php";
+        $settings = [];
+        foreach ($theme_settings as $id => $info) {
+            $settings[$id] = $info['default_value'];
+        }
+    }
+    return $settings;
+}
+
 function admin_page() {
+    $msg = save_admin_page();
+    $settings = get_vuewp_settings();
+    include_once get_stylesheet_directory() . "/theme-settings.php";
     ?>
     <div class="wrap">
+        <h1><?php _e('Vue WP Theme options', 'vuewp'); ?></h1>
         <?php if (!empty($msg)) { ?>
-            <div class="message"><?php print $msg; ?></div>
+            <div id="message" class="notice notice-success settings-error is-dismissible">
+                <p>
+                    <strong><?php print $msg; ?></strong>
+                </p>
+                <button type="button" class="notice-dismiss">
+                    <span class="screen-reader-text">Dismiss this notice.</span>
+                </button>
+            </div>
         <?php } ?>
-        <h1><?php _e('Vue WP Theme options', 'vuewp') ?></h1>
         <?php
-            $menus = get_menus();
-            print_r($menus);
+            // $menus = get_menus();
+            // print_r($menus);
         ?>
+        <?php
+            $lang_info = readStrings();
+            $strings = $lang_info['strings'];
+            $lang_codes = array_keys($strings);
+            $languages = [];
+            foreach ($lang_codes as $code) {
+                $languages[$code] = $code;
+                if (!empty($strings[$code]['language_name'])) {
+                    $languages[$code] = $strings[$code]['language_name'];
+                }
+            }
+        ?>
+        <div class="settings">
+            <form action="themes.php?page=vuewp-options" method="post" id="vuewp-form">
+                <h2><?php _e('Theme options', 'vuewp'); ?></h2>
+                <p>
+                    <?php printf(__('These options will be available for all components in the Vue app as %s.', 'vuewp'), '<code>this.info.settings</code>'); ?>
+                </p>
+                <?php foreach ($theme_settings as $id => $info) { ?>
+                <?php
+                    $value = $settings[$id] ?? $info['default_value'];
+                ?>
+                    <div class="formline">
+                        <label for="<?php print $id; ?>">
+                            <?php if ($info['type'] == 'checkbox') { ?>
+                                <input type="hidden" name="settings[<?php print $id; ?>]" value="0">
+                                <input type="checkbox" name="settings[<?php print $id; ?>]" id="<?php print $id; ?>" value="1"<?php if ($value == '1') print ' checked'; ?>>
+                                <?php print $info['label']; ?>
+                            <?php } ?>
+                            <?php if ($info['type'] == 'select') { ?>
+                            <?php
+                                $options = $info['options'];
+                                if (!is_array($options) && is_callable($options)) {
+                                    $options = call_user_func($options);
+                                }
+                            ?>
+                                <label for="<?php print $id; ?>"><?php print $info['label']; ?></label>
+                                <select name="settings[<?php print $id; ?>]" id="<?php print $id; ?>">
+                                    <?php foreach($options as $opt) { ?>
+                                        <option value="<?php print $opt['value'] ?>"<?php if (isset($settings[$id]) && $opt['value'] == $settings[$id]) print ' selected'; ?>><?php print $opt['label'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            <?php } ?>
+                        </label>
+                        <div class="info">
+                            <?php print $info['description']; ?>
+                        </div>
+                    </div>
+                <?php } ?>
+                <div class="formline buttons">
+                    <button id="save_settings" class="button button-primary">
+                        <?php _e('Save options', 'vuewp'); ?>
+                    </button>
+                </div>
+
+                <h2><?php _e('Frontend translations', 'vuewp'); ?></h2>
+                <p>
+                    <?php _e('You can edit all translatable strings from here.', 'vuewp'); ?>
+                    <?php _e('If you created some new translatable strings, they should appear bellow, because they are read directly from the app code.', 'vuewp'); ?>
+                </p>
+                <div class="formline">
+                    <label for="langs"><?php _e('Select a language to edit', 'vuewp'); ?></label>
+                    <select name="langs" id="langs">
+                        <?php foreach ($languages as $lcode => $lname) { ?>
+                            <option value="<?php print $lcode; ?>"><?php print $lname; ?></option>
+                        <?php } ?>
+                    </select>
+                    <button type="button" class="button" id="edit_button"><?php _e('Edit', 'vuewp'); ?></button>
+                </div>
+
+                <div class="formline">
+                    <label for="new_code"><?php _e('Create a new language file', 'vuewp'); ?></label>
+                    <input type="text" name="new_code" id="new_code" placeholder="<?php _e('Language code', 'vuewp'); ?>">
+                    <input type="text" name="new_name" id="new_name" placeholder="<?php _e('Language name', 'vuewp'); ?>">
+                    <button type="button" class="button" id="create_button"><?php _e('Create', 'vuewp'); ?></button>
+                </div>
+
+                <div class="translator" style="display: none;">
+                    <div class="strings"></div>
+                    <div class="editor">
+                        <div class="key-string">
+                            <textarea id="key-string" readonly></textarea>
+                        </div>
+                        <div class="value-string">
+                            <textarea id="value-string"></textarea>
+                        </div>
+                        <div class="buttons">
+                            <input type="hidden" id="action" name="action">
+                            <input type="hidden" id="lang" name="lang">
+                            <input type="hidden" id="strings" name="strings">
+                            <button class="button" type="button" id="cancel_saving">
+                                <?php _e('Cancel', 'vuewp'); ?>
+                            </button>
+                            <button class="button button-primary" type="button" id="save_language">
+                                <?php _e('Save', 'vuewp'); ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="strings-source" style="display: none;">
+                    <?php foreach ($strings as $lng => $strs) { ?>
+                        <div class="lang-set" data-lang="<?php print $lng; ?>">
+                            <h3><?php printf(__('Editing language file &apos;%s.json&apos; (%s)', 'vuewp'), $lng, $languages[$lng]); ?></h3>
+                            <?php foreach ($strs as $key => $val) { ?>
+                                <?php $new_item = in_array($key, $lang_info['new_items'][$lng]); ?>
+                                <div class="str-line<?php if ($new_item) print ' not-saved' ?>">
+                                    <span class="key"><?php print $key; ?></span>
+                                    <span class="val"><?php print $val; ?></span>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+                </div>
+            </form>
+        </div>
     </div>
     <?php
 }
@@ -163,4 +348,58 @@ function get_slug_by_id($itm) {
         return $slug;
     }
     return '';
+}
+
+function readStrings() {
+    $app_dir = get_stylesheet_directory() . '/vue-app';
+    $lang_files = listFiles($app_dir . '/src/I18n/langs');
+    $components = listFiles($app_dir . '/src/components');
+    $views = listFiles($app_dir . '/src/views');
+    $files = array_merge($components, $views);
+
+    $code = ["language_name" => ""];
+    foreach ($files as $file) {
+        $content = file_get_contents($file);
+        preg_match_all("/\bt[pl]?\([\'\"]([^\'\"]+)[\'\"][^)]*\)/", $content, $matches);
+        foreach ($matches[1] as $str) {
+            $code[$str] = "";
+        }
+    }
+
+    $new_items = [];
+    $all = [];
+    foreach ($lang_files as $lfile) {
+        $transl = (array) json_decode(file_get_contents($lfile));
+        $lang = str_replace(".json", "", basename($lfile));
+        $all[$lang] = $code;
+        $new_items[$lang] = [];
+        foreach ($transl as $key => $value) {
+            if (isset($code[$key])) {
+                $all[$lang][$key] = $value;
+            }
+        }
+        if (count($transl) < count($code)) {
+            foreach ($code as $key => $value) {
+                if (!isset($transl[$key])) {
+                    $new_items[$lang][] = $key;
+                }
+            }
+        }
+    }
+    return [
+        "strings" => $all,
+        "new_items" => $new_items
+    ];
+}
+
+// list the files on the givem directory
+function listFiles($directory) {
+    $files = array(); 
+    $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));
+    foreach ($rii as $file) {
+        if (!$file->isDir()) { 
+            $files[] = str_replace("\\", "/", $file->getPathname()); 
+        }
+    }
+    return $files;
 }

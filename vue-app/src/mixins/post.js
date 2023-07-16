@@ -9,12 +9,9 @@ export default {
             post: {
                 id: '',
                 title: '',
-                content: '',
-                created: '',
-                updated: ''
+                content: ''
             },
             thumbnail: '',
-            loaded: false,
             is404: false,
             path: window.location.pathname
         }
@@ -49,7 +46,6 @@ export default {
                     } else {
                         this.is404 = true;
                     }
-                    this.loaded = true;
                     this.loading(false);
                     resolve(!this.is404);
                 });

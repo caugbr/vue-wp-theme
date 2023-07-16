@@ -50,7 +50,7 @@ export default {
     },
     computed: {
         urlName() {
-            if (/^(post|page|video)$/.test(this.postType)) {
+            if (/^(post|page)$/.test(this.postType)) {
                 return this.postType + 's';
             }
             return this.postType;
@@ -66,41 +66,10 @@ export default {
             const { postType, taxonomy, term } = this;
             const posts = await this.apiCall('listByTaxonomy', postType, taxonomy, term, params);
             this.posts = this.normalizeStringsArray(posts.data);
-            // this.api.listByTaxonomy(postType, taxonomy, term, params).then(posts => {
-            //     this.posts = this.normalizeStringsArray(posts.data);
-            //     this.loading(false);
-            // });
         } else {
             const posts = await this.apiCall('listByPostType', this.urlName, params);
             this.posts = this.normalizeStringsArray(posts.data);
-            // this.api.listByPostType(this.urlName, params).then(posts => {
-            //     this.posts = this.normalizeStringsArray(posts.data);
-            //     this.loading(false);
-            // });
         }
     }
 }
 </script>
-
-<style lang="scss">
-// .list-posts {
-//     display: inline-block;
-//     width: auto;
-    
-//     ul {
-//         display: inline-block;
-//         padding: 0;
-//         margin: 0;
-//         list-style-type: none;
-//         list-style: none;
-        
-//         li {
-//             display: inline-block;
-//             padding: 0;
-//             margin: 0;
-//             list-style-type: none;
-//             list-style: none;
-//         }
-//     }
-// }
-</style>

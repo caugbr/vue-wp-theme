@@ -25,7 +25,7 @@
 
 class Translate {
 
-    constructor(lang, defaultLang = 'en') {
+    constructor(lang, defaultLang = 'en-us') {
         lang = lang ? lang : process.env.LANGUAGE;
         this.navigatorLang = this.normalizeCode();
         this.defaultLang = defaultLang;
@@ -56,7 +56,7 @@ class Translate {
     }
     
     setLang = (lang = false) => {
-        this.lang = lang ? lang : this.navigatorLang;
+        this.lang = lang ? this.normalizeCode(lang) : this.navigatorLang;
         this.strings = {};
         if (this.translations[this.lang]) {
             this.strings = this.translations[this.lang]
@@ -182,6 +182,9 @@ export const i18nMixin = {
         },
         setLanguage(lng) {
             this.$i18n.setLang(lng);
+        },
+        normalizeLangCode(code) {
+            return code.toLowerCase().replace('_', '-');
         }
     }
 };

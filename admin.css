@@ -1,0 +1,105 @@
+
+.settings {
+    width: 70%;
+    min-width: 720px;
+}
+
+.settings * {
+    box-sizing: border-box;
+    font-size: 1.05em;
+}
+
+.wrap h1 {
+    font-size: 1.85rem;
+}
+
+.settings h2 {
+    font-size: 1.45rem;
+}
+
+.settings h3 {
+    font-size: 1.2rem;
+}
+
+.settings button {
+    margin-left: 0.5rem;
+}
+
+.settings .formline label[for] {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.settings .formline {
+    margin: 1.25rem auto;
+}
+
+.settings .translator {
+    margin-top: 2rem;
+}
+.translator .strings {
+    
+}
+.translator .strings h3 {
+}
+.translator .strings .str-line {
+    display: flex;
+    flex-direction: row;
+}
+.strings .str-line > span {
+    display: block;
+    width: 50%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding: 0.25rem 0.5rem;
+    background-color: #FEFEFE;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+.strings .str-line.not-saved > span {
+    background-color: #ffebeb;
+}
+.strings .str-line:hover > span {
+    background-color: #421fce;
+    color: #fff;
+}
+.strings .str-line.selected > span {
+    background-color: #6f6fff;
+    color: #fff;
+}
+.strings .str-line .key {
+    font-weight: bold;
+}
+.strings .str-line .val {
+}
+
+.editor {
+
+}
+.editor textarea {
+    font-size: 16px;
+    height: 3.5rem;
+    width: 100%;
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 0;
+    outline: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    resize: none;
+}
+.editor textarea:focus {
+    outline: 0;
+}
+.editor .key-string textarea {
+    font-weight: bold;
+}
+.editor .value-string textarea {
+    height: 6rem;
+}
+.editor .buttons {
+    padding: 0.5rem 0;
+    text-align: right;
+}

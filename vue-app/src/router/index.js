@@ -7,6 +7,8 @@ import Page from '../views/Page.vue';
 import PageArchive from '../views/PageArchive.vue';
 import TaxonomyArchive from '../views/TaxonomyArchive.vue';
 import NotFound from '../views/NotFound.vue';
+// import Video from '../views/Video.vue';
+// import VideoArchive from '../views/VideoArchive.vue';
 
 Vue.use(VueRouter);
 
@@ -37,6 +39,16 @@ const routes = [
         name: 'Page',
         component: Page
     },
+    // {
+    //     path: basePath + '/videos',
+    //     name: 'VideoArchive',
+    //     component: VideoArchive
+    // },
+    // {
+    //     path: basePath + '/videos/:slug',
+    //     name: 'Video',
+    //     component: Video
+    // },
     {
         path: basePath + '/:postType/:taxonomy/:term',
         name: 'TaxonomyArchive',
