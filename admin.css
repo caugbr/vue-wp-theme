@@ -1,12 +1,12 @@
 
 .settings {
-    width: 70%;
-    min-width: 720px;
+    width: 100%;
+    max-width: 720px;
 }
 
 .settings * {
     box-sizing: border-box;
-    font-size: 1.05em;
+    /* font-size: 1.05em; */
 }
 
 .wrap h1 {
@@ -25,14 +25,35 @@
     margin-left: 0.5rem;
 }
 
+
+.settings .formline {
+    margin: 1.25rem auto;
+}
 .settings .formline label[for] {
     display: block;
     margin-bottom: 0.25rem;
     font-weight: 600;
 }
 
-.settings .formline {
-    margin: 1.25rem auto;
+.formline input[type="text"],
+.formline input[type="email"],
+.formline input[type="url"],
+.formline input[type="password"],
+.formline input[type="tel"],
+.formline input[type="number"],
+.formline input[type="search"],
+.formline select,
+.formline textarea {
+    width: 100%;
+    max-width: 500px;
+    padding: 0 0.5rem;
+    font-size: 14px;
+}
+.formline input.half,
+.formline select.half,
+.formline textarea.half {
+    width: 49%;
+    max-width: 246px;
 }
 
 .settings .translator {
@@ -74,9 +95,6 @@
 .strings .str-line .val {
 }
 
-.editor {
-
-}
 .editor textarea {
     font-size: 16px;
     height: 3.5rem;
@@ -102,4 +120,52 @@
 .editor .buttons {
     padding: 0.5rem 0;
     text-align: right;
+}
+
+
+/* tabs */
+
+.settings .tabs {
+    margin: 0.25rem auto;
+}
+.settings .tabs .tab-links {
+    border-bottom: 1px solid #ccc;
+}
+.settings .tab-links a.tab {
+    color: #333;
+    background-color: #bfbfbf;
+    text-decoration: none;
+    display: inline-block;
+    white-space: nowrap;
+    padding: 0.25rem 0.5rem;
+    font-size: 16px;
+    margin-right: 0.25rem;
+    border: 1px solid #ccc;
+    transform: translateY(1px);
+    -webkit-border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    -moz-border-radius-topright: 6px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.settings .tabs .tab-stage {
+    padding: 0.5rem 0;
+}
+.settings .tabs .tab-content {
+    display: none;
+}
+.settings .tabs[data-tab="settings"] .tab-links a.tab[data-tab="settings"],
+.settings .tabs[data-tab="translations"] .tab-links a.tab[data-tab="translations"] {
+    background-color: #efefef;
+    border-bottom-color: #efefef;
+    font-weight: bold;
+    cursor: default;
+}
+.settings .tabs[data-tab="settings"] .tab-stage .tab-content[data-tab="settings"],
+.settings .tabs[data-tab="translations"] .tab-stage .tab-content[data-tab="translations"] {
+    display: block;
 }

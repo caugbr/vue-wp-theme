@@ -3,7 +3,6 @@
         <div class="center">
             <div class="image" v-html="spinner"></div>
             <div class="text">{{message}}</div>
-            {{ t('tracatraca') }}
         </div>
     </div>
 </template>

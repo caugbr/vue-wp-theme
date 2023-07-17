@@ -1,7 +1,7 @@
 <template>
     <div class="site-footer">
         <div class="copyright">
-            &copy;{{ year }} Cau Guanabara
+            &copy;{{ year }} Vue WP Theme
         </div>
     </div>
 </template>

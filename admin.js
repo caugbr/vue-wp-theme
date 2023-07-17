@@ -73,6 +73,19 @@ window.addEventListener('load', evt => {
             notice.parentNode.removeChild(notice);
         });
     }
+
+    const tabEl = document.querySelector('.tabs');
+    if (tabEl) {
+        const tabs = tabEl.querySelectorAll('.tab-links a');
+        console.log('tabs', tabs)
+        Array.from(tabs).forEach(tab => {
+            tab.addEventListener('click', evt => {
+                evt.preventDefault();
+                const name = evt.target.getAttribute('data-tab');
+                tabEl.setAttribute('data-tab', name);
+            });
+        });
+    }
 });
 
 function setBehavior() {

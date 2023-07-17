@@ -61,7 +61,7 @@ class WpApi {
         params[taxonomy] = term;
         const urlParams = this.obj2url(params);
         this.embed = false;
-        return this._get(`/${this.ptSlug(postType)}${urlParams}`);
+        return this._get(`/${this.postSlug(postType)}${urlParams}`);
     }
 
     /**
@@ -73,7 +73,7 @@ class WpApi {
     listByPostType(postType, params = {}) {
         const urlParams = this.obj2url(params);
         this.embed = false;
-        return this._get(`/${this.ptSlug(postType)}${urlParams}`);
+        return this._get(`/${this.postSlug(postType)}${urlParams}`);
     }
 
     /**
@@ -87,7 +87,7 @@ class WpApi {
         params.id = id;
         const urlParams = this.obj2url(params);
         this.embed = false;
-        return this._get(`/${this.ptSlug(postType)}${urlParams}`);
+        return this._get(`/${this.postSlug(postType)}${urlParams}`);
     }
 
     /**
@@ -101,7 +101,7 @@ class WpApi {
         params.slug = slug;
         const urlParams = this.obj2url(params);
         this.embed = false;
-        return this._get(`/${this.ptSlug(postType)}${urlParams}`);
+        return this._get(`/${this.postSlug(postType)}${urlParams}`);
     }
 
     /**
@@ -135,7 +135,7 @@ class WpApi {
         return str.length ? '?' + str.join('&') : '';
     }
 
-    ptSlug(slug) {
+    postSlug(slug) {
         return /^(post|page)$/.test(slug) ? `${slug}s` : slug;
     }
 }

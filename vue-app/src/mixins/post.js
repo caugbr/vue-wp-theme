@@ -11,6 +11,10 @@ export default {
                 title: '',
                 content: ''
             },
+            taxonomyLinks: {
+                category: [],
+                tag: []
+            },
             thumbnail: '',
             is404: false,
             path: window.location.pathname
@@ -64,6 +68,30 @@ export default {
                 }
             }
             return '';
+        },
+        async getTerm(tax, term) {
+            const api = this.getApi({ namespace: 'vuewp/v1' });
+            return api._get(`/term/${tax}/${term}`);
+        },
+        termLink(term, type = 'link') {
+            let url = `${this.info.basePath}/${term.post_type}/${term.taxonomy}/${term.term_id}`;
+            if (type == 'url') {
+                return url;
+            }
+            return `<a href="${url}">${term.name}</a>`;
+        },
+        setTermLinks(taxName) {
+            if (this.post[taxName] && this.post[taxName].length) {
+                const vcTerms = this.post[taxName];
+                if (!this.taxonomyLinks[taxName]) {
+                    this.taxonomyLinks[taxName] = [];
+                }
+                vcTerms.forEach(vcTerm => {
+                    this.getTerm(taxName, vcTerm).then(term => {
+                        this.taxonomyLinks[taxName].push(this.termLink(term.data));
+                    });
+                });
+            }
         }
     }
 }

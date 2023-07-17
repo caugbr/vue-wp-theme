@@ -31,7 +31,42 @@ $theme_settings = [
         "description" => __('Define where to show sidebar', 'vuewp'),
         "label" =>  __('Sidebar position', 'vuewp'),
         "default_value" => 'left'
-    ]
+    ],
+    // Other possible types...
+    // "text_field" => [
+    //     "type" => "text", // one of text|email|url|password|tel|number|search
+    //     "description" => __('Test field', 'vuewp'),
+    //     "label" =>  __('Type something', 'vuewp'),
+    //     "default_value" => ''
+    // ],
+    // "area_field" => [
+    //     "type" => "textarea",
+    //     "description" => __('Test area field', 'vuewp'),
+    //     "label" =>  __('Type something', 'vuewp'),
+    //     "default_value" => 'bah'
+    // ],
+    // "radio_list" => [
+    //     "type" => "radio-group",
+    //     "description" => __('Choose one', 'vuewp'),
+    //     "label" =>  __('Radio group', 'vuewp'),
+    //     "options" => [
+    //         [ "label" => "left", "value" => "left" ],
+    //         [ "label" => "right", "value" => "right" ],
+    //         [ "label" => "none", "value" => "none" ]
+    //     ],
+    //     "default_value" => ''
+    // ],
+    // "checkbox_list" => [
+    //     "type" => "checkbox-group",
+    //     "description" => __('Choose one or more', 'vuewp'),
+    //     "label" =>  __('Checkbox group', 'vuewp'),
+    //     "options" => [
+    //         [ "label" => "left", "value" => "left" ],
+    //         [ "label" => "right", "value" => "right" ],
+    //         [ "label" => "none", "value" => "none" ]
+    //     ],
+    //     "default_value" => ''
+    // ]
 ];
 
 function get_menus_as_options() {

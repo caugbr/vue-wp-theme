@@ -1,4 +1,4 @@
-import WpApi from '../assets/js/api.js';
+import WpApi from '../assets/js/wp-api.js';
 
 export default {
     computed: {
