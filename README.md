@@ -41,7 +41,7 @@ The current route schema is simple and you can change it as you wish. There is o
 * **/:postType/:taxonomy/:term** - TaxonomyArchive
 * **/[anything else]** - NotFound
 
-**The variable `vueWpThemeInfo`**
+**The variable** `vueWpThemeInfo`
 This is a JS variable that holds site information. It is available in Vue components as `this.info`.
 
 	{
