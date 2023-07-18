@@ -59,7 +59,7 @@ This is a JS variable that holds site information. It is available in Vue compon
 		"siteUrl": "Site URL", // Full site URL
 		"basePath": "Path", // If WP base URL is a sub folder, contains the path to it
 		"language": "WP language", // The language defined in Wordpress settings
-		"settings": {}, //All settings defined in admin page
+		"settings": {}, // All settings defined in admin page
 		"wpApiSettings": { // used by WpApi
 			"root": "REST API base URL",
 			"nonce": "WP nonce"

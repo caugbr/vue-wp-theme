@@ -6,6 +6,7 @@ import PostArchive from '../views/PostArchive.vue';
 import Page from '../views/Page.vue';
 import PageArchive from '../views/PageArchive.vue';
 import TaxonomyArchive from '../views/TaxonomyArchive.vue';
+import SearchResults from '../views/SearchResults.vue';
 import NotFound from '../views/NotFound.vue';
 import Video from '../views/Video.vue';
 import VideoArchive from '../views/VideoArchive.vue';
@@ -53,6 +54,11 @@ const routes = [
         path: basePath + '/:postType/:taxonomy/:term',
         name: 'TaxonomyArchive',
         component: TaxonomyArchive
+    },
+    {
+        path: basePath + '/search/:term',
+        name: 'SearchResults',
+        component: SearchResults
     },
     {
         path: basePath + '/:pathMatch(.*)*',

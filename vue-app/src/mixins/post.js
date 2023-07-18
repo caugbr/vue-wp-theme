@@ -67,6 +67,9 @@ export default {
                     }
                 }
             }
+            if (post && post.thumbnail) {
+                return post.thumbnail;
+            }
             return '';
         },
         async getTerm(tax, term) {

@@ -39,6 +39,19 @@ class WpApi {
     }
 
     /**
+     * Returns the results of the search for searchTerm
+     * @param {string} searchTerm   Search for this string
+     * @param {object} params       Other request params
+     * @returns array
+     */
+    getSearchResults(searchTerm, params = {}) {
+        // params.search = searchTerm;
+        const urlParams = this.obj2url(params);
+        this.namespace = 'vuewp/v1';
+        return this._get(`/search/${searchTerm}${urlParams}`);
+    }
+
+    /**
      * Returns the menu items
      * @param {string} menuName     WP Menu name
      * @param {object} params       Other request params

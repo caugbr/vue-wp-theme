@@ -2,7 +2,10 @@
     <div :class="`list-posts type-${postType} list`">
         <ul>
             <li v-for="post, index in posts" :key="index">
-                <router-link :to="`${info.basePath}/${urlName}/${post.slug}`">
+                <router-link 
+                    :to="`${info.basePath}/${typeName(post)}/${post.slug}`" 
+                    :class="postType"
+                >
                     <div 
                         v-if="thumbnails" 
                         class="thumbnail" 
@@ -28,7 +31,7 @@ export default {
         },
         postType: {
             type: String,
-            default: 'post'
+            default: ''
         },
         taxonomy: {
             type: String,
@@ -41,6 +44,12 @@ export default {
         thumbnails: {
             type: Boolean,
             default: true
+        },
+        postList: {
+            type: Array,
+            default() {
+                return [];
+            }
         }
     },
     data() {
@@ -48,15 +57,38 @@ export default {
             posts: []
         };
     },
-    computed: {
-        urlName() {
-            if (/^(post|page)$/.test(this.postType)) {
-                return this.postType + 's';
+    methods: {
+        typeName(post) {
+            if (post.type) {
+                return this.normalizeName(post.type);
             }
-            return this.postType;
+            return this.urlName;
+        },
+        normalizeName(name) {
+            if (/^(post|page)$/.test(name)) {
+                return name + 's';
+            }
+            return name;
         }
     },
-    async beforeMount() {
+    computed: {
+        urlName() {
+            return this.normalizeName(this.postType);
+        },
+        items() {
+            if (this.postList.length) {
+                return this.postList;
+            }
+            return this.posts;
+        }
+    },
+    async mounted() {
+        console.log('mounted', this.postList)
+        if (this.postList.length) {
+            console.log('postList', this.postList)
+            this.posts = this.postList;
+            return;
+        }
         this.loading(true);
         const params = { _fields: ['slug', 'title'], per_page: this.perPage };
         if (this.thumbnails) {

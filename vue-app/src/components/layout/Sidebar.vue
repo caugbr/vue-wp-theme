@@ -1,9 +1,10 @@
 <template>
     <div v-if="position != 'none'" :class="`sidebar position-${position}`">
-        <a class="toggle" href="#" @click.prevent="toggle">
+        <a class="toggle" href="#" @click.prevent="toggleMenu">
             <span class="open">&plus;</span>
             <span class="close">&minus;</span>
         </a>
+        <search />
         <wp-menu 
             v-if="info.settings.sidebar_menu" 
             :menu="info.settings.sidebar_menu" 
@@ -14,25 +15,17 @@
 
 <script>
 import WpMenu from '../WpMenu.vue';
+import Search from '../Search.vue';
 
 export default {
     name: 'Sidebar',
     components: {
-        WpMenu
+        WpMenu,
+        Search
     },
-    // data() {
-    //     return {
-    //         position: this.info.settings.sidebar_location
-    //     }
-    // },
     computed: {
         position() {
             return this.info.settings.sidebar_location;
-        }
-    }, 
-    methods: {
-        toggle() {
-            document.body.classList.toggle('menu-open');
         }
     }
 }

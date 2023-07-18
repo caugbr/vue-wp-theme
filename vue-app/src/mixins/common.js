@@ -28,6 +28,9 @@ export default {
         },
         redraw() {
             this.$store.dispatch('setRedraw');
+        },
+        toggleMenu() {
+            document.body.classList.toggle('menu-open');
         }
     }
 };

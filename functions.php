@@ -57,13 +57,14 @@ add_action('wp_footer', 'enqueue_scripts');
  */
 function get_vue_info() {
     global $scriptsUrlProd;
+    global $settings;
     $url_info = parse_url(site_url());
     $ret = [
         "themeDirUrl" => $scriptsUrlProd,
         "siteUrl" => site_url(),
         "basePath" => $url_info['path'],
         "language" => get_locale(),
-        "settings" => get_vuewp_settings(),
+        "settings" => $settings->get_saved(),
         "wpApiSettings" => [
             "root" => esc_url_raw(rest_url()),
             "nonce" => wp_create_nonce('wp_rest')
@@ -281,6 +282,29 @@ function get_menus() {
     return array_map(function($a) { return (array) $a; }, $menus);
 }
 
+function rest_search(WP_REST_Request $request) {
+    $term = $request->get_param('term');
+    $args = [
+        "post_type" => "any",
+        "s" => $term
+    ];
+    $posts = get_posts($args);
+    $results = [];
+    foreach ($posts as $p) {
+        // print_r($p);
+        $thumbnail_id = get_post_thumbnail_id($p);
+        $thumbnail = wp_get_attachment_image_src($thumbnail_id);
+        $results[] = [
+            "id" => $p->ID,
+            "title" => $p->post_title,
+            "slug" => $p->post_name,
+            "type" => $p->post_type,
+            "thumbnail" => $thumbnail[0] ?? ''
+        ];
+    }
+    return new WP_REST_Response($results, 200);
+}
+
 function rest_get_menu_items(WP_REST_Request $request) {
     $menuID = $request->get_param('slug');
     $items = wp_get_nav_menu_items($menuID);
@@ -307,6 +331,10 @@ add_action('rest_api_init', function() {
     register_rest_route('vuewp/v1', '/term/(?P<tax>[a-z-_]+)/(?P<term>\d+)', [
         'methods' => 'GET',
         'callback' => 'rest_get_term'
+    ]);
+    register_rest_route('vuewp/v1', '/search/(?P<term>\w+)', [
+        'methods' => 'GET',
+        'callback' => 'rest_search'
     ]);
 });
 
