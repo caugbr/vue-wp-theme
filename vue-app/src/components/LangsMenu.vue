@@ -1,7 +1,12 @@
 <template>
     <div class="langs-menu">
         <form action="#" @submit.prevent>
-            <label for="chose-lang">{{  t('Choose your language') }}</label>
+            <label v-if="label" for="chose-lang">
+                {{ label }}
+            </label>
+            <label v-else for="chose-lang">
+                {{ defaultLabel }}
+            </label>
             <select id="chose-lang" @change="select">
                 <option 
                     v-for="name, code in langs" 
@@ -19,10 +24,22 @@
 <script>
 export default {
     name: 'LangsMenu',
+    props: {
+        label: {
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
-            langs: this.getLangs()
+            langs: this.getLangs(),
+            // defaultLabel: 'Choose your language'
         };
+    },
+    computed: {
+        defaultLabel() {
+            return this.t('Choose your language');
+        }
     },
     methods: {
         select(val) {

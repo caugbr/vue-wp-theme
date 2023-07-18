@@ -10,22 +10,35 @@
             :menu="info.settings.sidebar_menu" 
             :inline="false"
         />
+        <langs-menu :label="t('Language')" />
     </div>
 </template>
 
 <script>
 import WpMenu from '../WpMenu.vue';
 import Search from '../Search.vue';
+import LangsMenu from '../LangsMenu.vue';
 
 export default {
     name: 'Sidebar',
     components: {
         WpMenu,
-        Search
+        Search,
+        LangsMenu
     },
     computed: {
         position() {
             return this.info.settings.sidebar_location;
+        }
+    },
+    beforeMount() {
+        if (!window.menuBehaviorApplied) {
+            document.body.addEventListener('mousedown', evt => {
+                if (!evt.target.matches('.sidebar,.sidebar *')) {
+                    this.closeMenu();
+                }
+            })
+            window.menuBehaviorApplied = 1;
         }
     }
 }
@@ -38,6 +51,8 @@ export default {
     left: 0;
     width: 200px;
     height: 100%;
+    padding: 1rem 0.25rem;
+    text-align: left;
     background-color: #fefefe;
     border-right: 1px solid #ccc;
     transform: translateX(-100%);
@@ -87,6 +102,19 @@ export default {
             transform: translateX(calc(-100% + 1px));
             border-width: 0 0 1px 1px;
         }
+    }
+
+    .search {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .langs-menu {
+        text-align: left;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        margin-top: 1rem;
     }
 }
 .menu-open .sidebar {

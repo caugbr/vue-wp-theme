@@ -1,16 +1,24 @@
 <template>
     <div class="search-results">
-        <h1>SearchResults</h1>
-        <list v-if="posts.length" :postList="posts" />
+        <h1>{{ t('Search Results') }}</h1>
+        <search layout="horizontal" />
+        <div class="results" v-if="posts.length">
+            {{ tp('One result for "{term}"|{count} results for "{term}".', { count, term }) }}
+            <list :postList="posts" />
+        </div>
+        <p class="no-results" v-else>
+            {{ t('No results for "{term}".', { term }) }}
+        </p>
     </div>
 </template>
 
 <script>
 import List from '../components/List.vue';
+import Search from '../components/Search.vue';
 
 export default {
     name: 'SearchResults',
-    components: { List },
+    components: { List, Search },
     data() {
         return {
             posts: []
@@ -25,9 +33,15 @@ export default {
     computed: {
         term() {
             return this.$route.params.term;
+        },
+        count() {
+            return this.posts.length;
         }
     },
     beforeMount() {
+        if (this.term) {
+            this.$store.dispatch('setLastSearch', this.term);
+        }
         this.search();
     }
 }

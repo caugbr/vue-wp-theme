@@ -31,6 +31,9 @@ export default {
         },
         toggleMenu() {
             document.body.classList.toggle('menu-open');
+        },
+        closeMenu() {
+            document.body.classList.remove('menu-open');
         }
     }
 };

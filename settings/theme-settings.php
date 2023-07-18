@@ -69,6 +69,11 @@ $theme_settings = [
     // ]
 ];
 
+function get_menus() {
+    $menus = get_terms('nav_menu', array('hide_empty' => true));
+    return array_map(function($a) { return (array) $a; }, $menus);
+}
+
 function get_menus_as_options() {
     $ret = [ [ "label" => "None", "value" => "" ] ];
     foreach (get_menus() as $opt) {

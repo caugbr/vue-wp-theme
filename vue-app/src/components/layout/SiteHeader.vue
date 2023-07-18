@@ -5,17 +5,15 @@
             v-if="info.settings.header_menu" 
             :menu="info.settings.header_menu" 
         />
-        <langs-menu />
     </div>
 </template>
 
 <script>
-import LangsMenu from '../LangsMenu.vue';
 import WpMenu from '../WpMenu.vue';
 
 export default {
     name: 'SiteHeader',
-    components: { LangsMenu, WpMenu }
+    components: { WpMenu }
 }
 </script>
 

@@ -7,6 +7,7 @@ export default new Vuex.Store({
     state: {
         redrawKey: 0,
         language: 'pt-br',
+        lastSearch: '',
         loadingLayer: {
             bgColor: '#000000',
             bgOpacity: '0.6',
@@ -24,6 +25,9 @@ export default new Vuex.Store({
         SET_LANGUAGE(state, payload) {
             state.language = payload;
         },
+        SET_LAST_SEARCH(state, payload) {
+            state.lastSearch = payload;
+        },
         SET_REDRAW_KEY(state) {
             state.redrawKey++;
         }
@@ -37,6 +41,9 @@ export default new Vuex.Store({
         },
         setLanguage({ commit }, lang) {
             commit('SET_LANGUAGE', lang);
+        },
+        setLastSearch({ commit }, term) {
+            commit('SET_LAST_SEARCH', term);
         },
         setRedraw({ commit }) {
             commit('SET_REDRAW_KEY');
