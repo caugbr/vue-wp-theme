@@ -1,0 +1,87 @@
+@use "sass:math";
+
+// Grid Mixins
+
+// Add a breakpoint from $min to $max or from $min or until $max
+@mixin add-breakpoint($min: false, $max: false) {
+  @if $max and $min {
+    @media only screen and (min-width: calc($min + 1px)) and (max-width: $max) {
+      @content;
+    }
+  } @else if $min {
+    @media only screen and (min-width: calc($min + 1px)) {
+      @content;
+    }
+  } @else if $max {
+    @media only screen and (max-width: $max) {
+      @content;
+    }
+  } @else {
+    @error "add-breakpoint: expected $min and/or $max";
+  }
+}
+
+// Write the rules for columns
+@mixin grid-cols($sufix: "", $gutter: true) {
+  $gap: $grid-gutter;
+
+  @if false == $gutter or is-fixed-gutter() {
+    $gap: 0%;
+  }
+
+  .col-0#{$sufix} {
+    display: none;
+  }
+
+  @for $i from 1 through calc($grid-cols - 1) {
+    $width: to-fixed(math.div(100%, math.div($grid-cols, $i)) - ($gap * math.div(($grid-cols - $i), $grid-cols)), 4);
+    .col-#{$i}#{$sufix} {
+      @include col-def-rules($width);
+    }
+
+    .offset-#{$i}#{$sufix} {
+      margin-left: calc($width + $gap);
+    }
+  }
+
+  .col-#{$grid-cols}#{$sufix} {
+    @include col-def-rules(100%);
+  }
+}
+
+@mixin col-def-rules($width: false) {
+  box-sizing: border-box;
+  height: auto;
+  display: initial;
+
+  @if $width {
+    width: $width;
+    flex-basis: $width;
+  }
+}
+
+// Write alignment rules
+@mixin row-alignment($sufix: "") {
+  &.left#{$sufix} { justify-content: flex-start; }
+  &.center#{$sufix} { justify-content: center; }
+  &.right#{$sufix} { justify-content: flex-end; }
+  &.between#{$sufix} { justify-content: space-between; }
+  &.around#{$sufix} { justify-content: space-around; }
+}
+
+// Write sorting rules
+@mixin grid-order($sufix: "") {
+  @for $i from 1 through $grid-cols {
+    .order-#{$i}#{$sufix} { order: $i; }
+  }
+}
+
+// Check if $gutter have a fixed value
+@function is-fixed-gutter() {
+  @return ($grid-gutter > 0 and unit($grid-gutter) != "%");
+}
+
+@function to-fixed($float, $digits: 2) {
+  $pow: math.pow(10, $digits);
+  @return math.div(math.round($float * $pow), $pow);
+}

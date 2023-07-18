@@ -1,0 +1,94 @@
+// Grid rules
+
+.container {
+  box-sizing: border-box;
+  padding: 0;
+  width: 100%;
+  max-width: $grid-max-width;
+  min-width: $grid-min-width;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.row {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-flow: row wrap;
+  gap: $grid-gutter;
+
+  @if is-fixed-gutter() {
+    gap: 0%;
+    margin-left: calc(($grid-gutter / 2) * -1);
+    margin-right: calc(($grid-gutter / 2) * -1);
+  }
+
+  > * {
+    &.col {
+      @include col-def-rules;
+
+      flex-grow: 1;
+      flex-basis: 0;
+      max-width: 100%;
+    }
+
+    @if is-fixed-gutter() {
+      padding-left: calc($grid-gutter / 2);
+      padding-right: calc($grid-gutter / 2);
+    }
+  }
+
+  @include grid-order;
+  @include row-alignment;
+  @include grid-cols;
+
+  $last-value: false;
+
+  @each $label, $size in $breakpoints {
+    @include add-breakpoint($last-value, $size) {
+      @include row-alignment("-#{$label}");
+      @include grid-order("-#{$label}");
+      @include grid-cols("-#{$label}");
+    }
+
+    @if index($breakpoints, $label $size) == length($breakpoints) {
+      @include add-breakpoint($size) {
+        @include row-alignment("-#{$breakpoint-beyond}");
+        @include grid-order("-#{$breakpoint-beyond}");
+        @include grid-cols("-#{$breakpoint-beyond}");
+      }
+    }
+
+    $last-value: $size;
+  }
+
+  &.no-gutter {
+    gap: 0%;
+    margin-left: 0;
+    margin-right: 0;
+
+    > * {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    @include grid-cols("", false);
+
+    $last-value: false;
+
+    @each $label, $size in $breakpoints {
+      @include add-breakpoint($last-value, $size) {
+        @include grid-cols("-#{$label}", false);
+      }
+
+      @if index($breakpoints, $label $size) == length($breakpoints) {
+        @include add-breakpoint($size) {
+          @include grid-cols("-#{$breakpoint-beyond}", false);
+        }
+      }
+
+      $last-value: $size;
+    }
+  }
+}

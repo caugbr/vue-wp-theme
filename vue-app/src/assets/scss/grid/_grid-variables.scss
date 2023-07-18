@@ -1,0 +1,24 @@
+// Grid variables
+
+// Max width (.container)
+$grid-max-width: 1300px;
+
+// Min width (.container)
+$grid-min-width: 320px;
+
+// Space between the columns
+$grid-gutter: 1rem;
+
+// Number of columns
+$grid-cols: 12;
+
+// Breakpoints - it must be organized in ascending order
+$breakpoints: (
+  "sm": 568px,
+  "md": 768px,
+  "lg": 1024px,
+  "xl": 1280px
+);
+
+// Defines the name for the last breakpoint, that will be used to any width greater than the last value
+$breakpoint-beyond: "xxl";
