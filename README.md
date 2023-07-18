@@ -41,6 +41,7 @@ The current route schema is simple and you can change it as you wish. There is o
 * **/pages** - PageArchive
 * **/pages/:slug** - Page
 * **/:postType/:taxonomy/:term** - TaxonomyArchive
+* **/search/:term** - SearchResults
 * **/[anything else]** - NotFound
 
 ### The variable `vueWpThemeInfo`
