@@ -44,8 +44,7 @@ export default {
             this.loading(true);
             return new Promise(resolve => {
                 const api = this.api;
-                const oldFields = [ ...api.fields ];
-                api.fields = oldFields.concat(fields);
+                api.fields = api.fields.concat(fields);
                 api.embed = true;
                 api.getBySlug(postType, slug).then(video => {
                     if (video.data.length) {
