@@ -1,19 +1,12 @@
 <template>
     <div class="site-footer">
-        <div class="copyright">
-            &copy;{{ year }} Vue WP Theme
-        </div>
+        <div id="footer_area" class="wp-widgets-area"></div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'SiteFooter',
-    data() {
-        return {
-            year: (new Date()).getFullYear()
-        }
-    }
+    name: 'SiteFooter'
 }
 </script>
 
@@ -28,5 +21,9 @@ export default {
     bottom: 0;
     left: 0;
     box-sizing: border-box;
+
+    p {
+        margin: 0;
+    }
 }
 </style>

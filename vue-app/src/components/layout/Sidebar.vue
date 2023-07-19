@@ -11,6 +11,7 @@
             :inline="false"
         />
         <langs-menu :label="t('Language')" />
+        <div id="sidebar_area" class="wp-widgets-area"></div>
     </div>
 </template>
 

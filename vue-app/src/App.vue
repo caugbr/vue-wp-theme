@@ -52,6 +52,19 @@ export default {
             const lang = this.normalizeLangCode(this.info.language);
             this.$store.dispatch('setLanguage', lang);
         }
+    },
+    mounted() {
+        // move sidebars into app
+        const areas = document.querySelectorAll('#wp-sidebars [data-area-id]');
+        if (areas.length) {
+            Array.from(areas).forEach(area => {
+                const areaId = area.getAttribute('data-area-id');
+                const to = document.querySelector(`#${areaId}`);
+                if (to) {
+                    to.innerHTML = area.innerHTML;
+                }
+            });
+        }
     }
 }
 </script>

@@ -2,33 +2,87 @@
 
 global $scriptsUrlDev;
 global $themeDirUrl;
+global $themeDir;
 global $vueScripts;
 global $appDir;
 $scriptsUrlDev = 'http://127.0.0.1:8080';
 $themeDirUrl = get_template_directory_uri();
+$themeDir = get_stylesheet_directory();
 $vueScripts = [
     'wp-vue-app-js' => 'js/app.js',
     'wp-vue-vendors-js' => 'js/chunk-vendors.js'
 ];
 $appDir = 'vue-app';
 
+global $vuewp_areas;
+$vuewp_areas = [
+    [
+		'name' => 'Sidebar widgets area',
+		'id' => 'sidebar_area',
+		'before_widget' => '<div>',
+		'after_widget' => '</div>',
+		'before_title' => '<h2>',
+		'after_title' => '</h2>'
+	],
+    [
+		'name' => 'Footer widgets area',
+		'id' => 'footer_area',
+		'before_widget' => '<div>',
+		'after_widget' => '</div>',
+		'before_title' => '<h2>',
+		'after_title' => '</h2>'
+	]
+];
+
 add_theme_support('post-thumbnails');
 add_theme_support('html5', ['style','script']);
 add_theme_support('automatic-feed-links');
+add_theme_support('widgets');
 
 // Remove redirects
-function remove_redirects() {
-    add_rewrite_rule('^/(.+)/?', 'index.php', 'top');
-}
-add_action('init', 'remove_redirects');
 remove_action('template_redirect', 'redirect_canonical');
+// function remove_redirects() {
+//     add_rewrite_rule('^/(.+)/?', 'index.php', 'top');
+// }
+// add_action('init', 'remove_redirects');
 
 // Settings
-include_once get_stylesheet_directory() . "/settings/index.php";
+include_once $themeDir . "/settings/index.php";
 $settings = new ThemeSettings('vuewp_settings');
 
 // REST API custom endpoints
-include_once get_stylesheet_directory() . "/extend-rest-api.php";
+include_once $themeDir . "/extend-rest-api.php";
+
+/**
+ * Register widget areas
+ */
+function vuewp_widget_areas() {
+    global $vuewp_areas;
+    foreach ($vuewp_areas as $area) {
+        register_sidebar($area);
+    }
+}
+add_action('widgets_init', 'vuewp_widget_areas');
+
+/**
+ * Print HTML for wp widget areas
+ *
+ * @return void
+ */
+function vuewp_add_areas() {
+    global $vuewp_areas;
+    ?>
+    <div id="wp-sidebars" style="display: none;">
+        <?php foreach ($vuewp_areas as $area) { ?>
+            <?php if (is_active_sidebar($area['id'])) { ?>
+            <div data-area-id="<?php print $area['id']; ?>">
+                <?php dynamic_sidebar($area['id']); ?>
+            </div>
+            <?php } ?>
+        <?php } ?>
+    </div>
+    <?php
+}
 
 /**
  * Include the necessary files to run Vue, based on constant 
@@ -214,7 +268,7 @@ function admin_page() {
                             <p>
                                 <?php printf(__('These options will be available for all components in the Vue app as %s.', 'vuewp'), '<code>this.info.settings</code>'); ?>
                                 <br />
-                                <?php printf(__('You can edit the file %s and add some new settings as per your theme\'s needs.', 'vuewp'), '<em>settings/theme-settings.php</em>'); ?>
+                                <?php printf(__('You can edit the file %s and add some new settings as per your theme\'s needs.', 'vuewp'), '<code>settings/theme-settings.php</code>'); ?>
                             </p>
                             <?php $settings->render(); ?>
                             <div class="formline buttons">
@@ -319,8 +373,9 @@ function get_slug_by_id($itm) {
 }
 
 function readStrings() {
+    global $themeDir;
     global $appDir;
-    $app_dir = get_stylesheet_directory() . '/' . $appDir;
+    $app_dir = $themeDir . '/' . $appDir;
     $lang_files = listFiles($app_dir . '/src/I18n/langs');
     $components = listFiles($app_dir . '/src/components');
     $views = listFiles($app_dir . '/src/views');
@@ -372,4 +427,52 @@ function listFiles($directory) {
         }
     }
     return $files;
+}
+
+/**
+ * Adds Copyright widget.
+ */
+class Copyright extends WP_Widget {
+	public function __construct() {
+		parent::__construct(
+			'copyright',
+			'Copyright',
+			['description' => __('A Foo Widget', 'vuewp')]
+		);
+	}
+
+	public function widget($args, $instance) {
+		extract($args);
+		$name = $instance['name'];
+		print $before_widget;
+		if (!empty($name)) {
+            $year = date('Y');
+			print "&copy;{$year} {$name}";
+		}
+		print $after_widget;
+	}
+
+	public function form($instance) {
+		if (isset( $instance['name'])) {
+			$name = $instance['name'];
+		} else {
+			$name = __('Owner name', 'vuewp');
+		}
+		?>
+		<p>
+			<label for="<?php print $this->get_field_name('name'); ?>"><?php _e('Name:'); ?></label>
+			<input class="widefat" id="<?php print $this->get_field_id('name'); ?>" name="<?php print $this->get_field_name('name'); ?>" type="text" value="<?php print esc_attr($name); ?>" />
+		 </p>
+		<?php
+	}
+
+	public function update($new_instance, $old_instance) {
+		$instance = array();
+		$instance['name'] = (!empty( $new_instance['name'])) ? strip_tags($new_instance['name']) : '';
+		return $instance;
+	}
+}
+add_action('widgets_init', 'vuewp_register_widgets');
+function vuewp_register_widgets() {
+	register_widget('Copyright');
 }

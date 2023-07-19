@@ -1,5 +1,7 @@
 <?php get_header(); ?>
 
-<div id="app"></div>
+    <div id="app"></div>
 
-<?php get_footer();
+    <?php vuewp_add_areas(); ?>
+
+<?php get_footer(); ?>
