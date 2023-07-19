@@ -25,7 +25,7 @@ The frontend is a Vue app, all the displayed contents are loaded using the API a
 * Grid - Simple CSS grid made with SASS
 
 ### Administration page
-In `Appearence > Vue WP Theme` you can access the theme options page. There you can edit the site settings and edit translation files or even create a new one.
+In `Appearence > Vue WP Theme` you can access the theme options page. There you can edit the site settings and edit translation files or even create new ones.
 
 ### Settings
 The settings are stored in a php file, located in `settings/theme-settings.php`. The defined options will be editable in admin page and available in frontend as `this.info`. You can edit it and add new settings.
@@ -35,7 +35,8 @@ The translation files are simple JSON files located in `vue-app/I18n/langs` and 
 
 ### Routes
 The current route schema is simple and you can change it as you wish. There is one component for each defined route.
-[route - component]
+
+* [route] - [component name]
 * **/** - Home
 * **/posts** - PostArchive
 * **/posts/:slug** - Post
@@ -60,3 +61,7 @@ This is a JS variable that holds site information. It is available in Vue compon
 			"nonce": "WP nonce"
 		}
 	}
+
+### Widgets
+The Vue WP theme supports widgets. There are two widget areas available. They are located in sidebar and in footer. But you can remove them or add more.
+The theme adds the widget `Copyright`, that you can use in footer, to add a text (or link) like '&copy;2023 Your name'.
