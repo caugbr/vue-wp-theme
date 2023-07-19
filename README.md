@@ -28,13 +28,14 @@ The frontend is a Vue app, all the displayed contents are loaded using the API a
 In `Appearence > Vue WP Theme` you can access the theme options page. There you can edit the site settings and edit translation files or even create a new one.
 
 ### Settings
-The settings are stored in a php file, located in `settings/theme-settings.php`. The defined options will be editable in admin page and available in frontend as `this.info`.
+The settings are stored in a php file, located in `settings/theme-settings.php`. The defined options will be editable in admin page and available in frontend as `this.info`. You can edit it and add new settings.
 
 ### Translations
-The translation files are simple JSON files located in `vue-app/I18n/langs` and you can edit them directly, but there is a simple way to do this in the admin page. The set of strings displayed in admin is read from the code, so it's always up to date.
+The translation files are simple JSON files located in `vue-app/I18n/langs` and you can edit them directly, but there is a simple way to do this in the admin page. The set of strings displayed in admin is read from the code, so it's always up to date with possible new added strings.
 
 ### Routes
 The current route schema is simple and you can change it as you wish. There is one component for each defined route.
+[route - component]
 * **/** - Home
 * **/posts** - PostArchive
 * **/posts/:slug** - Post
@@ -50,10 +51,10 @@ This is a JS variable that holds site information. It is available in Vue compon
 	{
 		"themeDirUrl": "Theme URL", // Theme directory URL
 		"siteUrl": "Site URL", // Full site URL
-		"basePath": "Path", // If WP base URL is a sub folder, contains the path to it
-		"language": "WP language", // The language defined in Wordpress settings
+		"basePath": "Path", // Path if site URL contains a sub folder
+		"language": "WP language", // Language defined in Wordpress settings
 		"settings": {}, //All settings defined in admin page
-		"loggedUser": false, // User data or FALSE if user is unlogged 
+		"loggedUser": false, // User data object or FALSE if not logged in 
 		"wpApiSettings": { // used by WpApi
 			"root": "REST API base URL",
 			"nonce": "WP nonce"

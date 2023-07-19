@@ -63,7 +63,7 @@ class ThemeSettings {
                     <textarea 
                         name="settings[<?php print $id; ?>]" 
                         id="<?php print $id; ?>"
-                        <?php if ($info['placeholder']) {
+                        <?php if (!empty($info['placeholder'])) {
                             print "placeholder=\"{$info['placeholder']}\"";
                         } ?>
                     ><?php print $this->saved[$id] ?? $info['default_value']; ?></textarea>
@@ -76,7 +76,7 @@ class ThemeSettings {
                         value="<?php print $this->saved[$id] ?? $info['default_value']; ?>" 
                         name="settings[<?php print $id; ?>]" 
                         id="<?php print $id; ?>"
-                        <?php if ($info['placeholder']) {
+                        <?php if (!empty($info['placeholder'])) {
                             print " placeholder=\"{$info['placeholder']}\"";
                         } ?>
                     >

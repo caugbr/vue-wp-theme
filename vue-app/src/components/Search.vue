@@ -2,7 +2,7 @@
     <div :class="`search ${layout}`">
         <form :action="`${info.basePath}/search`" @submit.prevent="search">
             <div class="search-wrapper">
-                <label v-if="label" for="search">{{ label }}</label>
+                <label v-if="label" for="search">{{ searchLabel }}</label>
                 <div class="input-wrapper">
                     <input 
                         type="text" 
@@ -33,8 +33,8 @@ export default {
             default: 'normal'
         },
         label: {
-            type: String,
-            default: 'Search'
+            type: [String, Boolean],
+            default: true
         },
         buttonLabel: {
             type: String,
@@ -53,6 +53,12 @@ export default {
     computed: {
         lastSearch() {
             return this.$store.state.lastSearch;
+        },
+        searchLabel() {
+            if (typeof this.label != 'boolean') {
+                return this.label;
+            }
+            return this.label ? this.t('Search') : '';
         }
     },
     methods: {

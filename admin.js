@@ -77,7 +77,6 @@ window.addEventListener('load', evt => {
     const tabEl = document.querySelector('.tabs');
     if (tabEl) {
         const tabs = tabEl.querySelectorAll('.tab-links a');
-        console.log('tabs', tabs)
         Array.from(tabs).forEach(tab => {
             tab.addEventListener('click', evt => {
                 evt.preventDefault();

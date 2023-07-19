@@ -1,12 +1,18 @@
 {
     "language_name": "Português (Brasil)",
     "Choose your language": "Escolha seu idioma",
-    "Footer": "Rodapé",
-    "Header": "Cabeçalho",
-    "Vue WP Theme": "",
+    "Language": "Idioma",
+    "Vue WP theme": "",
+    "Search": "Busca",
+    "Vue WP starter theme": "",
     "vuewp_intro": "Introdução aqui...",
     "Pages": "Páginas",
     "Posts": "Posts",
     "Not found": "Não encontrado",
-    "Posts tax": ""
+    "content_not_found": "O conteúdo '{searched}' não foi encontrado",
+    "Search Results": "Resultado da busca",
+    "One result for": "",
+    "No results for": "",
+    "Posts tax": "",
+    "Videos": "Vídeos"
 }

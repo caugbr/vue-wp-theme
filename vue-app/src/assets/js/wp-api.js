@@ -5,12 +5,17 @@ class WpApi {
     nonce;
     namespace;
     embed;
+    fields;
 
     constructor(info) {
         this.apiUrl = info.root;
         this.nonce = info.nonce;
         this.namespace = info.namespace || 'wp/v2';
         this.embed = !!info.embed;
+        this.fields = info.fields ?? [
+            'id', 'title', 'slug', 'content', 'author',
+            'type', 'featured_media', 'categories', 'tags'
+        ];
     }
 
     /**
@@ -40,6 +45,7 @@ class WpApi {
 
     /**
      * Returns the results of the search for searchTerm
+     * Dependes on custom endpoint defined in extend-rest-api.php
      * @param {string} searchTerm   Search for this string
      * @param {object} params       Other request params
      * @returns array
@@ -53,11 +59,13 @@ class WpApi {
 
     /**
      * Returns the menu items
+     * Dependes on custom endpoint defined in extend-rest-api.php
      * @param {string} menuName     WP Menu name
      * @param {object} params       Other request params
      * @returns array
      */
     getMenu(menuName, params = {}) {
+        this.embed = false;
         const urlParams = this.obj2url(params);
         return this._get(`/menu/${menuName}${urlParams}`);
     }
@@ -138,6 +146,7 @@ class WpApi {
     obj2url(obj) {
         if (this.embed) {
             obj._embed = 1;
+            obj._fields = obj._fields ?? this.fields;
             obj._fields.push('_links.wp:featuredmedia', '_embedded');
         }
         let str = [];

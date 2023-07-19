@@ -9,7 +9,7 @@
     <list postType="page" :thumbnails="false"></list>
 
     <h3>{{ t('Posts') }}</h3>
-    <list postType="post" :thumbnails="false"></list>
+    <list postType="post"></list>
   </div>
 </template>
 

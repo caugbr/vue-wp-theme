@@ -12,8 +12,8 @@ export default {
                 content: ''
             },
             taxonomyLinks: {
-                category: [],
-                tag: []
+                categories: [],
+                tags: []
             },
             thumbnail: '',
             is404: false,
@@ -40,10 +40,14 @@ export default {
             }
             return nobj;
         },
-        getPost(slug, postType) {
+        getPost(slug, postType, fields = []) {
             this.loading(true);
             return new Promise(resolve => {
-                this.api.getBySlug(postType, slug).then(video => {
+                const api = this.api;
+                const oldFields = [ ...api.fields ];
+                api.fields = oldFields.concat(fields);
+                api.embed = true;
+                api.getBySlug(postType, slug).then(video => {
                     if (video.data.length) {
                         this.post = this.normalizeStrings(video.data[0]);
                         this.thumbnail = this.getThumbnailImg(this.post);
@@ -85,12 +89,19 @@ export default {
         },
         setTermLinks(taxName) {
             if (this.post[taxName] && this.post[taxName].length) {
-                const vcTerms = this.post[taxName];
+                const taxTerms = this.post[taxName];
                 if (!this.taxonomyLinks[taxName]) {
                     this.taxonomyLinks[taxName] = [];
                 }
-                vcTerms.forEach(vcTerm => {
-                    this.getTerm(taxName, vcTerm).then(term => {
+                taxTerms.forEach(taxTerm => {
+                    let singular = taxName;
+                    if ('categories' == taxName) {
+                        singular = 'category';
+                    }
+                    if ('tags' == taxName) {
+                        singular = 'post_tag';
+                    }
+                    this.getTerm(singular, taxTerm).then(term => {
                         this.taxonomyLinks[taxName].push(this.termLink(term.data));
                     });
                 });

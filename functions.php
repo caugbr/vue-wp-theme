@@ -1,14 +1,20 @@
 <?php
 
 global $scriptsUrlDev;
-global $scriptsUrlProd;
-global $loadScripts;
+global $themeDirUrl;
+global $vueScripts;
+global $appDir;
 $scriptsUrlDev = 'http://127.0.0.1:8080';
-$scriptsUrlProd = get_template_directory_uri();
-$loadScripts = [
+$themeDirUrl = get_template_directory_uri();
+$vueScripts = [
     'wp-vue-app-js' => 'js/app.js',
     'wp-vue-vendors-js' => 'js/chunk-vendors.js'
 ];
+$appDir = 'vue-app';
+
+add_theme_support('post-thumbnails');
+add_theme_support('html5', ['style','script']);
+add_theme_support('automatic-feed-links');
 
 // Remove redirects
 function remove_redirects() {
@@ -21,6 +27,7 @@ remove_action('template_redirect', 'redirect_canonical');
 include_once get_stylesheet_directory() . "/settings/index.php";
 $settings = new ThemeSettings('vuewp_settings');
 
+// REST API custom endpoints
 include_once get_stylesheet_directory() . "/extend-rest-api.php";
 
 /**
@@ -34,31 +41,32 @@ include_once get_stylesheet_directory() . "/extend-rest-api.php";
  */
 function enqueue_scripts() {
     global $scriptsUrlDev;
-    global $scriptsUrlProd;
-    global $loadScripts;
+    global $themeDirUrl;
+    global $vueScripts;
+    global $appDir;
     $envType = wp_get_environment_type();
     if ($envType == 'production') {
-        foreach ($loadScripts as $sid => $script) {
-            wp_register_script($sid, $scriptsUrlProd . "/vue-app/dist/" . $script);
-            wp_enqueue_script($sid);
+        foreach ($vueScripts as $sid => $script) {
+            $url = "{$themeDirUrl}/{$appDir}/dist/{$script}";
+            wp_enqueue_script($sid, $url);
         }
-        wp_enqueue_style("vp-vue-css-prod", $scriptsUrlProd . "/vue-app/dist/css/app.css");
+        $cssUrl = "{$themeDirUrl}/{$appDir}/dist/css/app.css";
+        wp_enqueue_style("vp-vue-css-prod", $cssUrl);
     } else {
-        foreach ($loadScripts as $sid => $script) {
-            wp_register_script($sid, $scriptsUrlDev . "/" . $script);
-            wp_enqueue_script($sid);
+        foreach ($vueScripts as $sid => $script) {
+            wp_enqueue_script($sid, $scriptsUrlDev . "/" . $script);
         }
     }
 }
 add_action('wp_footer', 'enqueue_scripts');
 
 /**
- * Add some values to wpVue variable
+ * Add some values to vueWpThemeInfo variable
  *
  * @return string
  */
 function get_vue_info() {
-    global $scriptsUrlProd;
+    global $themeDirUrl;
     global $settings;
 	global $current_user;
     $user = false;
@@ -73,7 +81,7 @@ function get_vue_info() {
     }
     $url_info = parse_url(site_url());
     $ret = [
-        "themeDirUrl" => $scriptsUrlProd,
+        "themeDirUrl" => $themeDirUrl,
         "siteUrl" => site_url(),
         "basePath" => $url_info['path'],
         "language" => get_locale(),
@@ -92,13 +100,13 @@ function get_vue_info() {
 }
 
 function add_admin_js() {
-    global $scriptsUrlProd;
-    wp_enqueue_script("vuewp-admin-js", $scriptsUrlProd . "/admin.js");
+    global $themeDirUrl;
+    wp_enqueue_script("vuewp-admin-js", $themeDirUrl . "/admin.js");
 }
 
 function add_admin_css() {
-    global $scriptsUrlProd;
-    wp_enqueue_style("vuewp-admin-css", $scriptsUrlProd . "/admin.css");
+    global $themeDirUrl;
+    wp_enqueue_style("vuewp-admin-css", $themeDirUrl . "/admin.css");
 }
 
 function vuewp_admin_page() {
@@ -144,7 +152,8 @@ function save_admin_page() {
 }
 
 function create_file($lang) {
-    $path = get_template_directory() . '/vue-app/src/I18n/langs/' . $lang . '.json';
+    global $appDir;
+    $path = get_template_directory() . $appDir . '/src/I18n/langs/' . $lang . '.json';
     if (!file_exists($path)) {
         $fh = fopen($path, "w");
         fclose($fh);
@@ -152,7 +161,8 @@ function create_file($lang) {
 }
 
 function save_strings($lang, $json) {
-    $path = get_template_directory() . '/vue-app/src/I18n/langs/' . $lang . '.json';
+    global $appDir;
+    $path = get_template_directory() . '/' . $appDir . '/src/I18n/langs/' . $lang . '.json';
     $valid = json_decode(stripslashes($json), true);
     if (!is_array($valid)) {
         return false;
@@ -309,7 +319,8 @@ function get_slug_by_id($itm) {
 }
 
 function readStrings() {
-    $app_dir = get_stylesheet_directory() . '/vue-app';
+    global $appDir;
+    $app_dir = get_stylesheet_directory() . '/' . $appDir;
     $lang_files = listFiles($app_dir . '/src/I18n/langs');
     $components = listFiles($app_dir . '/src/components');
     $views = listFiles($app_dir . '/src/views');

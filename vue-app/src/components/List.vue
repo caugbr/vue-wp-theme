@@ -83,9 +83,7 @@ export default {
         }
     },
     async mounted() {
-        console.log('mounted', this.postList)
         if (this.postList.length) {
-            console.log('postList', this.postList)
             this.posts = this.postList;
             return;
         }
