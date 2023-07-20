@@ -12,7 +12,7 @@ export default {
             return this.$store.state.redrawKey;
         },
         contentWidth() {
-            const cw = this.info.content_width;
+            const cw = this.info.contentWidth;
             return cw ? `<style>#app { --content-width: ${cw}px; }</style>` : '';
         }
     },

@@ -142,7 +142,7 @@ function get_vue_info() {
         "siteUrl" => site_url(),
         "basePath" => $url_info['path'],
         "language" => get_locale(),
-        "content_width" => $content_width,
+        "contentWidth" => $content_width,
         "settings" => $settings->get_saved(),
         "loggedUser" => $user,
         "wpApiSettings" => [
