@@ -67,3 +67,29 @@ function rest_get_menu_items(WP_REST_Request $request) {
     }
     return new WP_REST_Response($response, 200);
 }
+
+function get_slug_by_id($itm) {
+    if ($itm->type == "post_type") {
+        $post = get_post((int) $itm->object_id);
+        return $post->post_name;
+    }
+    if ($itm->type == "taxonomy") {
+        $tax = get_taxonomy($itm->object);
+        $term = get_term((int) $itm->object_id, $itm->object);
+        return [
+            "post_type" => $tax->object_type[0],
+            "tax_slug"  => $tax->rewrite['slug'],
+            "tax_name"  => $tax->name,
+            "term_slug" => $term->slug,
+            "term_id"   => $term->term_id
+        ];
+    }
+    if ($itm->type == "post_type_archive") {
+        $slug = $itm->object;
+        if (preg_match("/^(post|page|video)$/", $slug)) {
+            $slug .= "s";
+        }
+        return $slug;
+    }
+    return '';
+}

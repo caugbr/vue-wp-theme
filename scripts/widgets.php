@@ -1,25 +1,5 @@
 <?php
 
-global $vuewp_areas;
-$vuewp_areas = [
-    [
-		'name' => 'Sidebar widgets area',
-		'id' => 'sidebar_area',
-		'before_widget' => '<div>',
-		'after_widget' => '</div>',
-		'before_title' => '<h2>',
-		'after_title' => '</h2>'
-	],
-    [
-		'name' => 'Footer widgets area',
-		'id' => 'footer_area',
-		'before_widget' => '<div>',
-		'after_widget' => '</div>',
-		'before_title' => '<h2>',
-		'after_title' => '</h2>'
-	]
-];
-
 /**
  * Register widget areas
  */
@@ -39,10 +19,10 @@ add_action('widgets_init', 'vuewp_widget_areas');
 function vuewp_add_areas() {
     global $vuewp_areas;
     ?>
-    <div id="wp-sidebars" style="display: none;">
+    <div id="wp-sidebars">
         <?php foreach ($vuewp_areas as $area) { ?>
             <?php if (is_active_sidebar($area['id'])) { ?>
-            <div data-area-id="<?php print $area['id']; ?>">
+            <div class="move-to-app" data-to="#<?php print $area['id']; ?>">
                 <?php dynamic_sidebar($area['id']); ?>
             </div>
             <?php } ?>

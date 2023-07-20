@@ -1,0 +1,187 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Vue WP Theme\n"
+"POT-Creation-Date: 2023-07-20 08:48-0300\n"
+"PO-Revision-Date: 2023-07-19 20:45+0300\n"
+"Last-Translator: \n"
+"Language-Team: Cau Guanabara\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: vue-app\n"
+"X-Poedit-SearchPathExcluded-1: .git\n"
+
+#: scripts/admin-page.php:15 scripts/admin-page.php:62
+msgid "Vue WP Theme options"
+msgstr ""
+
+#: scripts/admin-page.php:16
+msgid "Vue WP Theme"
+msgstr ""
+
+#: scripts/admin-page.php:34
+#, php-format
+msgid "The file %s was successfully saved."
+msgstr ""
+
+#: scripts/admin-page.php:36
+#, php-format
+msgid "The file %s could not be saved, there was an error."
+msgstr ""
+
+#: scripts/admin-page.php:43
+#, php-format
+msgid "The file %s was successfully create."
+msgstr ""
+
+#: scripts/admin-page.php:45
+#, php-format
+msgid "The file %s could not be create, there was an error."
+msgstr ""
+
+#: scripts/admin-page.php:50
+msgid "Settings updated successfully."
+msgstr ""
+
+#: scripts/admin-page.php:78
+msgid "Options"
+msgstr ""
+
+#: scripts/admin-page.php:81
+msgid "Translations"
+msgstr ""
+
+#: scripts/admin-page.php:86
+msgid "Theme options"
+msgstr ""
+
+#: scripts/admin-page.php:88
+#, php-format
+msgid "These options will be available for all components in the Vue app as %s."
+msgstr ""
+
+#: scripts/admin-page.php:90
+#, php-format
+msgid "You can edit the file %s and add some new settings as per your theme's needs."
+msgstr ""
+
+#: scripts/admin-page.php:95
+msgid "Save options"
+msgstr ""
+
+#: scripts/admin-page.php:100
+msgid "Frontend translations"
+msgstr ""
+
+#: scripts/admin-page.php:102
+msgid "You can edit all translatable strings from here."
+msgstr ""
+
+#: scripts/admin-page.php:103
+msgid "If you created some new translatable strings, they will be present and marked in red. The strings displayed below will always be up to date with the application code."
+msgstr ""
+
+#: scripts/translation-functions.php:26
+msgid "Select a language to edit"
+msgstr ""
+
+#: scripts/translation-functions.php:32
+msgid "Edit"
+msgstr ""
+
+#: scripts/translation-functions.php:36
+msgid "Create a new language file"
+msgstr ""
+
+#: scripts/translation-functions.php:37
+msgid "Language code"
+msgstr ""
+
+#: scripts/translation-functions.php:38
+msgid "Language name"
+msgstr ""
+
+#: scripts/translation-functions.php:39
+msgid "Create"
+msgstr ""
+
+#: scripts/translation-functions.php:56
+msgid "Cancel"
+msgstr ""
+
+#: scripts/translation-functions.php:59
+msgid "Save"
+msgstr ""
+
+#: scripts/translation-functions.php:68
+#, php-format
+msgid "Editing language file &apos;%s.json&apos; (%s)"
+msgstr ""
+
+#: scripts/widgets.php:42
+msgid "Copyright information"
+msgstr ""
+
+#: scripts/widgets.php:65
+msgid "Owner name:"
+msgstr ""
+
+#: scripts/widgets.php:69
+msgid "Link (optional):"
+msgstr ""
+
+#: settings/theme-settings.php:6
+msgid "Use the Wordpress language in your site (or define it directly in Vuex store)"
+msgstr ""
+
+#: settings/theme-settings.php:7
+msgid "Use WP language"
+msgstr ""
+
+#: settings/theme-settings.php:13
+msgid "Select the WP menu that appears in site header. Create a new one in Appearence &gt; Costumize &gt; Menus."
+msgstr ""
+
+#: settings/theme-settings.php:14
+msgid "WP menu in site header"
+msgstr ""
+
+#: settings/theme-settings.php:20
+msgid "Select the WP menu that appears in sidebar. Create a new one in Appearence &gt; Costumize &gt; Menus."
+msgstr ""
+
+#: settings/theme-settings.php:21
+msgid "WP menu in sidebar"
+msgstr ""
+
+#: settings/theme-settings.php:27
+msgid "On the left"
+msgstr ""
+
+#: settings/theme-settings.php:28
+msgid "On the right"
+msgstr ""
+
+#: settings/theme-settings.php:29
+msgid "Don't use sidebar"
+msgstr ""
+
+#: settings/theme-settings.php:31
+msgid "Define where to show sidebar"
+msgstr ""
+
+#: settings/theme-settings.php:32
+msgid "Sidebar position"
+msgstr ""
+
+#: settings/theme-settings.php:78
+msgid "None"
+msgstr ""

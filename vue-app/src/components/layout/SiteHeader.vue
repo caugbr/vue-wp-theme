@@ -1,6 +1,8 @@
 <template>
     <div class="site-header">
-        <h1>{{ t('Vue WP theme') }}</h1>
+        <div class="site-name">
+            <h1 class="site-title">{{ t('Vue WP theme') }}</h1>
+        </div>
         <wp-menu 
             v-if="info.settings.header_menu" 
             :menu="info.settings.header_menu" 

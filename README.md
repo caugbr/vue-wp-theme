@@ -65,3 +65,17 @@ This is a JS variable that holds site information. It is available in Vue compon
 ### Widgets
 The Vue WP theme supports widgets. There are two widget areas available. They are located in sidebar and in footer. But you can remove them or add more.
 The theme adds the widget `Copyright`, that you can use in footer, to add a text (or link) like '&copy;2023 Your name'.
+
+### Wordpress tags
+ * Grid Layout
+ * One Column
+ * Left Sidebar
+ * Right Sidebar
+ * Custom Logo
+ * Custom Menu
+ * Featured Images
+ * Footer Widgets
+ * Front Page Posting
+ * Full Width Template
+ * Theme Options
+ * Translation Ready

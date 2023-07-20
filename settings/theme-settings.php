@@ -75,7 +75,7 @@ function get_menus() {
 }
 
 function get_menus_as_options() {
-    $ret = [ [ "label" => "None", "value" => "" ] ];
+    $ret = [ [ "label" => __("None", 'vuewp'), "value" => "" ] ];
     foreach (get_menus() as $opt) {
         $ret[] = [
             "label" => $opt['name'],

@@ -60,7 +60,7 @@ export default {
         },
         getThumbnailImg(post) {
             const turl = this.getThumbnailUrl(post);
-            return turl ? `<img src="${turl}" alt="thumbnail">` : '';
+            return turl ? `<img src="${turl}" class="thumbnail" alt="">` : '';
         },
         getThumbnailUrl(post) {
             if (post && post._embedded) {

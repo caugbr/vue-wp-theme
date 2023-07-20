@@ -4,7 +4,7 @@
             <li v-for="post, index in posts" :key="index">
                 <router-link 
                     :to="`${info.basePath}/${typeName(post)}/${post.slug}`" 
-                    :class="postType"
+                    :class="`${postType}-link`"
                 >
                     <div 
                         v-if="thumbnails" 

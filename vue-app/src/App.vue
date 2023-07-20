@@ -20,6 +20,7 @@ import SiteHeader from './components/layout/SiteHeader.vue';
 import SiteFooter from './components/layout/SiteFooter.vue';
 import Sidebar from './components/layout/Sidebar.vue';
 import Loading from "@/components/Loading";
+import moveToApp from './assets/js/move-to-app';
 
 export default {
     name: 'App',
@@ -54,17 +55,8 @@ export default {
         }
     },
     mounted() {
-        // move sidebars into app
-        const areas = document.querySelectorAll('#wp-sidebars [data-area-id]');
-        if (areas.length) {
-            Array.from(areas).forEach(area => {
-                const areaId = area.getAttribute('data-area-id');
-                const to = document.querySelector(`#${areaId}`);
-                if (to) {
-                    to.innerHTML = area.innerHTML;
-                }
-            });
-        }
+        // move wp elements into app
+        moveToApp();
     }
 }
 </script>

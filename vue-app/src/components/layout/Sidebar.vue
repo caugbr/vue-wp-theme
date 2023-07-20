@@ -4,13 +4,17 @@
             <span class="open">&plus;</span>
             <span class="close">&minus;</span>
         </a>
+
         <search />
+
         <wp-menu 
             v-if="info.settings.sidebar_menu" 
             :menu="info.settings.sidebar_menu" 
             :inline="false"
         />
+
         <langs-menu :label="t('Language')" />
+
         <div id="sidebar_area" class="wp-widgets-area"></div>
     </div>
 </template>

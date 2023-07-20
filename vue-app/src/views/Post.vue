@@ -1,10 +1,22 @@
 <template>
     <not-found v-if="is404" :path="path" />
     <div class="post" v-else>
-        <h1 class="post-title">{{ post.title }}</h1>
-        <taxonomy-links :taxonomyLinks="taxonomyLinks" />
-        <div class="post-thumbnail" v-html="thumbnail"></div>
-        <article class="post-content" v-html="post.content"></article>
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    <div class="post-thumbnail" v-html="thumbnail"></div>
+                </div>
+                <div class="col-8">
+                    <h1 class="post-title">{{ post.title }}</h1>
+                    <taxonomy-links :taxonomyLinks="taxonomyLinks" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <article class="post-content" v-html="post.content"></article>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -27,7 +39,7 @@ export default {
 </script>
 
 <style lang="scss">
-.page {
-    
+.post {
+    text-align: left;
 }
 </style>

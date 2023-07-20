@@ -1,20 +1,67 @@
 <?php
 
 // Theme variables
+
+// Dev URL - npm can change this. In this
+// case you must edit the value bellow.
 $scriptsUrlDev = 'http://127.0.0.1:8080';
-$themeDirUrl = get_template_directory_uri();
+
+// Theme sidebars - this variable will be used to
+// register the sidebars and to render the WP part.
+// But in Vue app, you must add an HTML element for
+// each one with the same id, like this, on Sidebar:
+//   <div id="sidebar_area" class="wp-widgets-area"></div>
+$vuewp_areas = [
+    [
+		'name' => 'Sidebar widgets area',
+		'id' => 'sidebar_area',
+		'before_widget' => '<div>',
+		'after_widget' => '</div>',
+		'before_title' => '<h2>',
+		'after_title' => '</h2>'
+	],
+    [
+		'name' => 'Footer widgets area',
+		'id' => 'footer_area',
+		'before_widget' => '<div>',
+		'after_widget' => '</div>',
+		'before_title' => '<h2>',
+		'after_title' => '</h2>'
+	]
+];
+
+// App directory name
+$appDir = 'vue-app';
+
+// Image sizes
+$vuewp_image_sizes = [
+
+];
+
+// Logo image defaults
+$vuewp_logo = [
+    'height' => 40,
+    'width' => 80,
+    'flex-height' => false,
+    'flex-width' => true
+];
+
+// Do not edit these ones
 $themeDir = get_stylesheet_directory();
+$themeDirUrl = get_template_directory_uri();
 $vueScripts = [
     'wp-vue-app-js' => 'js/app.js',
     'wp-vue-vendors-js' => 'js/chunk-vendors.js'
 ];
-$appDir = 'vue-app';
+
+// Translations
+load_theme_textdomain("vuewp", $themeDir . '/languages');
 
 // Theme add support
 add_theme_support('post-thumbnails');
 add_theme_support('html5', ['style','script']);
-add_theme_support('automatic-feed-links');
 add_theme_support('widgets');
+add_theme_support('custom-logo', $vuewp_logo);
 
 // Remove redirects
 remove_action('template_redirect', 'redirect_canonical');
@@ -26,11 +73,12 @@ $settings = new ThemeSettings('vuewp_settings');
 // REST API custom endpoints
 include_once $themeDir . "/scripts/extend-rest-api.php";
 
-// Add custom widgets
+// Add sidebars and custom widgets
 include_once $themeDir . "/scripts/widgets.php";
 
 // Add translation functions
 include_once $themeDir . "/scripts/translation-functions.php";
+$translation = new TranslationFunctions($themeDir, $appDir);
 
 // Add options page
 include_once $themeDir . "/scripts/admin-page.php";
@@ -66,9 +114,9 @@ function enqueue_scripts() {
 add_action('wp_footer', 'enqueue_scripts');
 
 /**
- * Add some values to vueWpThemeInfo variable
+ * Print variable vueWpThemeInfo
  *
- * @return string
+ * @return void
  */
 function get_vue_info() {
     global $themeDirUrl;
@@ -104,41 +152,10 @@ function get_vue_info() {
     <?php
 }
 
-function get_slug_by_id($itm) {
-    if ($itm->type == "post_type") {
-        $post = get_post((int) $itm->object_id);
-        return $post->post_name;
+function vuewp_add_logo() {
+    print '<div class="custom-logo move-to-app" data-to=".site-name">';
+    if (function_exists('the_custom_logo')) {
+        the_custom_logo();
     }
-    if ($itm->type == "taxonomy") {
-        $tax = get_taxonomy($itm->object);
-        $term = get_term((int) $itm->object_id, $itm->object);
-        return [
-            "post_type" => $tax->object_type[0],
-            "tax_slug"  => $tax->rewrite['slug'],
-            "tax_name"  => $tax->name,
-            "term_slug" => $term->slug,
-            "term_id"   => $term->term_id
-        ];
-    }
-    if ($itm->type == "post_type_archive") {
-        $slug = $itm->object;
-        if (preg_match("/^(post|page|video)$/", $slug)) {
-            $slug .= "s";
-        }
-        return $slug;
-    }
-    return '';
-}
-
-// list the files on the given directory
-function listFiles($directory) {
-    $files = array();
-    $rdi = new RecursiveDirectoryIterator($directory);
-    $rii = new RecursiveIteratorIterator($rdi);
-    foreach ($rii as $file) {
-        if (!$file->isDir()) { 
-            $files[] = str_replace("\\", "/", $file->getPathname()); 
-        }
-    }
-    return $files;
+    print '</div>';
 }

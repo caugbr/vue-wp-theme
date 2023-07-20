@@ -24,11 +24,12 @@ function vuewp_admin_page() {
 add_action('admin_menu', 'vuewp_admin_page');
 
 function save_admin_page() {
+    global $translation;
     global $settings;
     $msg = '';
     if (isset($_POST['action'])) {
         if ($_POST['action'] == 'save-lang') {
-            $ok = save_strings($_POST['lang'], $_POST['strings']);
+            $ok = $translation->save_strings($_POST['lang'], $_POST['strings']);
             if ($ok) {
                 $msg = sprintf(__('The file %s was successfully saved.', 'vuewp'), $_POST['lang'] . '.json');
             } else {
@@ -36,8 +37,8 @@ function save_admin_page() {
             }
         }
         if ($_POST['action'] == 'create-lang') {
-            create_file($_POST['lang']);
-            $ok = save_strings($_POST['lang'], $_POST['strings']);
+            $translation->create_file($_POST['lang']);
+            $ok = $translation->save_strings($_POST['lang'], $_POST['strings']);
             if ($ok) {
                 $msg = sprintf(__('The file %s was successfully create.', 'vuewp'), $_POST['lang'] . '.json');
             } else {
@@ -53,6 +54,7 @@ function save_admin_page() {
 }
 
 function admin_page() {
+    global $translation;
     global $settings;
     $msg = save_admin_page();
     ?>
@@ -100,7 +102,7 @@ function admin_page() {
                                 <?php _e('You can edit all translatable strings from here.', 'vuewp'); ?>
                                 <?php _e('If you created some new translatable strings, they will be present and marked in red. The strings displayed below will always be up to date with the application code.', 'vuewp'); ?>
                             </p>
-                            <?php translations_form(); ?>
+                            <?php $translation->translations_form(); ?>
                         </div>
                     </div>
                 </div>
