@@ -51,13 +51,13 @@ This is a JS variable that holds site information. It is available in Vue compon
 
 	{
 		"themeDirUrl": "Theme URL", // Theme directory URL
-		"siteUrl": "Site URL", // Full site URL
-		"basePath": "Path", // Path if site URL contains a sub folder
-		"language": "WP language", // Language defined in Wordpress settings
-		"settings": {}, // All settings defined in admin page
-		"contentWidth": 900, // $content_width value
-		"loggedUser": false, // User data object or FALSE if not logged in 
-		"wpApiSettings": { // used by WpApi
+		"siteUrl": "Site URL",      // Full site URL
+		"basePath": "Path",         // Path if site URL contains a sub folder
+		"language": "WP language",  // Language defined in Wordpress settings
+		"settings": {},             // All settings defined in admin page
+		"contentWidth": 900,        // $content_width value
+		"loggedUser": false,        // User data object or FALSE if not logged in 
+		"wpApiSettings": {          // used by WpApi
 			"root": "REST API base URL",
 			"nonce": "WP nonce"
 		}
