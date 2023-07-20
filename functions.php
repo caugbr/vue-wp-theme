@@ -38,6 +38,9 @@ $vuewp_image_sizes = [
 
 ];
 
+// Max width for site content in pixels
+$content_width = 900;
+
 // Logo image defaults
 $vuewp_logo = [
     'height' => 40,
@@ -122,6 +125,7 @@ function get_vue_info() {
     global $themeDirUrl;
     global $settings;
 	global $current_user;
+	global $content_width;
     $user = false;
     if ($current_user->ID) {
         $user = [
@@ -138,6 +142,7 @@ function get_vue_info() {
         "siteUrl" => site_url(),
         "basePath" => $url_info['path'],
         "language" => get_locale(),
+        "content_width" => $content_width,
         "settings" => $settings->get_saved(),
         "loggedUser" => $user,
         "wpApiSettings" => [

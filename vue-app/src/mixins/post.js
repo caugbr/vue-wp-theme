@@ -16,6 +16,7 @@ export default {
                 tags: []
             },
             thumbnail: '',
+            thumbnail_size: 'medium',
             is404: false,
             path: window.location.pathname
         }
@@ -46,10 +47,10 @@ export default {
                 const api = this.api;
                 api.fields = api.fields.concat(fields);
                 api.embed = true;
-                api.getBySlug(postType, slug).then(video => {
+                api.getBySlug(postType, slug).then(async video => {
                     if (video.data.length) {
                         this.post = this.normalizeStrings(video.data[0]);
-                        this.thumbnail = this.getThumbnailImg(this.post);
+                        this.thumbnail = await this.getThumbnailHTML(this.post);
                     } else {
                         this.is404 = true;
                     }
@@ -58,20 +59,30 @@ export default {
                 });
             })
         },
-        getThumbnailImg(post) {
-            const turl = this.getThumbnailUrl(post);
-            return turl ? `<img src="${turl}" class="thumbnail" alt="">` : '';
+        async getMediaInfo(id) {
+            const res = await this.api._get(`/media/${id}`);
+            return {
+                id: res.data.id,
+                post_id: res.data.post,
+                ...res.data.media_details
+            };
         },
-        getThumbnailUrl(post) {
+        getThumbnailId(post) {
             if (post && post._embedded) {
                 if (post._embedded['wp:featuredmedia']) {
                     if (undefined !== post._embedded['wp:featuredmedia'][0]) {
-                        return post._embedded['wp:featuredmedia'][0].source_url ?? '';
+                        return post._embedded['wp:featuredmedia'][0].id ?? 0;
                     }
                 }
             }
-            if (post && post.thumbnail) {
-                return post.thumbnail;
+            return 0;
+        },
+        async getThumbnailHTML(post) {
+            const mid = this.getThumbnailId(post);
+            if (mid) {
+                const media = await this.getMediaInfo(mid);
+                const url = media.sizes[this.thumbnail_size]?.source_url;
+                return url ? `<img src="${url}" class="${this.post.title}" alt="">` : '';
             }
             return '';
         },

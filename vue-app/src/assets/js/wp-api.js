@@ -51,7 +51,6 @@ class WpApi {
      * @returns array
      */
     getSearchResults(searchTerm, params = {}) {
-        // params.search = searchTerm;
         const urlParams = this.obj2url(params);
         this.namespace = 'vuewp/v1';
         return this._get(`/search/${searchTerm}${urlParams}`);

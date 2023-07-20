@@ -2,12 +2,12 @@
 
 function add_admin_js() {
     global $themeDirUrl;
-    wp_enqueue_script("vuewp-admin-js", $themeDirUrl . "/admin.js");
+    wp_enqueue_script("vuewp-admin-js", $themeDirUrl . "/admin-assets/admin.js");
 }
 
 function add_admin_css() {
     global $themeDirUrl;
-    wp_enqueue_style("vuewp-admin-css", $themeDirUrl . "/admin.css");
+    wp_enqueue_style("vuewp-admin-css", $themeDirUrl . "/admin-assets/admin.css");
 }
 
 function vuewp_admin_page() {

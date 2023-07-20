@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div class="cssrule" v-html="contentWidth"></div>
     <site-header/>
 
     <div class="content">
@@ -63,4 +64,5 @@ export default {
 
 <style lang="scss">
     @import "./assets/scss/style.scss";
+    .cssrule { display: none; }
 </style>
