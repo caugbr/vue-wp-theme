@@ -78,7 +78,8 @@ class WpApi {
      * @returns array
      */
     listByTaxonomy(postType, taxonomy, term, params = {}) {
-        params[taxonomy] = term;
+        const taxSlug = this.taxSlug(taxonomy);
+        params[taxSlug] = term;
         const urlParams = this.obj2url(params);
         this.embed = false;
         return this._get(`/${this.postSlug(postType)}${urlParams}`);
@@ -158,6 +159,16 @@ class WpApi {
 
     postSlug(slug) {
         return /^(post|page)$/.test(slug) ? `${slug}s` : slug;
+    }
+
+    taxSlug(slug) {
+        if ('category' == slug) {
+            return 'categories';
+        }
+        if ('tag' == slug || 'post_tag' == slug) {
+            return 'tags';
+        }
+        return slug;
     }
 }
 

@@ -1,11 +1,12 @@
 <template>
     <div class="tax-links">
         <div 
-            v-for="tax, index in taxonomies" 
+            v-for="tax, index in taxIds" 
             :class="`taxonomy-links taxonomy-${tax}`" 
             :key="index"
         >
             <div v-if="thereAreLinks(tax)" :class="tax">
+                <div class="tax-name">{{ taxNames[index] }}</div>
                 <span 
                     :class="`tax-link ${tax}`" 
                     v-for="lnk, ind in taxonomyLinks[tax]" 
@@ -22,9 +23,9 @@ export default {
     name: 'TaxonomyLinks',
     props: {
         taxonomies: {
-            type: Array,
+            type: Object,
             default() {
-                return ['categories', 'tags'];
+                return { categories: 'Categories', tags: 'Tags' };
             }
         },
         taxonomyLinks: {
@@ -32,6 +33,14 @@ export default {
             default() {
                 return { categories: [], tags: [] };
             }
+        }
+    },
+    computed: {
+        taxNames() {
+            return Object.values(this.taxonomies);
+        },
+        taxIds() {
+            return Object.keys(this.taxonomies);
         }
     },
     methods: {

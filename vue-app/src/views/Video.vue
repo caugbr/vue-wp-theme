@@ -4,7 +4,7 @@
         <h1 class="post-title">{{ post.title }}</h1>
         <taxonomy-links 
             :taxonomyLinks="taxonomyLinks" 
-            :taxonomies="['video_category']"
+            :taxonomies="{ video_category: t('Video category') }"
         />
         <div class="post-thumbnail" v-html="thumbnail"></div>
         <article class="post-content" v-html="post.content"></article>

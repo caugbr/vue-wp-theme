@@ -9,7 +9,7 @@
                     <div 
                         v-if="thumbnails" 
                         class="thumbnail" 
-                        v-html="getThumbnailImg(post)"
+                        v-html="thumbHTML[post.slug]"
                     ></div>
                     <div class="post-title">{{ post.title }}</div>
                 </router-link>
@@ -54,7 +54,8 @@ export default {
     },
     data() {
         return {
-            posts: []
+            posts: [],
+            thumbHTML: {}
         };
     },
     methods: {
@@ -69,6 +70,22 @@ export default {
                 return name + 's';
             }
             return name;
+        },
+        normalizeTaxName(name) {
+            if ('category' == name) {
+                return 'categories';
+            }
+            if ('tag' == name || 'post_tag' == name) {
+                return 'tags';
+            }
+            return name;
+        },
+        getThumbHTML(post) {
+            this.getThumbnailHTML(post).then(html => {
+                const add = {};
+                add[post.slug] = html;
+                this.thumbHTML = { ...this.thumbHTML, ...add };
+            });
         }
     },
     computed: {
@@ -85,21 +102,24 @@ export default {
     async mounted() {
         if (this.postList.length) {
             this.posts = this.postList;
-            return;
-        }
-        this.loading(true);
-        const params = { _fields: ['slug', 'title'], per_page: this.perPage };
-        if (this.thumbnails) {
-            this.api.embed = true;
-        }
-        if (this.taxonomy && this.term) {
-            const { postType, taxonomy, term } = this;
-            const posts = await this.apiCall('listByTaxonomy', postType, taxonomy, term, params);
-            this.posts = this.normalizeStringsArray(posts.data);
         } else {
-            const posts = await this.apiCall('listByPostType', this.urlName, params);
-            this.posts = this.normalizeStringsArray(posts.data);
+            this.loading(true);
+            const _fields = ['slug', 'title'];
+            // console.log('_fields', _fields), this.normalizeTaxName(this.taxonomy)
+            const params = { _fields, per_page: this.perPage };
+            if (this.thumbnails) {
+                this.api.embed = true;
+            }
+            if (this.taxonomy && this.term) {
+                const { postType, taxonomy, term } = this;
+                const posts = await this.apiCall('listByTaxonomy', postType, taxonomy, term, params);
+                this.posts = this.normalizeStringsArray(posts.data);
+            } else {
+                const posts = await this.apiCall('listByPostType', this.urlName, params);
+                this.posts = this.normalizeStringsArray(posts.data);
+            }
         }
+        this.posts.forEach(async p => await this.getThumbHTML(p));
     }
 }
 </script>

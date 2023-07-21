@@ -68,7 +68,7 @@ The Vue WP theme supports widgets. There are two widget areas available. They ar
 The theme adds the widget `Copyright`, that you can use in footer, to add a text (or link) like '&copy;2023 Your name'.
 
 ### Wordpress tags
- * Grid Layout
+ * Grid Layout (in progress)
  * One Column
  * Left Sidebar
  * Right Sidebar

@@ -77,11 +77,14 @@ export default {
             }
             return 0;
         },
-        async getThumbnailHTML(post) {
+        async getThumbnailHTML(post, fallbackFull = true) {
             const mid = this.getThumbnailId(post);
             if (mid) {
                 const media = await this.getMediaInfo(mid);
-                const url = media.sizes[this.thumbnail_size]?.source_url;
+                let url = media.sizes[this.thumbnail_size]?.source_url;
+                if (fallbackFull && !media.sizes[this.thumbnail_size]) {
+                    url = media.sizes.full?.source_url ?? '';
+                }
                 return url ? `<img src="${url}" class="${this.post.title}" alt="">` : '';
             }
             return '';
