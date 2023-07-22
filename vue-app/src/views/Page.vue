@@ -1,6 +1,6 @@
 <template>
     <not-found v-if="is404" :path="path" />
-    <div class="post page" v-else>
+    <div class="single post page" v-else>
         <h1 class="post-title">{{ post.title }}</h1>
         <div class="post-thumbnail" v-html="thumbnail"></div>
         <article class="post-content" v-html="post.content"></article>

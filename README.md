@@ -20,7 +20,7 @@ The frontend is a Vue app, all the displayed contents are loaded using the API a
 
 ### Other scripts
 * I18n - Vue plugin to internationalize the Vue app
-   (edit / create translation files directly from WP admin)
+  **(edit / create translation files directly from WP admin)**
 * WpApi - script to interact with WP REST API
 * Grid - Simple CSS grid made with SASS
 
@@ -67,6 +67,9 @@ This is a JS variable that holds site information. It is available in Vue compon
 The Vue WP theme supports widgets. There are two widget areas available. They are located in sidebar and in footer. But you can remove them or add more.
 The theme adds the widget `Copyright`, that you can use in footer, to add a text (or link) like '&copy;2023 Your name'.
 
+### Theme hooks
+The theme adds the new hooks `register_vuewp_theme` and `unregister_vuewp_theme`, that works like the functions `register_activation_hook()` and  `register_activation_hook()` works for plugins.
+
 ### Wordpress tags
  * Grid Layout (in progress)
  * One Column
@@ -80,3 +83,5 @@ The theme adds the widget `Copyright`, that you can use in footer, to add a text
  * Full Width Template
  * Theme Options
  * Translation Ready
+ * Title Tag
+ * Content Width

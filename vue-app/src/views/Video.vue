@@ -1,6 +1,6 @@
 <template>
     <not-found v-if="is404" :path="path" />
-    <div class="post video" v-else>
+    <div class="single post video" v-else>
         <h1 class="post-title">{{ post.title }}</h1>
         <taxonomy-links 
             :taxonomyLinks="taxonomyLinks" 
@@ -21,7 +21,6 @@ export default {
     mixins: [ postMixin ],
     data() {
         return {
-            videoCategoryLinks: [],
             taxonomyLinks: {
                 video_category: []
             }

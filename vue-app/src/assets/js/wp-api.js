@@ -6,15 +6,17 @@ class WpApi {
     namespace;
     embed;
     fields;
+    formats;
 
     constructor(info) {
         this.apiUrl = info.root;
         this.nonce = info.nonce;
-        this.namespace = info.namespace || 'wp/v2';
-        this.embed = !!info.embed;
+        this.namespace = info.namespace ?? 'wp/v2';
+        this.embed = info.embed ?? false;
+        this.formats = info.formats ?? false;
         this.fields = info.fields ?? [
             'id', 'title', 'slug', 'content', 'author',
-            'type', 'featured_media', 'categories', 'tags'
+            'featured_media', 'categories', 'tags', 'type'
         ];
     }
 
@@ -78,8 +80,7 @@ class WpApi {
      * @returns array
      */
     listByTaxonomy(postType, taxonomy, term, params = {}) {
-        const taxSlug = this.taxSlug(taxonomy);
-        params[taxSlug] = term;
+        params[this.taxSlug(taxonomy)] = term;
         const urlParams = this.obj2url(params);
         this.embed = false;
         return this._get(`/${this.postSlug(postType)}${urlParams}`);
@@ -144,15 +145,18 @@ class WpApi {
      * @returns String (query string)
      */
     obj2url(obj) {
+        obj._fields = obj._fields ?? this.fields;
         if (this.embed) {
             obj._embed = 1;
-            obj._fields = obj._fields ?? this.fields;
             obj._fields.push('_links.wp:featuredmedia', '_embedded');
+        }
+        if (this.formats) {
+            obj._fields.push('format');
         }
         let str = [];
         for (const key in obj) {
             const val = this.arr2str(obj[key]);
-            str.push(`${key}=${encodeURIComponent(val)}`)
+            str.push(`${key}=${encodeURIComponent(val)}`);
         }
         return str.length ? '?' + str.join('&') : '';
     }

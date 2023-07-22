@@ -1,6 +1,6 @@
 <template>
     <not-found v-if="is404" :path="path" />
-    <div class="post" v-else>
+    <div class="single post" v-else>
         <div class="container">
             <div class="row">
                 <div class="col-4">

@@ -60,18 +60,18 @@ $vueScripts = [
 // Translations
 load_theme_textdomain("vuewp", $themeDir . '/languages');
 
-// Theme add support
-add_theme_support('post-thumbnails');
-add_theme_support('html5', ['style','script']);
-add_theme_support('widgets');
-add_theme_support('custom-logo', $vuewp_logo);
-
-// Remove redirects
-remove_action('template_redirect', 'redirect_canonical');
-
 // Settings
 include_once $themeDir . "/settings/index.php";
 $settings = new ThemeSettings('vuewp_settings');
+
+vuewp_add_support();
+
+// Add translation functions
+include_once $themeDir . "/scripts/translation-functions.php";
+$translation = new TranslationFunctions($themeDir, $appDir);
+
+// Remove redirects
+remove_action('template_redirect', 'redirect_canonical');
 
 // REST API custom endpoints
 include_once $themeDir . "/scripts/extend-rest-api.php";
@@ -79,12 +79,43 @@ include_once $themeDir . "/scripts/extend-rest-api.php";
 // Add sidebars and custom widgets
 include_once $themeDir . "/scripts/widgets.php";
 
-// Add translation functions
-include_once $themeDir . "/scripts/translation-functions.php";
-$translation = new TranslationFunctions($themeDir, $appDir);
-
 // Add options page
 include_once $themeDir . "/scripts/admin-page.php";
+
+// Theme add support
+function vuewp_add_support() {
+    global $vuewp_logo;
+    global $settings;
+    $options = $settings->get_saved();
+    $post_formats = $options['post_formats'] ?? '';
+
+    if (is_array($post_formats) && count($post_formats)) {
+        add_theme_support('post-formats', $post_formats);
+    }
+    add_theme_support('post-thumbnails');
+    add_theme_support('html5', ['style','script']);
+    add_theme_support('widgets');
+    add_theme_support('custom-logo', $vuewp_logo);
+    add_theme_support('title-tag');
+}
+
+// Register theme hook
+function register_vuewp() {
+    $one = get_option('vuewp_theme');
+    if (false == $one) {
+        update_option('vuewp_theme', 'on');
+        do_action('register_vuewp_theme');
+    }
+}
+add_action('admin_init', 'register_vuewp');
+
+// Unregister theme hook
+function unregister_vuewp() {
+    delete_option('vuewp_theme');
+    do_action('unregister_vuewp_theme');
+}
+add_action('switch_theme', 'unregister_vuewp');
+
 
 /**
  * Include the necessary files to run Vue, based on constant 
@@ -126,6 +157,8 @@ function get_vue_info() {
     global $settings;
 	global $current_user;
 	global $content_width;
+    $options = $settings->get_saved();
+    $formats = $options['post_formats'] ?? [];
     $user = false;
     if ($current_user->ID) {
         $user = [
@@ -147,7 +180,8 @@ function get_vue_info() {
         "loggedUser" => $user,
         "wpApiSettings" => [
             "root" => esc_url_raw(rest_url()),
-            "nonce" => wp_create_nonce('wp_rest')
+            "nonce" => wp_create_nonce('wp_rest'),
+            "formats" => (count($formats) > 0)
         ]
     ];
     ?>
@@ -158,9 +192,9 @@ function get_vue_info() {
 }
 
 function vuewp_add_logo() {
-    print '<div class="custom-logo move-to-app" data-to=".site-name">';
-    if (function_exists('the_custom_logo')) {
+    if (function_exists('the_custom_logo') && has_custom_logo()) {
+        print '<div class="custom-logo move-to-app" data-to=".site-name">';
         the_custom_logo();
+        print '</div>';
     }
-    print '</div>';
 }

@@ -105,7 +105,6 @@ export default {
         } else {
             this.loading(true);
             const _fields = ['slug', 'title'];
-            // console.log('_fields', _fields), this.normalizeTaxName(this.taxonomy)
             const params = { _fields, per_page: this.perPage };
             if (this.thumbnails) {
                 this.api.embed = true;

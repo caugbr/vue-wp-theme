@@ -32,6 +32,13 @@ $theme_settings = [
         "label" =>  __('Sidebar position', 'vuewp'),
         "default_value" => 'left'
     ],
+    "post_formats" => [
+        "type" => "checkbox-group",
+        "options" => "all_post_formats",
+        "description" => __('Select the post formats that will have support in your theme.', 'vuewp'),
+        "label" =>  __('Post formats support', 'vuewp'),
+        "default_value" => ''
+    ],
     // Other possible types...
     // "text_field" => [
     //     "type" => "text", // one of text|email|url|password|tel|number|search
@@ -55,17 +62,6 @@ $theme_settings = [
     //         [ "label" => "none", "value" => "none" ]
     //     ],
     //     "default_value" => ''
-    // ],
-    // "checkbox_list" => [
-    //     "type" => "checkbox-group",
-    //     "description" => __('Choose one or more', 'vuewp'),
-    //     "label" =>  __('Checkbox group', 'vuewp'),
-    //     "options" => [
-    //         [ "label" => "left", "value" => "left" ],
-    //         [ "label" => "right", "value" => "right" ],
-    //         [ "label" => "none", "value" => "none" ]
-    //     ],
-    //     "default_value" => ''
     // ]
 ];
 
@@ -83,4 +79,45 @@ function get_menus_as_options() {
         ];
     }
     return $ret;
+}
+
+function all_post_formats() {
+    return [
+        [
+            "label" => 'Aside',
+            "value" => 'aside'
+        ],
+        [
+            "label" => 'Gallery',
+            "value" => 'gallery'
+        ],
+        [
+            "label" => 'Link',
+            "value" => 'link'
+        ],
+        [
+            "label" => 'Image',
+            "value" => 'image'
+        ],
+        [
+            "label" => 'Quote', 
+            "value" => 'quote'
+        ],
+        [
+            "label" => 'Status',
+            "value" => 'status'
+        ],
+        [
+            "label" => 'Video',
+            "value" => 'video'
+        ],
+        [
+            "label" => 'Audio',
+            "value" => 'audio'
+        ],
+        [
+            "label" => 'Chat',
+            "value" => 'chat'
+        ],
+    ];
 }
