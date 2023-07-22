@@ -158,7 +158,6 @@ function get_vue_info() {
 	global $current_user;
 	global $content_width;
     $options = $settings->get_saved();
-    $formats = $options['post_formats'] ?? [];
     $user = false;
     if ($current_user->ID) {
         $user = [
@@ -176,12 +175,12 @@ function get_vue_info() {
         "basePath" => $url_info['path'],
         "language" => get_locale(),
         "contentWidth" => $content_width,
-        "settings" => $settings->get_saved(),
+        "settings" => $options,
         "loggedUser" => $user,
         "wpApiSettings" => [
             "root" => esc_url_raw(rest_url()),
             "nonce" => wp_create_nonce('wp_rest'),
-            "formats" => (count($formats) > 0)
+            "formats" => (bool) count($options['post_formats'])
         ]
     ];
     ?>
