@@ -33,7 +33,7 @@ There are some built in options:
  * Use WP language - Use WP language?
  * WP menu in site header - Menu do display in header position
  * WP menu in site sidebar - Menu do display in sidebar position
- * Sidebar position - Right, lef or disable sidebar
+ * Sidebar position - Right, left or disable sidebar
  * Post formats support - Enable support for marked formats
 
 ### Translations
