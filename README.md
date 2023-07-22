@@ -65,7 +65,8 @@ This is a JS variable that holds site information. It is available in Vue compon
 		"loggedUser": false,        // User data object or FALSE if not logged in 
 		"wpApiSettings": {          // used by WpApi
 			"root": "REST API base URL",
-			"nonce": "WP nonce"
+			"nonce": "WP nonce",
+			"formats": false // true if some post format is enabled
 		}
 	}
 
