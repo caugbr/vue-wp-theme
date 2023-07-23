@@ -25,7 +25,7 @@ The frontend is a Vue app, all the displayed contents are loaded using the API a
 * Grid - Simple CSS grid made with SASS
 
 ### Administration page
-In `Appearence > Vue WP Theme` you can access the theme options page. There you can edit the site settings, edit / crete translation files and edit / create the Vue routes.
+In `Appearence > Vue WP Theme` you can access the theme options page. There you can edit the site settings, edit or create translation files and edit or create Vue routes.
 
 ### Settings
 The settings are stored in a php file, located in `settings/theme-settings.php`. The defined options will be editable in admin page and available in frontend as `this.info`. You can edit it and add new settings.
