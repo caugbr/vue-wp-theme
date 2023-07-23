@@ -70,6 +70,10 @@ vuewp_add_support();
 include_once $themeDir . "/scripts/translation-functions.php";
 $translation = new TranslationFunctions($themeDir, $appDir);
 
+// Add routes
+include_once $themeDir . "/scripts/routes-vue.php";
+$vue_routes = new RoutesVue($themeDir, $appDir);
+
 // Remove redirects
 remove_action('template_redirect', 'redirect_canonical');
 
@@ -98,6 +102,15 @@ function vuewp_add_support() {
     add_theme_support('custom-logo', $vuewp_logo);
     add_theme_support('title-tag');
 }
+
+////////////////////////
+function change_the_title($title) {
+    if (is_404()) {
+        return 'nao é';
+    }
+    return $title;
+}
+add_filter('document_title', 'change_the_title');
 
 // Register theme hook
 function register_vuewp() {
@@ -180,7 +193,7 @@ function get_vue_info() {
         "wpApiSettings" => [
             "root" => esc_url_raw(rest_url()),
             "nonce" => wp_create_nonce('wp_rest'),
-            "formats" => (bool) count($options['post_formats'])
+            "formats" => !empty($options['post_formats'])
         ]
     ];
     ?>
@@ -196,4 +209,18 @@ function vuewp_add_logo() {
         the_custom_logo();
         print '</div>';
     }
+}
+
+
+// list the files on the given directory
+function listFiles($directory) {
+    $files = array();
+    $rdi = new RecursiveDirectoryIterator($directory);
+    $rii = new RecursiveIteratorIterator($rdi);
+    foreach ($rii as $file) {
+        if (!$file->isDir()) { 
+            $files[] = str_replace("\\", "/", $file->getPathname()); 
+        }
+    }
+    return $files;
 }

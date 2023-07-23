@@ -18,6 +18,7 @@ import postMixin from '../mixins/post.js';
 export default {
     name: 'Video',
     components: { TaxonomyLinks },
+    route_params: 'slug',
     mixins: [ postMixin ],
     data() {
         return {

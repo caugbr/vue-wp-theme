@@ -10,6 +10,7 @@
 <script>
 export default {
     name: 'NotFound',
+    route_params: 'pathMatch(.*)*',
     props: {
         path: {
             type: String,

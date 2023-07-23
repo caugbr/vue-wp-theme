@@ -99,9 +99,9 @@ class TranslationFunctions {
     
     public function read_strings() {
         $app_dir = $this->themeDir . '/' . $this->appDir;
-        $lang_files = $this->listFiles($app_dir . '/src/I18n/langs');
-        $components = $this->listFiles($app_dir . '/src/components');
-        $views = $this->listFiles($app_dir . '/src/views');
+        $lang_files = listFiles($app_dir . '/src/I18n/langs');
+        $components = listFiles($app_dir . '/src/components');
+        $views = listFiles($app_dir . '/src/views');
         $files = array_merge($components, $views);
     
         $code = ["language_name" => ""];
@@ -137,18 +137,5 @@ class TranslationFunctions {
             "strings" => $all,
             "new_items" => $new_items
         ];
-    }
-
-    // list the files on the given directory
-    private function listFiles($directory) {
-        $files = array();
-        $rdi = new RecursiveDirectoryIterator($directory);
-        $rii = new RecursiveIteratorIterator($rdi);
-        foreach ($rii as $file) {
-            if (!$file->isDir()) { 
-                $files[] = str_replace("\\", "/", $file->getPathname()); 
-            }
-        }
-        return $files;
     }
 }

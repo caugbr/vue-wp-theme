@@ -22,7 +22,7 @@ window.addEventListener('load', evt => {
         translator.style.display = 'block';
         translator.setAttribute('data-lang', lng);
         translator.removeAttribute('data-new');
-        setBehavior();
+        setTranslationsBehavior();
     });
     
     cancelButton.addEventListener('click', evt => {
@@ -61,7 +61,7 @@ window.addEventListener('load', evt => {
         translator.style.display = 'block';
         translator.setAttribute('data-lang', code.value);
         translator.setAttribute('data-new', '1');
-        setBehavior();
+        setTranslationsBehavior();
     });
 
     saveButton.addEventListener('click', saveStrings);
@@ -85,9 +85,164 @@ window.addEventListener('load', evt => {
             });
         });
     }
+
+    // routes
+    const comps = document.querySelector('select#route-component');
+    comps.addEventListener('input', evt => {
+        const component = evt.target.value;
+        // console.log('Selected view', vuewpViews[component])
+        let htm = '';
+        if (component) {
+            document.querySelector('#route-path').value = '/';
+            const cmp = vuewpViews[component] ?? {};
+            if (cmp.params) {
+                htm = 'Required params: ';
+                let prms = [];
+                cmp.params.forEach(prm => {
+                    prms.push(`<code data-param="${prm}" class="route-param">${prm}</code>`);
+                });
+                htm += prms.join(', ');
+            } else {
+                htm = 'No params required';
+            }
+        }
+        document.querySelector('.route-variables').innerHTML = htm;
+    });
+    
+    document.body.addEventListener('click', evt => {
+        if (evt.target.matches('.route-param')) {
+            evt.preventDefault();
+            const field = document.querySelector('#route-path');
+            let val = field.value;
+            const param = evt.target.getAttribute('data-param');
+            val = val.replace(`/:${param}`, '').replace(/\/$/, '') + `/:${param}`;
+            field.value = val;
+        }
+        if (evt.target.matches('.remove-route')) {
+            evt.preventDefault();
+            const index = evt.target.getAttribute('data-index');
+            deleteRoute(index);
+        }
+        if (evt.target.matches('.up-route')) {
+            evt.preventDefault();
+            const index = evt.target.getAttribute('data-index');
+            upRoute(index);
+        }
+        if (evt.target.matches('.down-route')) {
+            evt.preventDefault();
+            const index = evt.target.getAttribute('data-index');
+            downRoute(index);
+        }
+    });
+    
+    document.querySelector('#add-route').addEventListener('click', () => addRoute());
+    document.querySelector('#save-routes').addEventListener('click', () => saveRoutes());
+
+    setVuewpRoutes();
+    populateRoutesList();
 });
 
-function setBehavior() {
+function populateRoutesList() {
+    const routes = document.querySelector('div.current-routes');
+    const addRoute = (p, c, i) => {
+        const route = document.createElement('div');
+        const path = document.createElement('span');
+        const component = document.createElement('span');
+        const actions = document.createElement('span');
+        actions.className = 'actions';
+        path.className = 'route-path';
+        path.innerHTML = p;
+        component.className = 'route-component';
+        component.innerHTML = ` (${c})`;
+        actions.innerHTML = ` <a href="#" class="remove-route" data-index="${i}">Remove</a>`;
+        actions.innerHTML += ` | <a href="#" class="up-route" data-index="${i}">Up</a>`;
+        actions.innerHTML += ` | <a href="#" class="down-route" data-index="${i}">Down</a>`;
+        route.appendChild(path);
+        route.appendChild(component);
+        route.appendChild(actions);
+        routes.appendChild(route);
+    };
+    routes.innerHTML = '';
+    vuewpRoutes.forEach((route, index) => {
+        addRoute(route.path, route.component, index);
+    });
+}
+
+function upRoute(index) {
+    index = Number(index);
+    if (index == 0) {
+        return;
+    }
+    let arr = vuewpRoutes;
+    const r = arr[index];
+    arr.splice(index, 1);
+    arr.splice(index - 1, 0, r);
+    vuewpRoutes = arr;
+    setVuewpRoutes();
+    populateRoutesList();
+}
+
+function downRoute(index) {
+    index = Number(index);
+    const next = index + 1;
+    let arr = vuewpRoutes;
+    if (next == arr.length) {
+        return;
+    }
+    const r = arr[index];
+    arr.splice(Number(index), 1);
+    arr.splice(next, 0, r);
+    vuewpRoutes = arr;
+    setVuewpRoutes();
+    populateRoutesList();
+}
+
+function setVuewpRoutes() {
+    if (window.vuewpRoutes) {
+        document.querySelector('input#routes').value = JSON.stringify(vuewpRoutes);
+    }
+}
+
+function deleteRoute(index) {
+    if (window.vuewpRoutes && vuewpRoutes[index]) {
+        vuewpRoutes.splice(index, 1);
+        setVuewpRoutes();
+    }
+}
+
+function addRoute() {
+    const path = document.querySelector('input#route-path').value;
+    const component = document.querySelector('select#route-component').value;
+    if (path && component) {
+        if (routeExists(path, component)) {
+            const msg = 'The sent path or component is already in use.';
+            const err = document.querySelector('.route-error')
+            err.innerHTML = msg;
+            setTimeout(() => err.innerHTML = '', 5000);
+            return;
+        }
+        vuewpRoutes.push({ path, component });
+        setVuewpRoutes();
+        populateRoutesList();
+    }
+}
+
+function routeExists(path, comp) {
+    let exists = false;
+    vuewpRoutes.forEach(route => {
+        if (route.path == path || route.component == comp) {
+            exists = true;
+        }
+    });
+    return exists;
+}
+
+function saveRoutes() {
+    document.querySelector('input#action').value =  'save-routes';
+    document.querySelector('form#vuewp-form').submit();
+}
+
+function setTranslationsBehavior() {
     const lines = document.querySelectorAll('.translator .str-line');
     Array.from(lines).forEach(line => {
         line.addEventListener('click', evt => {

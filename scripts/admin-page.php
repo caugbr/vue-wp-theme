@@ -26,6 +26,7 @@ add_action('admin_menu', 'vuewp_admin_page');
 function save_admin_page() {
     global $translation;
     global $settings;
+    global $vue_routes;
     $msg = '';
     if (isset($_POST['action'])) {
         if ($_POST['action'] == 'save-lang') {
@@ -49,13 +50,18 @@ function save_admin_page() {
             $settings->save($_POST['settings']);
             $msg = __('Settings updated successfully.', 'vuewp');
         }
+        if ($_POST['action'] == 'save-routes') {
+            $vue_routes->write_file($_POST['routes']);
+            $msg = __('Routes updated successfully.', 'vuewp');
+        }
     }
     return $msg;
 }
 
 function admin_page() {
-    global $translation;
     global $settings;
+    global $translation;
+    global $vue_routes;
     $msg = save_admin_page();
     ?>
     <div class="wrap">
@@ -79,6 +85,9 @@ function admin_page() {
                         </a>
                         <a class="tab" href="#" data-tab="translations">
                             <?php _e('Translations', 'vuewp'); ?>
+                        </a>
+                        <a class="tab" href="#" data-tab="routes">
+                            <?php _e('Routes', 'vuewp'); ?>
                         </a>
                     </div>
                     <div class="tab-stage">
@@ -104,6 +113,18 @@ function admin_page() {
                             </p>
                             <?php $translation->translations_form(); ?>
                         </div>
+                        <div class="tab-content" data-tab="routes">
+                            <h2><?php _e('Routes', 'vuewp'); ?></h2>
+                            <p>
+                                <?php printf(__('The site routes are defined by Vue app, ignoring the original WP routes. You can edit it here or directly in Vue Router file (%s).', 'vuewp'), '<code>src/router/index.js</code>'); ?>
+                            </p>
+                            <?php $vue_routes->render_form(); ?>
+                            <div class="formline buttons">
+                                <button id="save-routes" class="button button-primary">
+                                    <?php _e('Save routes', 'vuewp'); ?>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -111,3 +132,26 @@ function admin_page() {
     </div>
     <?php
 }
+
+function get_vue_views() {
+    global $appDir;
+    global $themeDir;
+    $views = listFiles("{$themeDir}/{$appDir}/src/views");
+    // print_r($views);
+    $components = [];
+    foreach ($views as $view) {
+        $code = file_get_contents($view);
+        $name = basename($view);
+        $components[$name] = [
+            "file" => $view,
+            "componentPath" => "../views/{$name}",
+            "componentName" => str_replace(".vue", "", $name)
+        ];
+        if (preg_match("/\broute_params:\s*[\"']([^\"']+)[\"']/", $code, $m)) {
+            $components[$name]["params"] = preg_split("/\s*,\s*/", $m[1]);
+        }
+    }
+    print_r($components);
+    // return $components;
+}
+// add_action('init', 'get_vue_views');

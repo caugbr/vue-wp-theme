@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Vue WP Theme\n"
-"POT-Creation-Date: 2023-07-20 08:48-0300\n"
+"POT-Creation-Date: 2023-07-22 08:19-0300\n"
 "PO-Revision-Date: 2023-07-19 20:45+0300\n"
 "Last-Translator: \n"
 "Language-Team: Cau Guanabara\n"
@@ -151,7 +151,7 @@ msgid "Select the WP menu that appears in site header. Create a new one in Appea
 msgstr ""
 
 #: settings/theme-settings.php:14
-msgid "WP menu in site header"
+msgid "WP menu in header"
 msgstr ""
 
 #: settings/theme-settings.php:20
@@ -182,6 +182,14 @@ msgstr ""
 msgid "Sidebar position"
 msgstr ""
 
-#: settings/theme-settings.php:78
+#: settings/theme-settings.php:38
+msgid "Select the post formats that will have support in your theme."
+msgstr ""
+
+#: settings/theme-settings.php:39
+msgid "Post formats support"
+msgstr ""
+
+#: settings/theme-settings.php:74
 msgid "None"
 msgstr ""

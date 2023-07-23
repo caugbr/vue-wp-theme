@@ -28,6 +28,7 @@ export default {
     name: 'Post',
     components: { TaxonomyLinks },
     mixins: [ postMixin ],
+    route_params: 'slug',
     beforeMount() {
         const slug = this.$route.params.slug;
         this.getPost(slug, 'posts').then(() => {

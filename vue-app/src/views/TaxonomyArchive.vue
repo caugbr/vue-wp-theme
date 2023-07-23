@@ -11,6 +11,7 @@ import List from '../components/List.vue';
 export default {
     name: 'TaxonomyArchive',
     components: { List },
+    route_params: 'postType,taxonomy,term',
     data() {
         return {
             postType: '',

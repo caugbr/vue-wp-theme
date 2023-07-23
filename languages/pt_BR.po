@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Vue WP Theme\n"
-"POT-Creation-Date: 2023-07-20 08:44-0300\n"
-"PO-Revision-Date: 2023-07-20 08:45-0300\n"
+"POT-Creation-Date: 2023-07-22 08:14-0300\n"
+"PO-Revision-Date: 2023-07-22 08:15-0300\n"
 "Last-Translator: \n"
 "Language-Team: Cau Guanabara\n"
 "Language: pt_BR\n"
@@ -165,7 +165,7 @@ msgstr ""
 "novo em Aparência &gt; Personalizar &gt; Menus."
 
 #: settings/theme-settings.php:14
-msgid "WP menu in site header"
+msgid "WP menu in header"
 msgstr "Menu para o header do site"
 
 #: settings/theme-settings.php:20
@@ -200,6 +200,14 @@ msgstr "Defina a posição do sidebar"
 msgid "Sidebar position"
 msgstr "Posição do sidebar"
 
-#: settings/theme-settings.php:78
+#: settings/theme-settings.php:38
+msgid "Select the post formats that will have support in your theme."
+msgstr "Selecione os formatos de post que terão suporte no seu tema."
+
+#: settings/theme-settings.php:39
+msgid "Post formats support"
+msgstr "Suporte a formatos de post"
+
+#: settings/theme-settings.php:74
 msgid "None"
 msgstr "Nenhum"

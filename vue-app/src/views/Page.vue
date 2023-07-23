@@ -13,6 +13,7 @@ import postMixin from '../mixins/post.js';
 export default {
     name: 'Page',
     mixins: [ postMixin ],
+    route_params: 'slug',
     beforeMount() {
         const slug = this.$route.params.slug;
         this.getPost(slug, 'pages');

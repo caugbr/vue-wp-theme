@@ -31,8 +31,8 @@ In `Appearence > Vue WP Theme` you can access the theme options page. There you 
 The settings are stored in a php file, located in `settings/theme-settings.php`. The defined options will be editable in admin page and available in frontend as `this.info`. You can edit it and add new settings.
 There are some built in options:
  * Use WP language - Use WP language?
- * WP menu in site header - Menu do display in header position
- * WP menu in site sidebar - Menu do display in sidebar position
+ * WP menu in header - Menu do display in header position
+ * WP menu in sidebar - Menu do display in sidebar position
  * Sidebar position - Right, left or disable sidebar
  * Post formats support - Enable support for marked formats
 

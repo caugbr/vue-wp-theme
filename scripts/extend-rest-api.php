@@ -36,7 +36,6 @@ function rest_search(WP_REST_Request $request) {
     $posts = get_posts($args);
     $results = [];
     foreach ($posts as $p) {
-        // print_r($p);
         $thumbnail_id = get_post_thumbnail_id($p);
         $thumbnail = wp_get_attachment_image_src($thumbnail_id);
         $results[] = [
@@ -47,7 +46,8 @@ function rest_search(WP_REST_Request $request) {
             "thumbnail" => $thumbnail[0] ?? ''
         ];
     }
-    return new WP_REST_Response($results, 200);
+    return wp_send_json($results, 200);
+    // return new WP_REST_Response($results, 200);
 }
 
 function rest_get_menu_items(WP_REST_Request $request) {
@@ -65,7 +65,8 @@ function rest_get_menu_items(WP_REST_Request $request) {
         ];
         $response[] = $arr;
     }
-    return new WP_REST_Response($response, 200);
+    return wp_send_json($response, 200);
+    // return new WP_REST_Response($response, 200);
 }
 
 function get_slug_by_id($itm) {

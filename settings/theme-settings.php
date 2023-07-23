@@ -11,7 +11,7 @@ $theme_settings = [
         "type" => "select",
         "options" => "get_menus_as_options",
         "description" => __('Select the WP menu that appears in site header. Create a new one in Appearence &gt; Costumize &gt; Menus.', 'vuewp'),
-        "label" =>  __('WP menu in site header', 'vuewp'),
+        "label" =>  __('WP menu in header', 'vuewp'),
         "default_value" => ''
     ],
     "sidebar_menu" => [
@@ -83,41 +83,14 @@ function get_menus_as_options() {
 
 function all_post_formats() {
     return [
-        [
-            "label" => 'Aside',
-            "value" => 'aside'
-        ],
-        [
-            "label" => 'Gallery',
-            "value" => 'gallery'
-        ],
-        [
-            "label" => 'Link',
-            "value" => 'link'
-        ],
-        [
-            "label" => 'Image',
-            "value" => 'image'
-        ],
-        [
-            "label" => 'Quote', 
-            "value" => 'quote'
-        ],
-        [
-            "label" => 'Status',
-            "value" => 'status'
-        ],
-        [
-            "label" => 'Video',
-            "value" => 'video'
-        ],
-        [
-            "label" => 'Audio',
-            "value" => 'audio'
-        ],
-        [
-            "label" => 'Chat',
-            "value" => 'chat'
-        ],
+        [ "label" => __('Aside'), "value" => 'aside' ],
+        [ "label" => __('Gallery'), "value" => 'gallery' ],
+        [ "label" => __('Link'), "value" => 'link' ],
+        [ "label" => __('Image'), "value" => 'image' ],
+        [ "label" => __('Quote'),  "value" => 'quote' ],
+        [ "label" => __('Status'), "value" => 'status' ],
+        [ "label" => __('Video'), "value" => 'video' ],
+        [ "label" => __('Audio'), "value" => 'audio' ],
+        [ "label" => __('Chat'), "value" => 'chat' ]
     ];
 }

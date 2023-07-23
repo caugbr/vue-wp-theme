@@ -45,8 +45,7 @@ export default {
                     break;
 
                 default:
-                    to = itm.url;
-                    break;
+                    to = itm.url ?? '';
             }
             to = to.replace(/^(https?:\/\/[^/]+)(.+)$/, '$2');
             if (!to.includes(this.info.basePath)) {
@@ -62,6 +61,7 @@ export default {
         if (this.menu) {
             const api = this.getApi({ namespace: 'vuewp/v1' });
             api.getMenu(this.menu).then(menu => {
+                console.log('items', menu.data)
                 this.items = menu.data;
             });
         }

@@ -48,6 +48,7 @@
     max-width: 500px;
     padding: 0 0.5rem;
     font-size: 14px;
+    vertical-align: middle;
 }
 .formline input.half,
 .formline select.half,
@@ -123,10 +124,53 @@
 }
 
 
+#route-component option:first-child {
+    color: #ccc;
+}
+.route-variables {
+    margin: 0.5rem auto;
+}
+.route-variables .route-param {
+    cursor: pointer;
+}
+
+.current-routes > div {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    flex-direction: row;
+}
+
+.current-routes .route-path {
+    font-size: 16px;
+    font-weight: 600;
+    flex-grow: 0;
+}
+.current-routes .route-component {
+    font-size: 16px;
+    flex-grow: 0;
+}
+.current-routes .actions {
+    flex-grow: 4;
+    flex-shrink: 4;
+    justify-content: flex-end;
+    text-align: right;
+}
+.current-routes .actions a {
+    text-decoration: none;
+}
+.route-error {
+    margin: 1rem auto;
+    color: red;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
 /* tabs */
 
 .settings .tabs {
-    margin: 0.25rem auto;
+    margin: 1rem auto 0.25rem;
 }
 .settings .tabs .tab-links {
     border-bottom: 1px solid #ccc;
@@ -159,6 +203,7 @@
     display: none;
 }
 .settings .tabs[data-tab="settings"] .tab-links a.tab[data-tab="settings"],
+.settings .tabs[data-tab="routes"] .tab-links a.tab[data-tab="routes"],
 .settings .tabs[data-tab="translations"] .tab-links a.tab[data-tab="translations"] {
     background-color: #efefef;
     border-bottom-color: #efefef;
@@ -166,6 +211,7 @@
     cursor: default;
 }
 .settings .tabs[data-tab="settings"] .tab-stage .tab-content[data-tab="settings"],
+.settings .tabs[data-tab="routes"] .tab-stage .tab-content[data-tab="routes"],
 .settings .tabs[data-tab="translations"] .tab-stage .tab-content[data-tab="translations"] {
     display: block;
 }

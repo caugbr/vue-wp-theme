@@ -19,6 +19,7 @@ import Search from '../components/Search.vue';
 export default {
     name: 'SearchResults',
     components: { List, Search },
+    route_params: 'term',
     data() {
         return {
             posts: []
