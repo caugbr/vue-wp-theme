@@ -51,7 +51,9 @@ function save_admin_page() {
             $msg = __('Settings updated successfully.', 'vuewp');
         }
         if ($_POST['action'] == 'save-routes') {
-            $vue_routes->write_file($_POST['routes']);
+            $routes = json_decode(stripslashes($_POST['routes']), true);
+            // var_dump($routes);
+            $vue_routes->write_file($routes);
             $msg = __('Routes updated successfully.', 'vuewp');
         }
     }

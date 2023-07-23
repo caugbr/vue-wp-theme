@@ -207,12 +207,15 @@ function deleteRoute(index) {
     if (window.vuewpRoutes && vuewpRoutes[index]) {
         vuewpRoutes.splice(index, 1);
         setVuewpRoutes();
+        populateRoutesList();
     }
 }
 
 function addRoute() {
-    const path = document.querySelector('input#route-path').value;
-    const component = document.querySelector('select#route-component').value;
+    const pathEl = document.querySelector('input#route-path');
+    const componentEl = document.querySelector('select#route-component');
+    const path = pathEl.value;
+    const component = componentEl.value;
     if (path && component) {
         if (routeExists(path, component)) {
             const msg = 'The sent path or component is already in use.';
@@ -221,6 +224,8 @@ function addRoute() {
             setTimeout(() => err.innerHTML = '', 5000);
             return;
         }
+        pathEl.value = '';
+        componentEl.value = '';
         vuewpRoutes.push({ path, component });
         setVuewpRoutes();
         populateRoutesList();

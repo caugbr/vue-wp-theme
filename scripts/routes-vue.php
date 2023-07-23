@@ -124,8 +124,8 @@ class RoutesVue {
         <?php
     }
 
-    public function write_file() {
-        $routes = $this->get_routes();
+    public function write_file($routes) {
+        // $routes = $this->get_routes();
         $views = $this->get_vue_views();
         $imports = [];
         $c = "import Vue from 'vue';\n";
@@ -152,5 +152,6 @@ class RoutesVue {
 
         $file = "{$this->src}/router/index.js";
         file_put_contents($file, $c);
+        $this->save_routes($routes);
     }
 }
