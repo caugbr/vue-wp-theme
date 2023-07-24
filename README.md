@@ -20,12 +20,17 @@ The frontend is a Vue app, all the displayed contents are loaded using the API a
 
 ### Other scripts
 * I18n - Vue plugin to internationalize the Vue app
-  **(edit / create translation files directly from WP admin)**
 * WpApi - script to interact with WP REST API
 * Grid - Simple CSS grid made with SASS
 
 ### Administration page
-In `Appearence > Vue WP Theme` you can access the theme options page. There you can edit the site settings, edit or create translation files and edit or create Vue routes.
+The theme has an admistration page. You can access it in `Appearence > Vue WP Theme`. In admin page you'll find:
+* Site options
+  Edit the options defined in `/settings/theme-settings.php`.
+* Translations on frontend
+  Edit / create translation files directly from WP admin
+* Routes
+  Edit / create Vue routes directly from WP admin
 
 ### Settings
 The settings are stored in a php file, located in `settings/theme-settings.php`. The defined options will be editable in admin page and available in frontend as `this.info`. You can edit it and add new settings.
