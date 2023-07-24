@@ -100,17 +100,7 @@ function vuewp_add_support() {
     add_theme_support('html5', ['style','script']);
     add_theme_support('widgets');
     add_theme_support('custom-logo', $vuewp_logo);
-    add_theme_support('title-tag');
 }
-
-////////////////////////
-function change_the_title($title) {
-    if (is_404()) {
-        return 'nao é';
-    }
-    return $title;
-}
-add_filter('document_title', 'change_the_title');
 
 // Register theme hook
 function register_vuewp() {

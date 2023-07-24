@@ -20,38 +20,14 @@ class RoutesVue {
         $routes = get_option('vuewp_routes');
         if (!is_array($routes) || empty($routes)) {
             return [
-                [
-                    "path" => "/",
-                    "component" => "Home"
-                ],
-                [
-                    "path" => "/posts",
-                    "component" => "PostArchive"
-                ],
-                [
-                    "path" => "/posts/:slug",
-                    "component" => "Post"
-                ],
-                [
-                    "path" => "/pages",
-                    "component" => "PageArchive"
-                ],
-                [
-                    "path" => "/pages/:slug",
-                    "component" => "Page"
-                ],
-                [
-                    "path" => "/:postType/:taxonomy/:term",
-                    "component" => "TaxonomyArchive"
-                ],
-                [
-                    "path" => "/search/:term",
-                    "component" => "SearchResults"
-                ],
-                [
-                    "path" => "/:pathMatch(.*)*",
-                    "component" => "NotFound"
-                ]
+                [ "path" => "/", "component" => "Home" ],
+                [ "path" => "/posts", "component" => "PostArchive" ],
+                [ "path" => "/posts/:slug", "component" => "Post" ],
+                [ "path" => "/pages", "component" => "PageArchive" ],
+                [ "path" => "/pages/:slug", "component" => "Page" ],
+                [ "path" => "/:postType/:taxonomy/:term", "component" => "TaxonomyArchive" ],
+                [ "path" => "/search/:term", "component" => "SearchResults" ],
+                [ "path" => "/:pathMatch(.*)*", "component" => "NotFound" ]
             ];
         }
         return $this->routes = $routes;
@@ -125,7 +101,6 @@ class RoutesVue {
     }
 
     public function write_file($routes) {
-        // $routes = $this->get_routes();
         $views = $this->get_vue_views();
         $imports = [];
         $c = "import Vue from 'vue';\n";

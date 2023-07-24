@@ -52,7 +52,6 @@ function save_admin_page() {
         }
         if ($_POST['action'] == 'save-routes') {
             $routes = json_decode(stripslashes($_POST['routes']), true);
-            // var_dump($routes);
             $vue_routes->write_file($routes);
             $msg = __('Routes updated successfully.', 'vuewp');
         }
@@ -134,26 +133,3 @@ function admin_page() {
     </div>
     <?php
 }
-
-function get_vue_views() {
-    global $appDir;
-    global $themeDir;
-    $views = listFiles("{$themeDir}/{$appDir}/src/views");
-    // print_r($views);
-    $components = [];
-    foreach ($views as $view) {
-        $code = file_get_contents($view);
-        $name = basename($view);
-        $components[$name] = [
-            "file" => $view,
-            "componentPath" => "../views/{$name}",
-            "componentName" => str_replace(".vue", "", $name)
-        ];
-        if (preg_match("/\broute_params:\s*[\"']([^\"']+)[\"']/", $code, $m)) {
-            $components[$name]["params"] = preg_split("/\s*,\s*/", $m[1]);
-        }
-    }
-    print_r($components);
-    // return $components;
-}
-// add_action('init', 'get_vue_views');

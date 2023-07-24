@@ -95,5 +95,4 @@ The theme adds the new hooks `register_vuewp_theme` and `unregister_vuewp_theme`
  * Full Width Template
  * Theme Options
  * Translation Ready
- * Title Tag
  * Content Width
