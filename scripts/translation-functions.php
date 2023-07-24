@@ -2,12 +2,12 @@
 
 class TranslationFunctions {
 
-    var $themeDir;
-    var $appDir;
+    var $vuewp_theme_dir;
+    var $vuewp_app_dir;
 
-    public function __construct($themeDir, $appDir) {
-        $this->themeDir = $themeDir;
-        $this->appDir = $appDir;
+    public function __construct($vuewp_theme_dir, $vuewp_app_dir) {
+        $this->themeDir = $vuewp_theme_dir;
+        $this->appDir = $vuewp_app_dir;
     }
     
     public function translations_form() {

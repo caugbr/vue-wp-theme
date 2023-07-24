@@ -103,6 +103,7 @@ class RoutesVue {
     public function write_file($routes) {
         $views = $this->get_vue_views();
         $imports = [];
+
         $c = "import Vue from 'vue';\n";
         $c .= "import VueRouter from 'vue-router';\n\n";
         $c .= "%IMPORTS%\n\n";
@@ -114,10 +115,11 @@ class RoutesVue {
             if ($route['path'] == '/') {
                 $base = 'basePath ? basePath : ';
             }
-            $c .= "    { path: {$base}'{$route['path']}', name: ";
-            $c .= "'{$route['component']}', component: {$route['component']} },\n";
-            $imports[] = "import {$views[$route['component']]['componentName']} " .
-                         "from '{$views[$route['component']]['componentPath']}';";
+            $cn = $route['component'];
+            $c .= "    { path: {$base}'{$route['path']}', ";
+            $c .= "name: '{$cn}', component: {$cn} },\n";
+            $imports[] = "import {$views[$cn]['componentName']} " .
+                         "from '{$views[$cn]['componentPath']}';";
         }
         $c .= "];\n\n";
         $c .= "const router = new VueRouter({ mode: 'history', routes });\n\n";
@@ -127,6 +129,7 @@ class RoutesVue {
 
         $file = "{$this->src}/router/index.js";
         file_put_contents($file, $c);
+
         $this->save_routes($routes);
     }
 }

@@ -4,7 +4,7 @@
 
 // Dev URL - npm can change this. In this
 // case you must edit the value bellow.
-$scriptsUrlDev = 'http://127.0.0.1:8080';
+$vuewp_dev_url = 'http://127.0.0.1:8080';
 
 // Theme sidebars - this variable will be used to
 // register the sidebars and to render the WP part.
@@ -31,15 +31,12 @@ $vuewp_areas = [
 ];
 
 // App directory name
-$appDir = 'vue-app';
+$vuewp_app_dir = 'vue-app';
 
 // Image sizes
 $vuewp_image_sizes = [
 
 ];
-
-// Max width for site content in pixels
-$content_width = 900;
 
 // Logo image defaults
 $vuewp_logo = [
@@ -49,42 +46,49 @@ $vuewp_logo = [
     'flex-width' => true
 ];
 
+// Max width for site content in pixels
+$content_width = 900;
+
 // Do not edit these ones
-$themeDir = get_stylesheet_directory();
-$themeDirUrl = get_template_directory_uri();
-$vueScripts = [
+$vuewp_theme_dir = get_stylesheet_directory();
+$vuewp_theme_url = get_template_directory_uri();
+$vuewp_scripts = [
     'wp-vue-app-js' => 'js/app.js',
     'wp-vue-vendors-js' => 'js/chunk-vendors.js'
 ];
 
 // Translations
-load_theme_textdomain("vuewp", $themeDir . '/languages');
+load_theme_textdomain("vuewp", $vuewp_theme_dir . '/languages');
 
 // Settings
-include_once $themeDir . "/settings/index.php";
+include_once $vuewp_theme_dir . "/settings/index.php";
 $settings = new ThemeSettings('vuewp_settings');
 
+// Add theme supports
 vuewp_add_support();
 
 // Add translation functions
-include_once $themeDir . "/scripts/translation-functions.php";
-$translation = new TranslationFunctions($themeDir, $appDir);
+include_once $vuewp_theme_dir . "/scripts/translation-functions.php";
+$translation = new TranslationFunctions($vuewp_theme_dir, $vuewp_app_dir);
 
 // Add routes
-include_once $themeDir . "/scripts/routes-vue.php";
-$vue_routes = new RoutesVue($themeDir, $appDir);
+include_once $vuewp_theme_dir . "/scripts/routes-vue.php";
+$vue_routes = new RoutesVue($vuewp_theme_dir, $vuewp_app_dir);
 
 // Remove redirects
 remove_action('template_redirect', 'redirect_canonical');
 
+// Disable 404 errors
+add_filter("pre_handle_404", "__return_false");
+
 // REST API custom endpoints
-include_once $themeDir . "/scripts/extend-rest-api.php";
+include_once $vuewp_theme_dir . "/scripts/extend-rest-api.php";
 
 // Add sidebars and custom widgets
-include_once $themeDir . "/scripts/widgets.php";
+include_once $vuewp_theme_dir . "/scripts/widgets.php";
 
 // Add options page
-include_once $themeDir . "/scripts/admin-page.php";
+include_once $vuewp_theme_dir . "/scripts/admin-page.php";
 
 // Theme add support
 function vuewp_add_support() {
@@ -130,21 +134,21 @@ add_action('switch_theme', 'unregister_vuewp');
  * @return void
  */
 function enqueue_scripts() {
-    global $scriptsUrlDev;
-    global $themeDirUrl;
-    global $vueScripts;
-    global $appDir;
+    global $vuewp_dev_url;
+    global $vuewp_theme_url;
+    global $vuewp_scripts;
+    global $vuewp_app_dir;
     $envType = wp_get_environment_type();
     if ($envType == 'production') {
-        foreach ($vueScripts as $sid => $script) {
-            $url = "{$themeDirUrl}/{$appDir}/dist/{$script}";
+        foreach ($vuewp_scripts as $sid => $script) {
+            $url = "{$vuewp_theme_url}/{$vuewp_app_dir}/dist/{$script}";
             wp_enqueue_script($sid, $url);
         }
-        $cssUrl = "{$themeDirUrl}/{$appDir}/dist/css/app.css";
+        $cssUrl = "{$vuewp_theme_url}/{$vuewp_app_dir}/dist/css/app.css";
         wp_enqueue_style("vp-vue-css-prod", $cssUrl);
     } else {
-        foreach ($vueScripts as $sid => $script) {
-            wp_enqueue_script($sid, $scriptsUrlDev . "/" . $script);
+        foreach ($vuewp_scripts as $sid => $script) {
+            wp_enqueue_script($sid, $vuewp_dev_url . "/" . $script);
         }
     }
 }
@@ -156,7 +160,7 @@ add_action('wp_footer', 'enqueue_scripts');
  * @return void
  */
 function get_vue_info() {
-    global $themeDirUrl;
+    global $vuewp_theme_url;
     global $settings;
 	global $current_user;
 	global $content_width;
@@ -173,7 +177,7 @@ function get_vue_info() {
     }
     $url_info = parse_url(site_url());
     $ret = [
-        "themeDirUrl" => $themeDirUrl,
+        "themeDirUrl" => $vuewp_theme_url,
         "siteUrl" => site_url(),
         "basePath" => $url_info['path'],
         "language" => get_locale(),

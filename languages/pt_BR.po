@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Vue WP Theme\n"
-"POT-Creation-Date: 2023-07-22 08:14-0300\n"
-"PO-Revision-Date: 2023-07-22 08:15-0300\n"
+"POT-Creation-Date: 2023-07-24 14:38-0300\n"
+"PO-Revision-Date: 2023-07-24 14:42-0300\n"
 "Last-Translator: \n"
 "Language-Team: Cau Guanabara\n"
 "Language: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: vue-app\n"
 "X-Poedit-SearchPathExcluded-1: .git\n"
 
-#: scripts/admin-page.php:15 scripts/admin-page.php:62
+#: scripts/admin-page.php:15 scripts/admin-page.php:69
 msgid "Vue WP Theme options"
 msgstr "Opções do Vue WP Theme"
 
@@ -26,50 +26,58 @@ msgstr "Opções do Vue WP Theme"
 msgid "Vue WP Theme"
 msgstr ""
 
-#: scripts/admin-page.php:34
+#: scripts/admin-page.php:35
 #, php-format
 msgid "The file %s was successfully saved."
 msgstr "O arquivo %s foi salvo com sucesso."
 
-#: scripts/admin-page.php:36
+#: scripts/admin-page.php:37
 #, php-format
 msgid "The file %s could not be saved, there was an error."
 msgstr "O arquivo %s  não pôde ser salvo, houve um erro."
 
-#: scripts/admin-page.php:43
+#: scripts/admin-page.php:44
 #, php-format
 msgid "The file %s was successfully create."
 msgstr "O arquivo %s foi criado  com sucesso."
 
-#: scripts/admin-page.php:45
+#: scripts/admin-page.php:46
 #, php-format
 msgid "The file %s could not be create, there was an error."
 msgstr "O arquivo %s  não pôde ser criado, houve um erro."
 
-#: scripts/admin-page.php:50
+#: scripts/admin-page.php:51
 msgid "Settings updated successfully."
 msgstr "Configurações salvas com sucesso."
 
-#: scripts/admin-page.php:78
+#: scripts/admin-page.php:56
+msgid "Routes updated successfully."
+msgstr "Rotas salvas com sucesso."
+
+#: scripts/admin-page.php:85
 msgid "Options"
 msgstr "Opções"
 
-#: scripts/admin-page.php:81
+#: scripts/admin-page.php:88
 msgid "Translations"
 msgstr "Traduções"
 
-#: scripts/admin-page.php:86
+#: scripts/admin-page.php:91 scripts/admin-page.php:118
+msgid "Routes"
+msgstr "Rotas"
+
+#: scripts/admin-page.php:96
 msgid "Theme options"
 msgstr "Opções do tema"
 
-#: scripts/admin-page.php:88
+#: scripts/admin-page.php:98
 #, php-format
 msgid ""
 "These options will be available for all components in the Vue app as %s."
 msgstr ""
 "Essas configurações estarão disponíveis para todos os componentes Vue em %s."
 
-#: scripts/admin-page.php:90
+#: scripts/admin-page.php:100
 #, php-format
 msgid ""
 "You can edit the file %s and add some new settings as per your theme's needs."
@@ -77,19 +85,19 @@ msgstr ""
 "Você pode editar o arquivo %s e adicionar novos itens de acordo com as "
 "necessidades do seu tema."
 
-#: scripts/admin-page.php:95
+#: scripts/admin-page.php:105
 msgid "Save options"
 msgstr "Salvar opções"
 
-#: scripts/admin-page.php:100
+#: scripts/admin-page.php:110
 msgid "Frontend translations"
 msgstr "Traduções no frontend"
 
-#: scripts/admin-page.php:102
+#: scripts/admin-page.php:112
 msgid "You can edit all translatable strings from here."
 msgstr "Você pode editar todas as traduções aqui mesmo."
 
-#: scripts/admin-page.php:103
+#: scripts/admin-page.php:113
 msgid ""
 "If you created some new translatable strings, they will be present and "
 "marked in red. The strings displayed below will always be up to date with "
@@ -97,6 +105,43 @@ msgid ""
 msgstr ""
 "Se você criou novos termos traduzíveis, eles estarão presentes e marcados em "
 "vermelho. Os termos abaixo são lidos do código e estarão sempre atualizados."
+
+#: scripts/admin-page.php:120
+#, php-format
+msgid ""
+"The site routes are defined by Vue app, ignoring the original WP routes. You "
+"can edit it here or directly in Vue Router file (%s)."
+msgstr ""
+"As rotas do site são definidas no Vue, ignorando as rotas originais do WP. "
+"Você pode editá-las aqui ou diretamente no arquivo do Vue Router (%s)."
+
+#: scripts/admin-page.php:125
+msgid "Save routes"
+msgstr "Salvar rotas"
+
+#: scripts/routes-vue.php:69
+msgid "Add route"
+msgstr "Adicionar rota"
+
+#: scripts/routes-vue.php:72
+msgid "View to handle route"
+msgstr "View para gerenciar a rota"
+
+#: scripts/routes-vue.php:75
+msgid "Select the view"
+msgstr "Selecione a view"
+
+#: scripts/routes-vue.php:85
+msgid "Path"
+msgstr "Caminho"
+
+#: scripts/routes-vue.php:92
+msgid "Add"
+msgstr "Adicionar"
+
+#: scripts/routes-vue.php:97
+msgid "Current routes"
+msgstr "Rotas atuais"
 
 #: scripts/translation-functions.php:26
 msgid "Select a language to edit"
@@ -211,3 +256,39 @@ msgstr "Suporte a formatos de post"
 #: settings/theme-settings.php:74
 msgid "None"
 msgstr "Nenhum"
+
+#: settings/theme-settings.php:86
+msgid "Aside"
+msgstr ""
+
+#: settings/theme-settings.php:87
+msgid "Gallery"
+msgstr ""
+
+#: settings/theme-settings.php:88
+msgid "Link"
+msgstr ""
+
+#: settings/theme-settings.php:89
+msgid "Image"
+msgstr ""
+
+#: settings/theme-settings.php:90
+msgid "Quote"
+msgstr ""
+
+#: settings/theme-settings.php:91
+msgid "Status"
+msgstr ""
+
+#: settings/theme-settings.php:92
+msgid "Video"
+msgstr ""
+
+#: settings/theme-settings.php:93
+msgid "Audio"
+msgstr ""
+
+#: settings/theme-settings.php:94
+msgid "Chat"
+msgstr ""

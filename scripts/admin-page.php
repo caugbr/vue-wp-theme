@@ -1,13 +1,13 @@
 <?php
 
 function add_admin_js() {
-    global $themeDirUrl;
-    wp_enqueue_script("vuewp-admin-js", $themeDirUrl . "/admin-assets/admin.js");
+    global $vuewp_theme_url;
+    wp_enqueue_script("vuewp-admin-js", $vuewp_theme_url . "/admin-assets/admin.js");
 }
 
 function add_admin_css() {
-    global $themeDirUrl;
-    wp_enqueue_style("vuewp-admin-css", $themeDirUrl . "/admin-assets/admin.css");
+    global $vuewp_theme_url;
+    wp_enqueue_style("vuewp-admin-css", $vuewp_theme_url . "/admin-assets/admin.css");
 }
 
 function vuewp_admin_page() {
