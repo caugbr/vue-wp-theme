@@ -25,11 +25,11 @@ The frontend is a Vue app, all the displayed contents are loaded using the API a
 
 ### Administration page
 The theme has an admistration page. You can access it in `Appearence > Vue WP Theme`. In admin page you'll find:
-* Site options
+* Site options\
   Edit the options defined in `/settings/theme-settings.php`.
-* Translations on frontend
+* Translations on frontend\
   Edit / create translation files directly from WP admin
-* Routes
+* Routes\
   Edit / create Vue routes directly from WP admin
 
 ### Settings
