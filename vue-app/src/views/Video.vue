@@ -6,18 +6,19 @@
             :taxonomyLinks="taxonomyLinks" 
             :taxonomies="{ video_category: t('Video category') }"
         />
-        <div class="post-thumbnail" v-html="thumbnail"></div>
+        <thumbnail :post="post" />
         <article class="post-content" v-html="post.content"></article>
     </div>
 </template>
 
 <script>
+import Thumbnail from '../components/Thumbnail.vue';
 import TaxonomyLinks from '../components/TaxonomyLinks.vue';
 import postMixin from '../mixins/post.js';
 
 export default {
     name: 'Video',
-    components: { TaxonomyLinks },
+    components: { Thumbnail, TaxonomyLinks },
     route_params: 'slug',
     mixins: [ postMixin ],
     data() {

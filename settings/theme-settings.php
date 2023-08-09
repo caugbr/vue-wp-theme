@@ -7,6 +7,12 @@ $theme_settings = [
         "label" =>  __('Use WP language', 'vuewp'),
         "default_value" => '1'
     ],
+    "hide_wp_bar" => [
+        "type" => "checkbox",
+        "description" => __('Hide Wordpress admin bar on frontend overriding user setting', 'vuewp'),
+        "label" =>  __('Hide WP admin bar', 'vuewp'),
+        "default_value" => '0'
+    ],
     "header_menu" => [
         "type" => "select",
         "options" => "get_menus_as_options",

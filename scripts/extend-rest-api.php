@@ -47,7 +47,6 @@ function rest_search(WP_REST_Request $request) {
         ];
     }
     return wp_send_json($results, 200);
-    // return new WP_REST_Response($results, 200);
 }
 
 function rest_get_menu_items(WP_REST_Request $request) {
@@ -66,7 +65,6 @@ function rest_get_menu_items(WP_REST_Request $request) {
         $response[] = $arr;
     }
     return wp_send_json($response, 200);
-    // return new WP_REST_Response($response, 200);
 }
 
 function get_slug_by_id($itm) {

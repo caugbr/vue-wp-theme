@@ -13,6 +13,8 @@ The frontend is a Vue app, all the displayed contents are loaded using the API a
 * Loading - global loading layer
 * LangMenu - a menu to switch the site language
 * List - list posts by post type and taxonomy term
+* Search - search form
+* Thumbnail - render the featured image for a post
 
 ### Mixins
 * common.js - some helper functions that is available in all components
@@ -26,16 +28,17 @@ The frontend is a Vue app, all the displayed contents are loaded using the API a
 ### Administration page
 The theme has an admistration page. You can access it in `Appearence > Vue WP Theme`. In admin page you'll find:
 * Site options\
-  Edit the options defined in `/settings/theme-settings.php`.
+  You can edit the options. They are defined in `/settings/theme-settings.php`.
 * Translations on frontend\
-  Edit / create translation files directly from WP admin
+  Edit / create translation files for your Vue app directly from admin page
 * Routes\
-  Edit / create Vue routes directly from WP admin
+  Manage Vue routes directly from admin page
 
 ### Settings
 The settings are stored in a php file, located in `settings/theme-settings.php`. The defined options will be editable in admin page and available in frontend as `this.info`. You can edit it and add new settings.
 There are some built in options:
  * Use WP language - Use WP language?
+ * Hide WP admin bar - Override the user setting and hide admin bar for everyone
  * WP menu in header - Menu do display in header position
  * WP menu in sidebar - Menu do display in sidebar position
  * Sidebar position - Right, left or disable sidebar
@@ -82,8 +85,28 @@ The theme adds the widget `Copyright`, that you can use in footer, to add a text
 ### Theme hooks
 The theme adds the new hooks `register_vuewp_theme` and `unregister_vuewp_theme`, that works like the functions `register_activation_hook()` and  `register_activation_hook()` works for plugins.
 
+### Install
+Paste the theme folder into ```.../wp-content/themes/```. Open a terminal, navigate to ```wp-vue-theme/vue-app``` and run:
+
+	npm install
+
+It can take a while. Than you can start the development server:
+
+	npm run serve
+
+Before you can see the frontend working, there is a little edition on ```wp-config.php```. 
+We'll check your config file and add this constant on theme activation, but only if it's not already in the file. So there is a small chance of this value to be 'production' after theme activation. In this case, add the following command to your config file:
+
+	define( 'WP_ENVIRONMENT_TYPE', 'development' );
+
+This constant will define whether our theme loads the development files or the built production version.
+The default value is 'production' (if it isn't in your config file), but the theme defaults to 'development'. In other words, while you don't build a package, you need that constant to be 'development' or you won't see the theme frontend.
+
+You'll use ```WP_ENVIRONMENT_TYPE``` as 'development' only while you are editing the files.\
+After build your production package, don't forget to change it to 'production'.
+
 ### Wordpress tags
- * Grid Layout (in progress)
+ * Grid Layout
  * One Column
  * Left Sidebar
  * Right Sidebar

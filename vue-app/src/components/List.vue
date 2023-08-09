@@ -1,16 +1,12 @@
 <template>
     <div :class="`list-posts type-${postType} list`">
-        <ul>
+        <ul v-if="posts.length">
             <li v-for="post, index in posts" :key="index">
                 <router-link 
                     :to="`${info.basePath}/${typeName(post)}/${post.slug}`" 
                     :class="`${postType}-link`"
                 >
-                    <div 
-                        v-if="thumbnails" 
-                        class="thumbnail" 
-                        v-html="thumbHTML[post.slug]"
-                    ></div>
+                    <thumbnail :post="post" />
                     <div class="post-title">{{ post.title }}</div>
                 </router-link>
             </li>
@@ -19,10 +15,12 @@
 </template>
 
 <script>
+import Thumbnail from '../components/Thumbnail.vue';
 import postMixin from '../mixins/post.js';
 
 export default {
     name: 'List',
+    components: { Thumbnail },
     mixins: [postMixin],
     props: {
         perPage: {
@@ -54,8 +52,7 @@ export default {
     },
     data() {
         return {
-            posts: [],
-            thumbHTML: {}
+            posts: []
         };
     },
     methods: {
@@ -79,13 +76,6 @@ export default {
                 return 'tags';
             }
             return name;
-        },
-        getThumbHTML(post) {
-            this.getThumbnailHTML(post).then(html => {
-                const add = {};
-                add[post.slug] = html;
-                this.thumbHTML = { ...this.thumbHTML, ...add };
-            });
         }
     },
     computed: {
@@ -107,6 +97,7 @@ export default {
             const _fields = ['slug', 'title'];
             const params = { _fields, per_page: this.perPage };
             if (this.thumbnails) {
+                params._fields.push('id');
                 this.api.embed = true;
             }
             if (this.taxonomy && this.term) {
@@ -118,7 +109,6 @@ export default {
                 this.posts = this.normalizeStringsArray(posts.data);
             }
         }
-        this.posts.forEach(async p => await this.getThumbHTML(p));
     }
 }
 </script>

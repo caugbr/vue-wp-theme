@@ -2,12 +2,12 @@
 
 class TranslationFunctions {
 
-    var $vuewp_theme_dir;
-    var $vuewp_app_dir;
+    var $theme_dir;
+    var $app_dir;
 
     public function __construct($vuewp_theme_dir, $vuewp_app_dir) {
-        $this->themeDir = $vuewp_theme_dir;
-        $this->appDir = $vuewp_app_dir;
+        $this->theme_dir = $vuewp_theme_dir;
+        $this->app_dir = $vuewp_app_dir;
     }
     
     public function translations_form() {
@@ -80,7 +80,7 @@ class TranslationFunctions {
     }
     
     public function create_file($lang) {
-        $path = get_template_directory() . $this->appDir . '/src/I18n/langs/' . $lang . '.json';
+        $path = get_template_directory() . $this->app_dir . '/src/I18n/langs/' . $lang . '.json';
         if (!file_exists($path)) {
             $fh = fopen($path, "w");
             fclose($fh);
@@ -88,7 +88,7 @@ class TranslationFunctions {
     }
     
     public function save_strings($lang, $json) {
-        $path = get_template_directory() . '/' . $this->appDir . '/src/I18n/langs/' . $lang . '.json';
+        $path = get_template_directory() . '/' . $this->app_dir . '/src/I18n/langs/' . $lang . '.json';
         $valid = json_decode(stripslashes($json), true);
         if (!is_array($valid)) {
             return false;
@@ -98,7 +98,7 @@ class TranslationFunctions {
     }
     
     public function read_strings() {
-        $app_dir = $this->themeDir . '/' . $this->appDir;
+        $app_dir = $this->theme_dir . '/' . $this->app_dir;
         $lang_files = listFiles($app_dir . '/src/I18n/langs');
         $components = listFiles($app_dir . '/src/components');
         $views = listFiles($app_dir . '/src/views');

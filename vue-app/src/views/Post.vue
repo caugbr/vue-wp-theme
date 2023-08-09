@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-4">
-                    <div class="post-thumbnail" v-html="thumbnail"></div>
+                    <thumbnail :post="post" />
                 </div>
                 <div class="col-8">
                     <h1 class="post-title">{{ post.title }}</h1>
@@ -21,12 +21,13 @@
 </template>
 
 <script>
+import Thumbnail from '../components/Thumbnail.vue';
 import TaxonomyLinks from '../components/TaxonomyLinks.vue';
 import postMixin from '../mixins/post.js';
 
 export default {
     name: 'Post',
-    components: { TaxonomyLinks },
+    components: { Thumbnail, TaxonomyLinks },
     mixins: [ postMixin ],
     route_params: 'slug',
     beforeMount() {

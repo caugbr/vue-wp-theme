@@ -2,8 +2,11 @@
 
 // Theme variables
 
-// Dev URL - npm can change this. In this
-// case you must edit the value bellow.
+
+// ===================== edit ===================== //
+
+// Dev URL - npm can change it.
+// In this case you must edit the value bellow.
 $vuewp_dev_url = 'http://127.0.0.1:8080';
 
 // Theme sidebars - this variable will be used to
@@ -34,9 +37,8 @@ $vuewp_areas = [
 $vuewp_app_dir = 'vue-app';
 
 // Image sizes
-$vuewp_image_sizes = [
-
-];
+// $vuewp_image_sizes = [
+// ];
 
 // Logo image defaults
 $vuewp_logo = [
@@ -48,6 +50,8 @@ $vuewp_logo = [
 
 // Max width for site content in pixels
 $content_width = 900;
+
+// ===================== /edit ===================== //
 
 // Do not edit these ones
 $vuewp_theme_dir = get_stylesheet_directory();
@@ -63,9 +67,21 @@ load_theme_textdomain("vuewp", $vuewp_theme_dir . '/languages');
 // Settings
 include_once $vuewp_theme_dir . "/settings/index.php";
 $settings = new ThemeSettings('vuewp_settings');
+$theme_options = $settings->get_saved();
 
 // Add theme supports
 vuewp_add_support();
+
+// Remove redirects
+remove_action('template_redirect', 'redirect_canonical');
+
+// Disable 404 errors
+add_filter("pre_handle_404", "__return_false");
+
+// Hide admin bar
+if ($theme_options['hide_wp_bar']) {
+    add_filter("show_admin_bar", "__return_false");
+}
 
 // Add translation functions
 include_once $vuewp_theme_dir . "/scripts/translation-functions.php";
@@ -74,12 +90,6 @@ $translation = new TranslationFunctions($vuewp_theme_dir, $vuewp_app_dir);
 // Add routes
 include_once $vuewp_theme_dir . "/scripts/routes-vue.php";
 $vue_routes = new RoutesVue($vuewp_theme_dir, $vuewp_app_dir);
-
-// Remove redirects
-remove_action('template_redirect', 'redirect_canonical');
-
-// Disable 404 errors
-add_filter("pre_handle_404", "__return_false");
 
 // REST API custom endpoints
 include_once $vuewp_theme_dir . "/scripts/extend-rest-api.php";
@@ -93,9 +103,8 @@ include_once $vuewp_theme_dir . "/scripts/admin-page.php";
 // Theme add support
 function vuewp_add_support() {
     global $vuewp_logo;
-    global $settings;
-    $options = $settings->get_saved();
-    $post_formats = $options['post_formats'] ?? '';
+    global $theme_options;
+    $post_formats = $theme_options['post_formats'] ?? '';
 
     if (is_array($post_formats) && count($post_formats)) {
         add_theme_support('post-formats', $post_formats);
@@ -108,8 +117,8 @@ function vuewp_add_support() {
 
 // Register theme hook
 function register_vuewp() {
-    $one = get_option('vuewp_theme');
-    if (false == $one) {
+    $on = get_option('vuewp_theme');
+    if ('on' !== $on) {
         update_option('vuewp_theme', 'on');
         do_action('register_vuewp_theme');
     }
@@ -122,6 +131,20 @@ function unregister_vuewp() {
     do_action('unregister_vuewp_theme');
 }
 add_action('switch_theme', 'unregister_vuewp');
+
+// Add WP_ENVIRONMENT_TYPE to wp-config.php on theme
+// activation, if it doesn't already exist.
+function add_env_type() {
+    $content = file_get_contents(ABSPATH . "wp-config.php");
+    if (strstr($content, 'WP_ENVIRONMENT_TYPE')) {
+        return;
+    }
+    $code = "\n\n/**\n * Vue WP Starter Theme\n * --------------------";
+    $code .= "\n * Turn it to 'production' after build the Vue app\n */";
+    $code .= "\ndefine( 'WP_ENVIRONMENT_TYPE', 'development' );";
+    file_put_contents(ABSPATH . "/wp-config.php", $content . $code);
+}
+add_action('register_vuewp_theme', 'add_env_type');
 
 
 /**
@@ -161,10 +184,9 @@ add_action('wp_footer', 'enqueue_scripts');
  */
 function get_vue_info() {
     global $vuewp_theme_url;
-    global $settings;
+    global $theme_options;
 	global $current_user;
 	global $content_width;
-    $options = $settings->get_saved();
     $user = false;
     if ($current_user->ID) {
         $user = [
@@ -182,12 +204,12 @@ function get_vue_info() {
         "basePath" => $url_info['path'],
         "language" => get_locale(),
         "contentWidth" => $content_width,
-        "settings" => $options,
+        "settings" => $theme_options,
         "loggedUser" => $user,
         "wpApiSettings" => [
             "root" => esc_url_raw(rest_url()),
             "nonce" => wp_create_nonce('wp_rest'),
-            "formats" => !empty($options['post_formats'])
+            "formats" => !empty($theme_options['post_formats'])
         ]
     ];
     ?>
@@ -197,6 +219,11 @@ function get_vue_info() {
     <?php
 }
 
+/**
+ * Custom logo support
+ *
+ * @return void
+ */
 function vuewp_add_logo() {
     if (function_exists('the_custom_logo') && has_custom_logo()) {
         print '<div class="custom-logo move-to-app" data-to=".site-name">';
