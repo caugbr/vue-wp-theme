@@ -107,7 +107,13 @@ class TranslationFunctions {
         $code = ["language_name" => ""];
         foreach ($files as $file) {
             $content = file_get_contents($file);
-            preg_match_all("/\bt[pl]? *\([\'\"]([^\'\"]+)[\'\"][^)]*\)/", $content, $matches);
+            $content = str_replace("\\'", "--apos--", $content);
+            preg_match_all("/\bt[pl]? *\([\']([^\']+)[\'][^)]*\)/", $content, $matches);
+            foreach ($matches[1] as $str) {
+                $code[$str] = "";
+            }
+            $content = str_replace('\\"', "--quote--", $content);
+            preg_match_all("/\bt[pl]? *\([\"]([^\"]+)[\"][^)]*\)/", $content, $matches);
             foreach ($matches[1] as $str) {
                 $code[$str] = "";
             }

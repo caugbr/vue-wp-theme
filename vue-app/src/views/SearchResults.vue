@@ -3,11 +3,11 @@
         <h1>{{ t('Search Results') }}</h1>
         <search layout="horizontal" />
         <div class="results" v-if="posts.length">
-            {{ tp('One result for "{term}"|{count} results for "{term}".', { count, term }) }}
+            {{ tp('one_or_more_results', { count, term }) }}
             <list :postList="posts" />
         </div>
         <p class="no-results" v-else>
-            {{ t('No results for "{term}".', { term }) }}
+            {{ t('no_results', { term }) }}
         </p>
     </div>
 </template>

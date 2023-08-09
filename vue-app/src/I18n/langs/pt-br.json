@@ -9,10 +9,10 @@
     "Pages": "Páginas",
     "Posts": "Posts",
     "Not found": "Não encontrado",
-    "content_not_found": "O conteúdo '{searched}' não foi encontrado",
     "Search Results": "Resultado da busca",
-    "One result for": "",
-    "No results for": "",
+    "one_or_more_results": "Um resultado para \"{term}\"|{count} resultados para \"{term}\"",
+    "no_results": "Nenhum resultado para \"{term}\"",
     "Posts tax": "",
+    "Video category": "Categoria de vídeos",
     "Videos": "Vídeos"
 }
