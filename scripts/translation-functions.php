@@ -24,19 +24,23 @@ class TranslationFunctions {
         ?>
         <div class="formline">
             <label for="langs"><?php _e('Select a language to edit', 'vuewp'); ?></label>
-            <select name="langs" id="langs" class="half">
-                <?php foreach ($languages as $lcode => $lname) { ?>
-                    <option value="<?php print $lcode; ?>"><?php print $lname; ?></option>
-                <?php } ?>
-            </select>
-            <button type="button" class="button" id="edit_button"><?php _e('Edit', 'vuewp'); ?></button>
+            <div class="input">
+                <select name="langs" id="langs" class="half">
+                    <?php foreach ($languages as $lcode => $lname) { ?>
+                        <option value="<?php print $lcode; ?>"><?php print $lname; ?></option>
+                    <?php } ?>
+                </select>
+                <button type="button" class="button" id="edit_button"><?php _e('Edit', 'vuewp'); ?></button>
+            </div>
         </div>
     
         <div class="formline">
             <label for="new_code"><?php _e('Create a new language file', 'vuewp'); ?></label>
-            <input class="half" type="text" name="new_code" id="new_code" placeholder="<?php _e('Language code', 'vuewp'); ?>">
-            <input class="half" type="text" name="new_name" id="new_name" placeholder="<?php _e('Language name', 'vuewp'); ?>">
-            <button type="button" class="button" id="create_button"><?php _e('Create', 'vuewp'); ?></button>
+            <div class="input">
+                <input type="text" name="new_code" id="new_code" placeholder="<?php _e('Language code', 'vuewp'); ?>">
+                <input type="text" name="new_name" id="new_name" placeholder="<?php _e('Language name', 'vuewp'); ?>">
+                <button type="button" class="button" id="create_button"><?php _e('Create', 'vuewp'); ?></button>
+            </div>
         </div>
     
         <div class="translator" style="display: none;">
@@ -49,7 +53,7 @@ class TranslationFunctions {
                     <textarea id="value-string"></textarea>
                 </div>
                 <div class="buttons">
-                    <input type="hidden" id="action" name="action">
+                    <!-- <input type="hidden" id="action" name="action"> -->
                     <input type="hidden" id="lang" name="lang">
                     <input type="hidden" id="strings" name="strings">
                     <button class="button" type="button" id="cancel_saving">
@@ -67,9 +71,12 @@ class TranslationFunctions {
                 <div class="lang-set" data-lang="<?php print $lng; ?>">
                     <h3><?php printf(__('Editing language file &apos;%s.json&apos; (%s)', 'vuewp'), $lng, $languages[$lng]); ?></h3>
                     <?php foreach ($strs as $key => $val) { ?>
-                        <?php $new_item = in_array($key, $lang_info['new_items'][$lng]); ?>
+                        <?php 
+                        $new_item = in_array($key, $lang_info['new_items'][$lng]);
+                        $vars = isset($lang_info['variables'][$key]) ? "<em> { " . join(', ', $lang_info['variables'][$key]) . " }</em>" : "";
+                        ?>
                         <div class="str-line<?php if ($new_item) print ' not-saved' ?>">
-                            <span class="key"><?php print $key; ?></span>
+                            <span class="key"><?php print "<span class='name'>{$key}</span>" . $vars; ?></span>
                             <span class="val"><?php print $val; ?></span>
                         </div>
                     <?php } ?>
@@ -103,20 +110,30 @@ class TranslationFunctions {
         $components = listFiles($app_dir . '/src/components');
         $views = listFiles($app_dir . '/src/views');
         $files = array_merge($components, $views);
-    
+
+        global $code, $vars;
         $code = ["language_name" => ""];
+        $vars = [];
+        function proccess($matches) {
+            global $code, $vars;
+            foreach ($matches as $arr) {
+                if (!empty($arr[1])) {
+                    $str = $arr[1];
+                    $code[$str] = "";
+                    if (!empty($arr[2])) {
+                        $vars[$str] = preg_split("/\s*,\s*/", trim(preg_replace("/, ?\{ ?([^\}]+) ?\}/", "$1", $arr[2])));
+                    }
+                }
+            }
+        }
         foreach ($files as $file) {
             $content = file_get_contents($file);
             $content = str_replace("\\'", "--apos--", $content);
-            preg_match_all("/\bt[pl]? *\([\']([^\']+)[\'][^)]*\)/", $content, $matches);
-            foreach ($matches[1] as $str) {
-                $code[$str] = "";
-            }
+            preg_match_all("/\bt[pl]? *\([\']([^\']+)[\']([^)]+)*\)/", $content, $matches, PREG_SET_ORDER);
+            proccess($matches);
             $content = str_replace('\\"', "--quote--", $content);
-            preg_match_all("/\bt[pl]? *\([\"]([^\"]+)[\"][^)]*\)/", $content, $matches);
-            foreach ($matches[1] as $str) {
-                $code[$str] = "";
-            }
+            preg_match_all("/\bt[pl]? *\([\"]([^\"]+)[\"]([^)]+)*\)/", $content, $matches, PREG_SET_ORDER);
+            proccess($matches);
         }
     
         $new_items = [];
@@ -141,7 +158,8 @@ class TranslationFunctions {
         }
         return [
             "strings" => $all,
-            "new_items" => $new_items
+            "new_items" => $new_items,
+            "variables" => $vars
         ];
     }
 }

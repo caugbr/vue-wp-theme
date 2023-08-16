@@ -80,7 +80,7 @@ This is a JS variable that holds site information. It is available in Vue compon
 
 ### Widgets
 The Vue WP theme supports widgets. There are two widget areas available. They are located in sidebar and in footer. But you can remove them or add more.
-The theme adds the widget `Copyright`, that you can use in footer, to add a text (or link) like '&copy;2023 Your name'.
+The theme adds the widget `Copyright`, that you can use in footer, to add a text (or link) like '&copy; 2023 Your name'.
 
 ### Theme hooks
 The theme adds the new hooks `register_vuewp_theme` and `unregister_vuewp_theme`, that works like the functions `register_activation_hook()` and  `register_activation_hook()` works for plugins.

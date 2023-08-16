@@ -2,13 +2,13 @@
 
 $theme_settings = [
     "use_wp_lang" => [
-        "type" => "checkbox",
+        "type" => "switch",
         "description" => __('Use the Wordpress language in your site (or define it directly in Vuex store)', 'vuewp'),
         "label" =>  __('Use WP language', 'vuewp'),
         "default_value" => '1'
     ],
     "hide_wp_bar" => [
-        "type" => "checkbox",
+        "type" => "switch",
         "description" => __('Hide Wordpress admin bar on frontend overriding user setting', 'vuewp'),
         "label" =>  __('Hide WP admin bar', 'vuewp'),
         "default_value" => '0'
@@ -44,31 +44,7 @@ $theme_settings = [
         "description" => __('Select the post formats that will have support in your theme.', 'vuewp'),
         "label" =>  __('Post formats support', 'vuewp'),
         "default_value" => ''
-    ],
-    // Other possible types...
-    // "text_field" => [
-    //     "type" => "text", // one of text|email|url|password|tel|number|search
-    //     "description" => __('Test field', 'vuewp'),
-    //     "label" =>  __('Type something', 'vuewp'),
-    //     "default_value" => ''
-    // ],
-    // "area_field" => [
-    //     "type" => "textarea",
-    //     "description" => __('Test area field', 'vuewp'),
-    //     "label" =>  __('Type something', 'vuewp'),
-    //     "default_value" => 'bah'
-    // ],
-    // "radio_list" => [
-    //     "type" => "radio-group",
-    //     "description" => __('Choose one', 'vuewp'),
-    //     "label" =>  __('Radio group', 'vuewp'),
-    //     "options" => [
-    //         [ "label" => "left", "value" => "left" ],
-    //         [ "label" => "right", "value" => "right" ],
-    //         [ "label" => "none", "value" => "none" ]
-    //     ],
-    //     "default_value" => ''
-    // ]
+    ]
 ];
 
 function get_menus() {

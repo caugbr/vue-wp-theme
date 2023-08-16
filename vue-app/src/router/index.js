@@ -6,8 +6,6 @@ import PostArchive from '../views/PostArchive.vue';
 import Post from '../views/Post.vue';
 import PageArchive from '../views/PageArchive.vue';
 import Page from '../views/Page.vue';
-import VideoArchive from '../views/VideoArchive.vue';
-import Video from '../views/Video.vue';
 import TaxonomyArchive from '../views/TaxonomyArchive.vue';
 import SearchResults from '../views/SearchResults.vue';
 import NotFound from '../views/NotFound.vue';
@@ -21,8 +19,6 @@ const routes = [
     { path: basePath + '/posts/:slug', name: 'Post', component: Post },
     { path: basePath + '/pages', name: 'PageArchive', component: PageArchive },
     { path: basePath + '/pages/:slug', name: 'Page', component: Page },
-    { path: basePath + '/videos', name: 'VideoArchive', component: VideoArchive },
-    { path: basePath + '/video/:slug', name: 'Video', component: Video },
     { path: basePath + '/:postType/:taxonomy/:term', name: 'TaxonomyArchive', component: TaxonomyArchive },
     { path: basePath + '/search/:term', name: 'SearchResults', component: SearchResults },
     { path: basePath + '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },

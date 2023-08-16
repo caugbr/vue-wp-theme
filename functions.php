@@ -1,9 +1,8 @@
 <?php
 
-// Theme variables
-
-
 // ===================== edit ===================== //
+
+// Theme variables
 
 // Dev URL - npm can change it.
 // In this case you must edit the value bellow.
@@ -36,9 +35,15 @@ $vuewp_areas = [
 // App directory name
 $vuewp_app_dir = 'vue-app';
 
-// Image sizes
-// $vuewp_image_sizes = [
-// ];
+// Aditional image sizes
+$vuewp_image_sizes = [
+    [
+        "name" => "list-image",
+        "width" => 220,
+        "height" => 120,
+        "crop" => true
+    ]
+];
 
 // Logo image defaults
 $vuewp_logo = [
@@ -53,7 +58,7 @@ $content_width = 900;
 
 // ===================== /edit ===================== //
 
-// Do not edit these ones
+// Internal
 $vuewp_theme_dir = get_stylesheet_directory();
 $vuewp_theme_url = get_template_directory_uri();
 $vuewp_scripts = [
@@ -61,27 +66,109 @@ $vuewp_scripts = [
     'wp-vue-vendors-js' => 'js/chunk-vendors.js'
 ];
 
-// Translations
-load_theme_textdomain("vuewp", $vuewp_theme_dir . '/languages');
-
 // Settings
-include_once $vuewp_theme_dir . "/settings/index.php";
-$settings = new ThemeSettings('vuewp_settings');
-$theme_options = $settings->get_saved();
+include_once $vuewp_theme_dir . "/theme-settings.php";
+$theme_options = [];
+foreach ($theme_settings as $id => $info) {
+    $theme_options[$id] = $info['default_value'] ?? '';
+}
+// If plugin Settings Page Manager is active
+if (class_exists('SettingsPage')) {
+    $config = new SettingsPage(
+        [
+            "page_title" => __('Vue WP Theme options', 'vuewp'),
+            "menu_title" => __('Vue WP Theme', 'vuewp'),
+            "menu_slug" => 'vuewp-options',
+            "option_name" => 'vuewp_settings',
+            "base_url" => get_stylesheet_directory_uri(),
+            "tabs" => [
+                "translations" => [
+                    "label" => "Translations",
+                    "callback" => "translations_tab",
+                    "action" => "save-translations",
+                    "hide_button" => true
+                ],
+                "routes" => [
+                    "label" => "Routes",
+                    "callback" => "routes_tab",
+                    "action" => "save-routes"
+                ]
+            ],
+            "beforeunload_msg" => '',
+            "__scripts" => [
+                "vuewp-admin-js" => $vuewp_theme_url . "/admin-assets/admin.js"
+            ],
+            "__styles" => [
+                "vuewp-admin-css" => $vuewp_theme_url . "/admin-assets/admin.css"
+            ]
+        ],
+        $theme_settings
+    );
+    $theme_options = $config->get_saved();
+}
+
+// If plugin Settings Page Manager is not active, show an error notice
+// If it is not installed, download from github and install it.
+function check_plugin_notice() {
+    $downloaded = false;
+    if (!file_exists(ABSPATH . "/wp-content/plugins/settings-page-manager")) {
+        download_spm();
+        $downloaded = true;
+    }
+    global $pagenow;
+    if (!is_plugin_active('settings-page-manager/index.php')) {
+        print '<div class="notice notice-error"><p>';
+        print 'Vue WP Theme depends on <strong>Settings Page Manager</strong> plugin';
+        if ($pagenow == 'plugins.php') {
+            if ($downloaded) {
+                print '.<br>We have downloaded <strong>Settings Page Manager</strong> for you, but you are in plugins page, so you must reload the page to see it.';
+            } else {
+                print ', please activate it.';
+            }
+        } else {
+            if ($downloaded) {
+                print '.<br>We have downloaded <strong>Settings Page Manager</strong> for you, just activate it in <a href="plugins.php">plugins page</a>.';
+            } else {
+                print ', please activate it in <a href="plugins.php">plugins page</a>.';
+            }
+        }
+        print '</p></div>';
+    }
+}
+add_action('admin_notices', 'check_plugin_notice');
+
+function download_spm() {
+    $zip_url = 'https://github.com/caugbr/settings-page-manager/archive/refs/heads/main.zip';
+    $file = ABSPATH . "/wp-content/uploads/settings-page-manager.zip";
+    $wp_filesystem = filesystem();
+
+    $data = wp_remote_get($zip_url);
+    $zip = $data['body'];
+    $wp_filesystem->put_contents($file, $zip);
+
+    if (unzip_file($file, ABSPATH . "/wp-content/uploads/")) {
+        unlink($file);
+        $wp_filesystem->move(
+            ABSPATH . "/wp-content/uploads/settings-page-manager-main", 
+            ABSPATH . "/wp-content/plugins/settings-page-manager"
+        );
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function filesystem() {
+    global $wp_filesystem;
+    if (is_null($wp_filesystem)) {
+        require_once ABSPATH . '/wp-admin/includes/file.php';
+        WP_Filesystem();
+    }
+    return $wp_filesystem;
+}
 
 // Add theme supports
-vuewp_add_support();
-
-// Remove redirects
-remove_action('template_redirect', 'redirect_canonical');
-
-// Disable 404 errors
-add_filter("pre_handle_404", "__return_false");
-
-// Hide admin bar
-if ($theme_options['hide_wp_bar']) {
-    add_filter("show_admin_bar", "__return_false");
-}
+vuewp_init();
 
 // Add translation functions
 include_once $vuewp_theme_dir . "/scripts/translation-functions.php";
@@ -97,15 +184,84 @@ include_once $vuewp_theme_dir . "/scripts/extend-rest-api.php";
 // Add sidebars and custom widgets
 include_once $vuewp_theme_dir . "/scripts/widgets.php";
 
-// Add options page
-include_once $vuewp_theme_dir . "/scripts/admin-page.php";
+function translations_tab() {
+    global $translation;
+    ?>
+    <h2><?php _e('Frontend translations', 'vuewp'); ?></h2>
+    <p>
+        <?php _e('You can edit all translatable strings from here.', 'vuewp'); ?>
+        <?php _e('If you created some new translatable strings, they will be present and marked in red. The strings displayed below will always be up to date with the application code.', 'vuewp'); ?>
+    </p>
+    <?php $translation->translations_form(); ?>
+    <?php
+}
 
-// Theme add support
-function vuewp_add_support() {
+function save_translations($msg) {
+    global $translation;
+    if (isset($_POST['action'])) {
+        if ($_POST['action'] == 'save-lang') {
+            $ok = $translation->save_strings($_POST['lang'], $_POST['strings']);
+            if ($ok) {
+                $msg = sprintf(__('The file %s was successfully saved.', 'vuewp'), $_POST['lang'] . '.json');
+            } else {
+                $msg = sprintf(__('The file %s could not be saved, there was an error.', 'vuewp'), $_POST['lang'] . '.json');
+            }
+        }
+        if ($_POST['action'] == 'create-lang') {
+            $translation->create_file($_POST['lang']);
+            $ok = $translation->save_strings($_POST['lang'], $_POST['strings']);
+            if ($ok) {
+                $msg = sprintf(__('The file %s was successfully create.', 'vuewp'), $_POST['lang'] . '.json');
+            } else {
+                $msg = sprintf(__('The file %s could not be create, there was an error.', 'vuewp'), $_POST['lang'] . '.json');
+            }
+        }
+    }
+    return $msg;
+}
+add_filter('save_admin_page_message', 'save_translations');
+
+function routes_tab() {
+    global $vue_routes;
+    ?>
+    <h2><?php _e('Routes', 'vuewp'); ?></h2>
+    <p>
+        <?php printf(__('The site routes are defined by Vue app, ignoring the original WP routes. You can edit it here or directly in Vue Router file (%s).', 'vuewp'), '<code>src/router/index.js</code>'); ?>
+    </p>
+    <?php $vue_routes->render_form(); ?>
+    <?php
+}
+
+function save_routes($msg) {
+    global $vue_routes;
+    if (!empty($_POST['action']) && $_POST['action'] == 'save-routes') {
+        $routes = json_decode(stripslashes($_POST['routes']), true);
+        $vue_routes->write_file($routes);
+        $msg = __('Routes updated successfully.', 'vuewp');
+    }
+    return $msg;
+}
+add_filter('save_admin_page_message', 'save_routes');
+
+// Theme initialization
+function vuewp_init() {
+    global $vuewp_image_sizes;
     global $vuewp_logo;
     global $theme_options;
-    $post_formats = $theme_options['post_formats'] ?? '';
+    global $vuewp_theme_dir;
 
+    // Translations
+    load_theme_textdomain("vuewp", $vuewp_theme_dir . '/languages');
+
+    // add aditional image sizes
+    if (count($vuewp_image_sizes)) {
+        foreach ($vuewp_image_sizes as $size) {
+            add_image_size($size['name'], $size['width'], $size['height'], $size['crop']);
+        }
+    }
+    
+    // Add theme support
+    $post_formats = $theme_options['post_formats'] ?? '';
     if (is_array($post_formats) && count($post_formats)) {
         add_theme_support('post-formats', $post_formats);
     }
@@ -113,6 +269,17 @@ function vuewp_add_support() {
     add_theme_support('html5', ['style','script']);
     add_theme_support('widgets');
     add_theme_support('custom-logo', $vuewp_logo);
+
+    // Remove redirects
+    remove_action('template_redirect', 'redirect_canonical');
+    
+    // Disable 404 errors
+    add_filter("pre_handle_404", "__return_false");
+    
+    // Hide admin bar
+    if ($theme_options['hide_wp_bar']) {
+        add_filter("show_admin_bar", "__return_false");
+    }
 }
 
 // Register theme hook

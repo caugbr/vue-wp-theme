@@ -4,16 +4,10 @@ window.addEventListener('load', evt => {
     const editButton = document.querySelector('#edit_button');
     const cancelButton = document.querySelector('#cancel_saving');
     const saveButton = document.querySelector('#save_language');
-    const saveSettingsButton = document.querySelector('#save_settings');
     const createButton = document.querySelector('#create_button');
     const translator = document.querySelector('.translator');
     const stage = translator.querySelector('.strings');
     const field = document.querySelector('textarea#value-string');
-
-    saveSettingsButton.addEventListener('click', () => {
-        document.querySelector('input#action').value = 'save-settings';
-        document.querySelector('form#vuewp-form').submit();
-    });
 
     editButton.addEventListener('click', evt => {
         const lng = select.value;
@@ -66,31 +60,10 @@ window.addEventListener('load', evt => {
 
     saveButton.addEventListener('click', saveStrings);
 
-    const dismissMessage = document.querySelector('button.notice-dismiss');
-    if (dismissMessage) {
-        dismissMessage.addEventListener('click', evt => {
-            const notice = evt.target.closest('.notice');
-            notice.parentNode.removeChild(notice);
-        });
-    }
-
-    const tabEl = document.querySelector('.tabs');
-    if (tabEl) {
-        const tabs = tabEl.querySelectorAll('.tab-links a');
-        Array.from(tabs).forEach(tab => {
-            tab.addEventListener('click', evt => {
-                evt.preventDefault();
-                const name = evt.target.getAttribute('data-tab');
-                tabEl.setAttribute('data-tab', name);
-            });
-        });
-    }
-
     // routes
     const comps = document.querySelector('select#route-component');
     comps.addEventListener('input', evt => {
         const component = evt.target.value;
-        // console.log('Selected view', vuewpViews[component])
         let htm = '';
         if (component) {
             document.querySelector('#route-path').value = '/';
@@ -136,7 +109,6 @@ window.addEventListener('load', evt => {
     });
     
     document.querySelector('#add-route').addEventListener('click', () => addRoute());
-    document.querySelector('#save-routes').addEventListener('click', () => saveRoutes());
 
     setVuewpRoutes();
     populateRoutesList();
@@ -242,16 +214,11 @@ function routeExists(path, comp) {
     return exists;
 }
 
-function saveRoutes() {
-    document.querySelector('input#action').value =  'save-routes';
-    document.querySelector('form#vuewp-form').submit();
-}
-
 function setTranslationsBehavior() {
     const lines = document.querySelectorAll('.translator .str-line');
     Array.from(lines).forEach(line => {
         line.addEventListener('click', evt => {
-            const key = line.querySelector('.key').innerHTML.trim();
+            const key = line.querySelector('.key .name').innerHTML;
             const value = line.querySelector('.val');
             const val = value.innerHTML.trim();
             checkLine(line);
@@ -291,12 +258,13 @@ function saveStrings() {
     const lines = translator.querySelectorAll('.str-line');
     let json = {};
     Array.from(lines).forEach(line => {
-        const key = line.querySelector('.key').innerHTML.trim();
+        const key = line.querySelector('.key .name').innerHTML.trim();
         const value = line.querySelector('.val').innerHTML.trim();
         json[key] = value;
     });
     document.querySelector('input#lang').value = lang;
     document.querySelector('input#strings').value = JSON.stringify(json);
-    document.querySelector('input#action').value = isNew ? 'create-lang' : 'save-lang';
-    document.querySelector('form#vuewp-form').submit();
+    const vform = document.querySelector('form#admin-page-form');
+    vform.elements.action.value = isNew ? 'create-lang' : 'save-lang';
+    vform.submit();
 }
