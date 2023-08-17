@@ -11,10 +11,11 @@ The frontend is a Vue app, all the displayed contents are loaded using the API a
 ### Components
 * WpMenu - component to display any WP menu
 * Loading - global loading layer
-* LangMenu - a menu to switch the site language
+* LangsMenu - a menu to switch the site language
 * List - list posts by post type and taxonomy term
 * Search - search form
 * Thumbnail - render the featured image for a post
+* TaxonomyLinks - render taxonomy links for posts
 
 ### Mixins
 * common.js - some helper functions that is available in all components
@@ -33,6 +34,8 @@ The theme has an admistration page. You can access it in `Appearence > Vue WP Th
   Edit / create translation files for your Vue app directly from admin page
 * Routes\
   Manage Vue routes directly from admin page
+* Server\
+  Information about the development server, site status and the last built package
 
 ### Settings
 The settings are stored in a php file, located in `settings/theme-settings.php`. The defined options will be editable in admin page and available in frontend as `this.info`. You can edit it and add new settings.
@@ -95,7 +98,7 @@ It can take a while. Than you can start the development server:
 	npm run serve
 
 Before you can see the frontend working, there is a little edition on ```wp-config.php```. 
-We'll check your config file and add this constant on theme activation, but only if it's not already in the file. So there is a small chance of this value to be 'production' after theme activation. In this case, add the following command to your config file:
+We'll check your config file and add this constant on theme activation, but only if it's not already in the file. So there is a small chance of this value to be 'production' after theme activation. In this case, switch 'production' for 'development' in the following line on wp-config.php:
 
 	define( 'WP_ENVIRONMENT_TYPE', 'development' );
 

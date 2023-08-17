@@ -197,6 +197,7 @@
 /* server */
 .server-msg {
     position: relative;
+    margin: 2rem auto 1rem;
 }
 
 .server-msg:before {
@@ -211,12 +212,35 @@
     border: 1px solid #666;
 }
 
-.server-msg.ok:before {
+.server-msg.server-ok:before {
     background-color: limegreen;
 }
-.server-msg.alert:before {
+.server-msg.server-alert:before {
     background-color: orange;
 }
-.server-msg.error:before {
+.server-msg.server-error:before {
     background-color: orangered;
+}
+.server-msg .dashicons {
+    display: none;
+    animation: spinner 1s infinite;
+    animation-timing-function: linear;
+}
+.server-msg.waiting .dashicons {
+    display: block;
+}
+.settings .infoline {
+    margin: 0.5rem auto;
+}
+.settings .server-status-link {
+    margin: 0.5rem auto;
+}
+
+@keyframes spinner {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(359deg);
+    }
 }

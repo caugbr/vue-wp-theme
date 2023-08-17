@@ -77,14 +77,25 @@ function server_tab() {
         <strong><?php _e('Last build', 'vuewp'); ?>:</strong>
         <span class="last-build"><?php print $build ? $build : 'no build found'; ?></span>
     </div>
-    <p class="server-msg"></p>
+    <button class="server-status-link">
+        <span class="dashicons dashicons-update"></span>
+        <?php _e('Check again', 'vuewp'); ?>
+    </button>
+    <div class="server-msg waiting">
+        <span class="dashicons dashicons-update"></span>
+        <div></div>
+    </div>
     <?php
 }
 
 function check_vue_server() {
     global $vuewp_dev_url;
     $ret = wp_remote_head($vuewp_dev_url);
-    wp_send_json([ "status" => is_wp_error($ret) ? 'stoped' : 'running' ], 200);
+    wp_send_json([
+        "server" => is_wp_error($ret) ? 'stoped' : 'running',
+        "last_build" => get_build(),
+        "environment" => wp_get_environment_type()
+    ], 200);
     wp_die();
 }
 add_action('wp_ajax_check_server', 'check_vue_server');
@@ -97,5 +108,5 @@ function get_build() {
         $time = filectime($path);
         return date("Y-m-d h:i:s", $time);
     }
-    return false;
+    return 'no build found';
 }

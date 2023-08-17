@@ -107,6 +107,10 @@ window.addEventListener('load', evt => {
             const index = evt.target.getAttribute('data-index');
             downRoute(index);
         }
+        if (evt.target.matches('.server-status-link')) {
+            evt.preventDefault();
+            getServerStatus();
+        }
     });
     
     document.querySelector('#add-route').addEventListener('click', () => addRoute());
@@ -114,8 +118,14 @@ window.addEventListener('load', evt => {
     setVuewpRoutes();
     populateRoutesList();
 
+    getServerStatus();
+});
+
+function getServerStatus() {
     const serverstatus = document.querySelector('.server-status');
     if (serverstatus) {
+        document.querySelector('.server-msg').className = 'server-msg waiting';
+        document.querySelector('.server-msg > div').innerHTML = '';
         fetch(ajaxurl, {
             method: "POST",
             body: "action=check_server",
@@ -125,44 +135,49 @@ window.addEventListener('load', evt => {
         })
         .then((response) => response.json())
         .then((json) => {
-            serverstatus.innerHTML = json.status;
-            showServerMessage(json.status);
+            serverstatus.innerHTML = json.server;
+            showServerMessage(json);
         });
     }
-});
+}
 
-function showServerMessage(status) {
-    const env = document.querySelector('.env-status').innerHTML;
-    const build = document.querySelector('.last-build').innerHTML;
+function showServerMessage(json) {
+    const env = document.querySelector('.env-status');
+    env.innerHTML = json.environment;
+    const build = document.querySelector('.last-build');
+    build.innerHTML = json.last_build;
+    const serv = document.querySelector('.server-status');
+    serv.innerHTML = json.server;
     const msg = document.querySelector('.server-msg');
-    let title = vuewp_admin_js.env_mode.replace('{env}', env);
+    let title = vuewp_admin_js.env_mode.replace('{env}', json.environment);
     let text = '';
-    let cls = 'ok';
-    if (env == 'production') {
-        if (build.includes('no build')) {
+    let cls = 'server-ok';
+    if (json.environment == 'production') {
+        if (json.last_build.includes('no build')) {
             title += vuewp_admin_js.env_mode_no_pack;
-            cls = 'error';
+            cls = 'server-error';
             text = vuewp_admin_js.exec_build;
         } else {
-            const buildDate = (new Date(build)).getTime();
+            const buildDate = (new Date(json.last_build)).getTime();
             const today = (new Date()).getTime();
             const days = Math.round((today - buildDate) / (1000 * 60 * 60 * 24));
             text = vuewp_admin_js.pack_age.replace('{days}', days);
             if (days > 90) {
-                cls = 'alert';
+                cls = 'server-alert';
             }
         }
     } else {
-        if (status == 'running') {
+        if (json.server == 'running') {
             text = vuewp_admin_js.alright;
         } else {
             title += vuewp_admin_js.env_mode_not_running;
-            cls = 'alert';
+            cls = 'server-alert';
             text = vuewp_admin_js.exec_serve;
         }
     }
+    msg.classList.remove('waiting');
     msg.classList.add(cls);
-    msg.innerHTML = `<h3>${title}</h3><p>${text}</p>`;
+    msg.getElementsByTagName('div')[0].innerHTML = `<h3>${title}</h3><p>${text}</p>`;
 }
 
 function populateRoutesList() {
