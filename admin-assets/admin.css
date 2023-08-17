@@ -188,6 +188,35 @@
 
 
 /* tabs */
-.settings .tabs[data-tab="translations"] .formline.buttons {
+.settings .tabs[data-tab="translations"] .formline.buttons,
+.settings .tabs[data-tab="server"] .formline.buttons {
     display: none;
+}
+
+
+/* server */
+.server-msg {
+    position: relative;
+}
+
+.server-msg:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #ccc;
+    border: 1px solid #666;
+}
+
+.server-msg.ok:before {
+    background-color: limegreen;
+}
+.server-msg.alert:before {
+    background-color: orange;
+}
+.server-msg.error:before {
+    background-color: orangered;
 }

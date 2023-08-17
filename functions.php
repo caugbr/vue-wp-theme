@@ -59,6 +59,7 @@ $content_width = 900;
 // ===================== /edit ===================== //
 
 // Internal
+$settings_page_zip = 'https://github.com/caugbr/settings-page-manager/archive/refs/heads/main.zip';
 $vuewp_theme_dir = get_stylesheet_directory();
 $vuewp_theme_url = get_template_directory_uri();
 $vuewp_scripts = [
@@ -92,11 +93,25 @@ if (class_exists('SettingsPage')) {
                     "label" => "Routes",
                     "callback" => "routes_tab",
                     "action" => "save-routes"
+                ],
+                "server" => [
+                    "label" => "Server",
+                    "callback" => "server_tab",
+                    "action" => "save-server"
                 ]
             ],
             "beforeunload_msg" => '',
             "__scripts" => [
-                "vuewp-admin-js" => $vuewp_theme_url . "/admin-assets/admin.js"
+                "vuewp-admin-js" => $vuewp_theme_url . "/admin-assets/admin.js",
+                "vuewp-admin-js-localize" => [
+                    "env_mode" => __('Your website is in {env} mode', 'vuewp'),
+                    "env_mode_no_pack" => __(', but there is no production package!', 'vuewp'),
+                    "exec_build" => __('Go to the Vue app folder, open a terminal and execute <code>npm run build</code>.', 'vuewp'),
+                    "pack_age" => __('Your package was built {days} days ago', 'vuewp'),
+                    "alright" => __('Everything is ok', 'vuewp'),
+                    "env_mode_not_running" => __(', but your server is not running!', 'vuewp'),
+                    "exec_serve" => __('Go to the Vue app folder, open a terminal and execute <code>npm run serve</code>.', 'vuewp'),
+                ]
             ],
             "__styles" => [
                 "vuewp-admin-css" => $vuewp_theme_url . "/admin-assets/admin.css"
@@ -107,68 +122,11 @@ if (class_exists('SettingsPage')) {
     $theme_options = $config->get_saved();
 }
 
-// If plugin Settings Page Manager is not active, show an error notice
-// If it is not installed, download from github and install it.
-function check_plugin_notice() {
-    $downloaded = false;
-    if (!file_exists(ABSPATH . "/wp-content/plugins/settings-page-manager")) {
-        download_spm();
-        $downloaded = true;
-    }
-    global $pagenow;
-    if (!is_plugin_active('settings-page-manager/index.php')) {
-        print '<div class="notice notice-error"><p>';
-        print 'Vue WP Theme depends on <strong>Settings Page Manager</strong> plugin';
-        if ($pagenow == 'plugins.php') {
-            if ($downloaded) {
-                print '.<br>We have downloaded <strong>Settings Page Manager</strong> for you, but you are in plugins page, so you must reload the page to see it.';
-            } else {
-                print ', please activate it.';
-            }
-        } else {
-            if ($downloaded) {
-                print '.<br>We have downloaded <strong>Settings Page Manager</strong> for you, just activate it in <a href="plugins.php">plugins page</a>.';
-            } else {
-                print ', please activate it in <a href="plugins.php">plugins page</a>.';
-            }
-        }
-        print '</p></div>';
-    }
-}
-add_action('admin_notices', 'check_plugin_notice');
-
-function download_spm() {
-    $zip_url = 'https://github.com/caugbr/settings-page-manager/archive/refs/heads/main.zip';
-    $file = ABSPATH . "/wp-content/uploads/settings-page-manager.zip";
-    $wp_filesystem = filesystem();
-
-    $data = wp_remote_get($zip_url);
-    $zip = $data['body'];
-    $wp_filesystem->put_contents($file, $zip);
-
-    if (unzip_file($file, ABSPATH . "/wp-content/uploads/")) {
-        unlink($file);
-        $wp_filesystem->move(
-            ABSPATH . "/wp-content/uploads/settings-page-manager-main", 
-            ABSPATH . "/wp-content/plugins/settings-page-manager"
-        );
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function filesystem() {
-    global $wp_filesystem;
-    if (is_null($wp_filesystem)) {
-        require_once ABSPATH . '/wp-admin/includes/file.php';
-        WP_Filesystem();
-    }
-    return $wp_filesystem;
-}
-
 // Add theme supports
 vuewp_init();
+
+// Tabs
+include_once $vuewp_theme_dir . "/scripts/admin-tabs.php";
 
 // Add translation functions
 include_once $vuewp_theme_dir . "/scripts/translation-functions.php";
@@ -183,65 +141,6 @@ include_once $vuewp_theme_dir . "/scripts/extend-rest-api.php";
 
 // Add sidebars and custom widgets
 include_once $vuewp_theme_dir . "/scripts/widgets.php";
-
-function translations_tab() {
-    global $translation;
-    ?>
-    <h2><?php _e('Frontend translations', 'vuewp'); ?></h2>
-    <p>
-        <?php _e('You can edit all translatable strings from here.', 'vuewp'); ?>
-        <?php _e('If you created some new translatable strings, they will be present and marked in red. The strings displayed below will always be up to date with the application code.', 'vuewp'); ?>
-    </p>
-    <?php $translation->translations_form(); ?>
-    <?php
-}
-
-function save_translations($msg) {
-    global $translation;
-    if (isset($_POST['action'])) {
-        if ($_POST['action'] == 'save-lang') {
-            $ok = $translation->save_strings($_POST['lang'], $_POST['strings']);
-            if ($ok) {
-                $msg = sprintf(__('The file %s was successfully saved.', 'vuewp'), $_POST['lang'] . '.json');
-            } else {
-                $msg = sprintf(__('The file %s could not be saved, there was an error.', 'vuewp'), $_POST['lang'] . '.json');
-            }
-        }
-        if ($_POST['action'] == 'create-lang') {
-            $translation->create_file($_POST['lang']);
-            $ok = $translation->save_strings($_POST['lang'], $_POST['strings']);
-            if ($ok) {
-                $msg = sprintf(__('The file %s was successfully create.', 'vuewp'), $_POST['lang'] . '.json');
-            } else {
-                $msg = sprintf(__('The file %s could not be create, there was an error.', 'vuewp'), $_POST['lang'] . '.json');
-            }
-        }
-    }
-    return $msg;
-}
-add_filter('save_admin_page_message', 'save_translations');
-
-function routes_tab() {
-    global $vue_routes;
-    ?>
-    <h2><?php _e('Routes', 'vuewp'); ?></h2>
-    <p>
-        <?php printf(__('The site routes are defined by Vue app, ignoring the original WP routes. You can edit it here or directly in Vue Router file (%s).', 'vuewp'), '<code>src/router/index.js</code>'); ?>
-    </p>
-    <?php $vue_routes->render_form(); ?>
-    <?php
-}
-
-function save_routes($msg) {
-    global $vue_routes;
-    if (!empty($_POST['action']) && $_POST['action'] == 'save-routes') {
-        $routes = json_decode(stripslashes($_POST['routes']), true);
-        $vue_routes->write_file($routes);
-        $msg = __('Routes updated successfully.', 'vuewp');
-    }
-    return $msg;
-}
-add_filter('save_admin_page_message', 'save_routes');
 
 // Theme initialization
 function vuewp_init() {
@@ -386,6 +285,59 @@ function get_vue_info() {
     <?php
 }
 
+// If plugin Settings Page Manager is not active, show an error notice.
+// If it is not installed, download from github and install it.
+function check_plugin_notice() {
+    $downloaded = false;
+    if (!file_exists(ABSPATH . "/wp-content/plugins/settings-page-manager/index.php")) {
+        download_spm();
+        $downloaded = true;
+    }
+    global $pagenow;
+    if (!is_plugin_active('settings-page-manager/index.php')) {
+        print '<div class="notice notice-error"><p>';
+        printf(__('Vue WP Theme depends on %s plugin', 'vuewp'), '<strong>Settings Page Manager</strong>');
+        if ($pagenow == 'plugins.php') {
+            if ($downloaded) {
+                printf(__('.<br>We have downloaded %s for you, but you are in plugins page, so you must reload the page to see it.', 'vuewp'), '<strong>Settings Page Manager</strong>');
+            } else {
+                _e(', please activate it.', 'vuewp');
+            }
+        } else {
+            if ($downloaded) {
+                printf(__('.<br>We have downloaded %s for you, just activate it in %splugins page%s.'), '<strong>Settings Page Manager</strong>', '<a href="plugins.php">', '</a>');
+            } else {
+                printf(__(', please activate it in %splugins page%s.'), '<a href="plugins.php">', '</a>');
+            }
+        }
+        print '</p></div>';
+    }
+}
+if (!empty($settings_page_zip)) {
+    add_action('admin_notices', 'check_plugin_notice');
+}
+
+function download_spm() {
+    global $settings_page_zip;
+    $file = ABSPATH . "/wp-content/uploads/settings-page-manager.zip";
+    $wp_filesystem = filesystem();
+
+    $data = wp_remote_get($settings_page_zip);
+    $zip = $data['body'];
+    $wp_filesystem->put_contents($file, $zip);
+
+    if (unzip_file($file, ABSPATH . "/wp-content/uploads/")) {
+        unlink($file);
+        $wp_filesystem->move(
+            ABSPATH . "/wp-content/uploads/settings-page-manager-main", 
+            ABSPATH . "/wp-content/plugins/settings-page-manager"
+        );
+        return true;
+    } else {
+        return false;
+    }
+}
+
 /**
  * Custom logo support
  *
@@ -411,4 +363,14 @@ function listFiles($directory) {
         }
     }
     return $files;
+}
+
+// return $wp_filesystem
+function filesystem() {
+    global $wp_filesystem;
+    if (is_null($wp_filesystem)) {
+        require_once ABSPATH . '/wp-admin/includes/file.php';
+        WP_Filesystem();
+    }
+    return $wp_filesystem;
 }

@@ -1,3 +1,4 @@
+// import axios from 'axios';
 
 window.addEventListener('load', evt => {
     const select = document.querySelector('#langs');
@@ -112,7 +113,57 @@ window.addEventListener('load', evt => {
 
     setVuewpRoutes();
     populateRoutesList();
+
+    const serverstatus = document.querySelector('.server-status');
+    if (serverstatus) {
+        fetch(ajaxurl, {
+            method: "POST",
+            body: "action=check_server",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;'
+            }
+        })
+        .then((response) => response.json())
+        .then((json) => {
+            serverstatus.innerHTML = json.status;
+            showServerMessage(json.status);
+        });
+    }
 });
+
+function showServerMessage(status) {
+    const env = document.querySelector('.env-status').innerHTML;
+    const build = document.querySelector('.last-build').innerHTML;
+    const msg = document.querySelector('.server-msg');
+    let title = vuewp_admin_js.env_mode.replace('{env}', env);
+    let text = '';
+    let cls = 'ok';
+    if (env == 'production') {
+        if (build.includes('no build')) {
+            title += vuewp_admin_js.env_mode_no_pack;
+            cls = 'error';
+            text = vuewp_admin_js.exec_build;
+        } else {
+            const buildDate = (new Date(build)).getTime();
+            const today = (new Date()).getTime();
+            const days = Math.round((today - buildDate) / (1000 * 60 * 60 * 24));
+            text = vuewp_admin_js.pack_age.replace('{days}', days);
+            if (days > 90) {
+                cls = 'alert';
+            }
+        }
+    } else {
+        if (status == 'running') {
+            text = vuewp_admin_js.alright;
+        } else {
+            title += vuewp_admin_js.env_mode_not_running;
+            cls = 'alert';
+            text = vuewp_admin_js.exec_serve;
+        }
+    }
+    msg.classList.add(cls);
+    msg.innerHTML = `<h3>${title}</h3><p>${text}</p>`;
+}
 
 function populateRoutesList() {
     const routes = document.querySelector('div.current-routes');
