@@ -108,5 +108,5 @@ function get_build() {
         $time = filectime($path);
         return date("Y-m-d h:i:s", $time);
     }
-    return 'no build found';
+    return __('no build found', 'vuewp');
 }

@@ -86,7 +86,7 @@ The Vue WP theme supports widgets. There are two widget areas available. They ar
 The theme adds the widget `Copyright`, that you can use in footer, to add a text (or link) like '&copy; 2023 Your name'.
 
 ### Theme hooks
-The theme adds the new hooks `register_vuewp_theme` and `unregister_vuewp_theme`, that works like the functions `register_activation_hook()` and  `register_activation_hook()` works for plugins.
+The theme adds the new hooks `register_vuewp_theme` and `unregister_vuewp_theme`, that works like the functions `register_activation_hook()` and  `unregister_activation_hook()` works for plugins.
 
 ### Install
 Paste the theme folder into ```.../wp-content/themes/```. Open a terminal, navigate to ```wp-vue-theme/vue-app``` and run:
@@ -98,7 +98,7 @@ It can take a while. Than you can start the development server:
 	npm run serve
 
 Before you can see the frontend working, there is a little edition on ```wp-config.php```. 
-We'll check your config file and add this constant on theme activation, but only if it's not already in the file. So there is a small chance of this value to be 'production' after theme activation. In this case, switch 'production' for 'development' in the following line on wp-config.php:
+We'll check your config file and add this constant on theme activation, but only if it's not already in the file. So there is a small chance of this value to be 'production' after theme activation. In this case, switch 'production' for 'development' in the ```WP_ENVIRONMENT_TYPE``` value on wp-config.php:
 
 	define( 'WP_ENVIRONMENT_TYPE', 'development' );
 
@@ -107,6 +107,8 @@ The default value is 'production' (if it isn't in your config file), but the the
 
 You'll use ```WP_ENVIRONMENT_TYPE``` as 'development' only while you are editing the files.\
 After build your production package, don't forget to change it to 'production'.
+
+You can monitor it in theme's admin page, under the 'Server' tab.
 
 ### Wordpress tags
  * Grid Layout

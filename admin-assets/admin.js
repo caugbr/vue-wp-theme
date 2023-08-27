@@ -1,6 +1,6 @@
 // import axios from 'axios';
 
-window.addEventListener('load', evt => {
+window.addEventListener('load', () => {
     const select = document.querySelector('#langs');
     const editButton = document.querySelector('#edit_button');
     const cancelButton = document.querySelector('#cancel_saving');
@@ -10,7 +10,7 @@ window.addEventListener('load', evt => {
     const stage = translator.querySelector('.strings');
     const field = document.querySelector('textarea#value-string');
 
-    editButton.addEventListener('click', evt => {
+    editButton.addEventListener('click', () => {
         const lng = select.value;
         const content = document.querySelector(`[data-lang="${lng}"]`);
         stage.innerHTML = content.innerHTML;
@@ -20,7 +20,7 @@ window.addEventListener('load', evt => {
         setTranslationsBehavior();
     });
     
-    cancelButton.addEventListener('click', evt => {
+    cancelButton.addEventListener('click', () => {
         stage.innerHTML = '';
         translator.style.display = 'none';
         translator.removeAttribute('data-lang');
@@ -36,7 +36,7 @@ window.addEventListener('load', evt => {
         }
     });
 
-    createButton.addEventListener('click', evt => {
+    createButton.addEventListener('click', () => {
         const code = document.querySelector('#new_code');
         const name = document.querySelector('#new_name');
         if (!code.value || !name.value) {
@@ -45,7 +45,8 @@ window.addEventListener('load', evt => {
             return false;
         }
         const ids = getIds();
-        let htm = `<h3>Creating new language file '${code.value}.json' (${name.value})</h3>\n`;
+        const title = create_lang_title.replace('{code}', code.value).replace('{name}', name.value);
+        let htm = `<h3>${title}</h3>\n`;
         ids.forEach(id => {
             htm += `<div class="str-line">\n`;
             htm += `    <span class="key">${id}</span>\n`;
@@ -70,14 +71,14 @@ window.addEventListener('load', evt => {
             document.querySelector('#route-path').value = '/';
             const cmp = vuewpViews[component] ?? {};
             if (cmp.params) {
-                htm = 'Required params: ';
+                htm = vuewp_admin_js.params_required;
                 let prms = [];
                 cmp.params.forEach(prm => {
                     prms.push(`<code data-param="${prm}" class="route-param">${prm}</code>`);
                 });
                 htm += prms.join(', ');
             } else {
-                htm = 'No params required';
+                htm = vuewp_admin_js.no_params_required;
             }
         }
         document.querySelector('.route-variables').innerHTML = htm;
@@ -192,9 +193,9 @@ function populateRoutesList() {
         path.innerHTML = p;
         component.className = 'route-component';
         component.innerHTML = ` (${c})`;
-        actions.innerHTML = ` <a href="#" class="remove-route" data-index="${i}">Remove</a>`;
-        actions.innerHTML += ` | <a href="#" class="up-route" data-index="${i}">Up</a>`;
-        actions.innerHTML += ` | <a href="#" class="down-route" data-index="${i}">Down</a>`;
+        actions.innerHTML = ` <a href="#" class="remove-route" data-index="${i}">${vuewp_admin_js.remove}</a>`;
+        actions.innerHTML += ` | <a href="#" class="up-route" data-index="${i}">${vuewp_admin_js.up}</a>`;
+        actions.innerHTML += ` | <a href="#" class="down-route" data-index="${i}">${vuewp_admin_js.down}</a>`;
         route.appendChild(path);
         route.appendChild(component);
         route.appendChild(actions);
@@ -256,7 +257,7 @@ function addRoute() {
     const component = componentEl.value;
     if (path && component) {
         if (routeExists(path, component)) {
-            const msg = 'The sent path or component is already in use.';
+            const msg = vuewp_admin_js.path_in_use;
             const err = document.querySelector('.route-error')
             err.innerHTML = msg;
             setTimeout(() => err.innerHTML = '', 5000);

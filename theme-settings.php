@@ -28,7 +28,7 @@ $theme_settings = [
         "default_value" => ''
     ],
     "sidebar_location" => [
-        "type" => "select",
+        "type" => "buttons-group",
         "options" => [
             [ "label" => __("On the left", "vuewp"), "value" => "left" ],
             [ "label" => __("On the right", "vuewp"), "value" => "right" ],

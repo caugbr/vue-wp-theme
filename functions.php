@@ -86,8 +86,7 @@ if (class_exists('SettingsPage')) {
                 "translations" => [
                     "label" => "Translations",
                     "callback" => "translations_tab",
-                    "action" => "save-translations",
-                    "hide_button" => true
+                    "action" => "save-translations"
                 ],
                 "routes" => [
                     "label" => "Routes",
@@ -96,14 +95,20 @@ if (class_exists('SettingsPage')) {
                 ],
                 "server" => [
                     "label" => "Server",
-                    "callback" => "server_tab",
-                    "action" => "save-server"
+                    "callback" => "server_tab"
                 ]
             ],
             "beforeunload_msg" => '',
             "__scripts" => [
                 "vuewp-admin-js" => $vuewp_theme_url . "/admin-assets/admin.js",
                 "vuewp-admin-js-localize" => [
+                    "create_lang_title" => __('Creating new language file &apos;{code}.json&apos; ({name})', 'vuewp'),
+                    "path_in_use" => __('The sent path or component is already in use.', 'vuewp'),
+                    "no_params_required" => __('No params required', 'vuewp'),
+                    "params_required" => __('Params required: ', 'vuewp'),
+                    "up" => __('Up', 'vuewp'),
+                    "down" => __('Down', 'vuewp'),
+                    "remove" => __('Remove', 'vuewp'),
                     "env_mode" => __('Your website is in {env} mode', 'vuewp'),
                     "env_mode_no_pack" => __(', but there is no production package!', 'vuewp'),
                     "exec_build" => __('Go to the Vue app folder, open a terminal and execute <code>npm run build</code>.', 'vuewp'),
